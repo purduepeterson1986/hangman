@@ -436,7 +436,7 @@
       if (isSolved()) {
         seat.score += BONUS;
         G.solvedBy = p;
-        setTimeout(function () { if (token === gen) endRound(p); }, 800);
+        endRound(p);   // the 5-second pause in endRound is the only wait
         return;
       }
     } else {
@@ -501,7 +501,7 @@
       Sound.play('solve');
       toast('🎉', 'Solved! +' + (newly + BONUS));
       render();
-      setTimeout(function () { if (token === gen) endRound(p); }, 900);
+      endRound(p);   // the 5-second pause in endRound is the only wait
       return;
     }
     // A wrong answer costs one chance and the turn, the same as a wrong letter.
