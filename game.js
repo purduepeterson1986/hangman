@@ -429,7 +429,7 @@
     if (hits) {
       seat.score += hits;
       Sound.play('hit');
-      if (G.level <= 2) speak(letter);
+      if (G.level <= 2) speak(letter.toLowerCase());   // lowercase, so the voice says just the letter
       toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''));
       render();
       if (isSolved()) {

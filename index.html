@@ -11,7 +11,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Hangman">
   <!-- When styles.css, words.js or game.js changes, change the ?v= tag on all three so browsers fetch the new copies. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-16r">
+  <link rel="stylesheet" href="styles.css?v=2026-11-16s">
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -102,15 +102,15 @@
         </div>
       </div>
 
+      <!-- The word gets the full width of the screen, just below the hangmen -->
+      <section class="word-band">
+        <div class="word" id="word" aria-label="The hidden word"></div>
+      </section>
+
       <div class="side">
         <div class="hint-wrap" id="hint"></div>
         <div class="toast-slot"><div class="toast" id="toast" aria-live="polite"></div></div>
       </div>
-    </section>
-
-    <!-- The word gets the full width of the screen, between the hangmen and the keyboard -->
-    <section class="word-band">
-      <div class="word" id="word" aria-label="The hidden word"></div>
     </section>
 
     <section class="keyboard" id="keys" aria-label="Letters"></section>
@@ -121,7 +121,7 @@
   </div>
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <script src="words.js?v=2026-11-16r"></script>
-  <script src="game.js?v=2026-11-16r"></script>
+  <script src="words.js?v=2026-11-16s"></script>
+  <script src="game.js?v=2026-11-16s"></script>
 </body>
 </html>

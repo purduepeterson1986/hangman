@@ -380,7 +380,7 @@ h1, h2, h3, p { margin: 0; }
 
 /* The word band spans the full width of the screen. Every letter box shrinks as needed,
    so the whole word always stays on one line. */
-.word-band { flex: none; width: 100%; padding: 4px clamp(8px, 2vw, 22px) 6px; }
+.word-band { flex: none; width: 100%; padding: clamp(8px, 1.6vh, 14px) clamp(8px, 2vw, 22px) 4px; }
 .word {
   --gap: clamp(3px, .6vw, 8px);
   container-type: inline-size;
