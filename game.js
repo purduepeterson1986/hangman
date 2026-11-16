@@ -17,7 +17,7 @@
          desc: 'A little longer, with no hint. Each letter is read aloud.' },
     3: { name: 'Tricky', lives: 6, size: '5 to 7 letters', hint: 'none', sample: 'TURTLE',
          desc: 'No picture and no category. Just the letters.' },
-    4: { name: 'Hard', lives: 5, size: '7 to 9 letters', hint: 'category', sample: 'GRAVITY',
+    4: { name: 'Hard', lives: 5, size: '7 to 9 letters', hint: 'none', sample: 'GRAVITY',
          desc: 'Longer words, and fewer wrong guesses to spare.' },
     5: { name: 'Expert', lives: 4, size: '8 to 13 letters', hint: 'none', sample: 'SERENDIPITY',
          desc: 'Long, tricky words with no hint, and only four wrong guesses.' }
