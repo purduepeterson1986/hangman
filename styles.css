@@ -545,6 +545,14 @@ h1, h2, h3, p { margin: 0; }
   .kb-row .key { max-width: none; }
   .pcard .pips { display: none; }
 }
+/* Short windows: shrink the hangmen, hint area and keys so the word and keyboard stay on screen */
+@media (max-height: 820px) {
+  .hint-wrap { min-height: 0; }
+  .toast-slot { height: 44px; }
+  .gallows-svg { width: auto; height: clamp(110px, 21vh, 190px); max-width: 100%; margin: 0 auto; }
+  .key.big { height: clamp(44px, 8vh, 64px); }
+  .keyboard.qwerty .key { height: clamp(40px, 7vh, 58px); }
+}
 @media (max-height: 560px) {
   .topbar { padding-top: 4px; padding-bottom: 2px; }
   .players { padding-top: 2px; padding-bottom: 2px; }
