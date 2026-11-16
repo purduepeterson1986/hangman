@@ -27,6 +27,7 @@
   var THINK = { easy: [2800, 3200], medium: [2800, 3200], hard: [2800, 3200] };
   var STORE_KEY = 'hangman.settings.v1';
   var TURN_SECS = 30;    // seconds per turn when the turn timer is on
+  var ROUND_PAUSE = 2500; // ms to pause after a word ends, before its result message appears
   var RING = 276.46;     // circumference of the timer ring (2 x pi x 44)
 
   function $(s) { return document.querySelector(s); }
@@ -544,6 +545,11 @@
     G.solvedBy = solver;
     var token = ++gen;
     render();
+    // Pause so the players can see the finished word on the board before the message appears.
+    setTimeout(function () { if (token === gen && G && G.phase === 'roundover') showRoundEnd(solver, token); }, ROUND_PAUSE);
+  }
+
+  function showRoundEnd(solver, token) {
     var solved = solver >= 0;
     var last = G.round >= ROUNDS;
     var title = solved ? esc(G.seats[solver].name) + ' got it!' : 'Out of chances!';
