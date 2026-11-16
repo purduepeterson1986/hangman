@@ -289,11 +289,13 @@ h1, h2, h3, p { margin: 0; }
 
 .status {
   flex: none; display: flex; align-items: center; justify-content: center;
-  min-height: 46px; padding: 2px clamp(10px, 2vw, 22px);
+  min-height: 52px; padding: 4px clamp(10px, 2vw, 22px);
+  position: relative; z-index: 2;
   width: 100%; max-width: 1200px; margin: 0 auto;
 }
 .status-main { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: clamp(1.05rem, 2.2vw, 1.4rem); min-width: 0; }
-.status-main .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Overflow is visible and the line is roomy, so tall and descending letters are not clipped */
+.status-main .txt { min-width: 0; line-height: 1.5; padding: 2px 0; white-space: nowrap; }
 .status-main .sub { color: var(--ink-dim); font-weight: 600; font-size: .8em; }
 .dots::after { content: ""; animation: dots 1.2s steps(4, end) infinite; }
 @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
