@@ -597,7 +597,7 @@
 
   function toSettings() {
     if (inProgress()) {
-      confirmModal('⚙️', 'Leave this game?', 'The scores for this game will be lost.', 'Leave', doSettings);
+      confirmModal('⚙️', 'Leave this game?', 'The scores for this game will be lost.', 'Go to settings', doSettings);
     } else {
       doSettings();
     }
