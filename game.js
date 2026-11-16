@@ -27,7 +27,7 @@
   var THINK = { easy: [2800, 3200], medium: [2800, 3200], hard: [2800, 3200] };
   var STORE_KEY = 'hangman.settings.v1';
   var TURN_SECS = 30;    // seconds per turn when the turn timer is on
-  var ROUND_PAUSE = 2500; // ms to pause after a word ends, before its result message appears
+  var ROUND_PAUSE = 5000; // ms to pause after a word ends, before its result message appears
   var RING = 276.46;     // circumference of the timer ring (2 x pi x 44)
 
   function $(s) { return document.querySelector(s); }
