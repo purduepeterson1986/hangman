@@ -748,7 +748,7 @@
 
   function renderKeys() {
     var myTurn = G.phase === 'turn' && G.seats[G.cur].type === 'human';
-    var alpha = G.level <= 2;   // Levels 1 and 2: A to Z order with big letter buttons
+    var alpha = true;   // Every level: A to Z order with big letter buttons
     function key(l) {
       var used = !!G.guessed[l], inWord = G.w.indexOf(l) >= 0;
       var cls = 'key' + (alpha ? ' big' : '') + (used ? (inWord ? ' hit' : ' miss') : '');

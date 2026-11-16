@@ -26,7 +26,7 @@ A word-guessing game for 1 or 2 players, played in any web browser with a mouse,
 | 4 | Hard | 7 to 9 letters | None | 5 |
 | 5 | Expert | 8 to 13 letters | None | 4 |
 
-Levels 1 and 2 are made for young children. The letter buttons are big and in A to Z order, and each letter is read aloud (turn on **Sound** to hear it). Levels 3 to 5 use a keyboard layout and no reading aid is needed.
+All levels use the same big letter buttons, in A to Z order. Levels 1 and 2 are made for young children, so each letter is also read aloud (turn on **Sound** to hear it).
 
 ## Players
 
