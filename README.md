@@ -11,6 +11,7 @@ A word-guessing game for 2 to 4 players, played in any web browser with a mouse,
 3. On your turn, guess one letter.
    - **Right:** every copy of that letter appears, and you score a point for each one.
    - **Wrong:** you lose one of your chances, and the hangman gets another piece.
+   - **Solve the word:** if you know the word, tap **Solve the word** and spell it out, then press **Check my answer**. A correct answer finishes the word and scores every hidden letter, plus the bonus. A wrong answer costs one chance, the same as a wrong letter.
 4. Then the turn passes to the next player who is still in.
 5. Finish the word to score a bonus of 5 points. If you run out of chances, you are out for this word.
 6. A game has 5 words. The player with the most points at the end wins.
@@ -57,7 +58,7 @@ No installation or build step is needed. Download the files and open `index.html
 | `index.html` | The page |
 | `styles.css` | Appearance and animations |
 | `words.js` | The word lists for each level |
-| `game.js` | Game rules, turns, scoring, computer players and settings |
+| `game.js` | Game rules, turns, solving, scoring, computer players and settings |
 | `manifest.json`, `icon-192.png`, `icon-512.png` | Lets the game be installed as an app |
 
 When `styles.css`, `words.js` or `game.js` changes, change the `?v=` tag on all three lines in `index.html` so browsers fetch the new copies.

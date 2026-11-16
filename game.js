@@ -276,7 +276,8 @@
       seats: names.map(function (nm, i) {
         return { name: nm, type: settings.seats[i].type, level: settings.seats[i].level, score: 0, wrong: 0, out: false };
       }),
-      entry: null, w: '', guessed: {}, cur: 0, phase: 'busy', last: '', solvedBy: -1
+      entry: null, w: '', guessed: {}, cur: 0, phase: 'busy', last: '', solvedBy: -1,
+      solving: false, typed: ''
     };
     $('#players').setAttribute('style', '--n: ' + G.n);
     showScreen('game');
@@ -302,6 +303,8 @@
     G.guessed = {};
     G.last = '';
     G.solvedBy = -1;
+    G.solving = false;
+    G.typed = '';
     G.seats.forEach(function (s) { s.wrong = 0; s.out = false; });
     G.cur = (G.round - 1) % G.n;       // the starting player rotates each word
     G.phase = 'busy';
@@ -371,6 +374,69 @@
         setTimeout(function () { if (token === gen) endRound(-1); }, 1000);
         return;
       }
+    }
+    setTimeout(function () { if (token === gen) passTurn(p); }, 950);
+  }
+
+  /* ---------- Solve the whole word (one turn) ---------- */
+  function startSolve() {
+    if (!G || G.phase !== 'turn' || G.seats[G.cur].type !== 'human') return;
+    G.solving = true;
+    G.typed = '';
+    render();
+  }
+  function cancelSolve() {
+    if (!G || !G.solving) return;
+    G.solving = false;
+    G.typed = '';
+    render();
+  }
+  function typeLetter(l) {
+    if (!G || !G.solving || G.phase !== 'turn') return;
+    if (G.typed.length < G.w.length) { G.typed += l; render(); }
+  }
+  function eraseLetter() {
+    if (!G || !G.solving || G.phase !== 'turn') return;
+    G.typed = G.typed.slice(0, -1);
+    render();
+  }
+  function submitSolve() {
+    if (!G || !G.solving || G.phase !== 'turn' || G.typed.length !== G.w.length) return;
+    var p = G.cur, seat = G.seats[p];
+    var answer = G.typed;
+    G.solving = false;
+    G.typed = '';
+    G.phase = 'busy';
+    var token = ++gen;
+    if (answer === G.w) {
+      // Points for every letter that was still hidden, plus the finishing bonus.
+      var newly = 0, i;
+      for (i = 0; i < G.w.length; i++) if (!G.guessed[G.w[i]]) newly++;
+      for (i = 0; i < G.w.length; i++) G.guessed[G.w[i]] = true;
+      seat.score += newly + BONUS;
+      G.solvedBy = p;
+      G.last = '';
+      G.note = 'Solved!';
+      Sound.play('solve');
+      toast('🎉', 'Solved! +' + (newly + BONUS));
+      render();
+      setTimeout(function () { if (token === gen) endRound(p); }, 900);
+      return;
+    }
+    // A wrong answer costs one chance and the turn, the same as a wrong letter.
+    seat.wrong++;
+    G.note = 'Not that word';
+    Sound.play('miss');
+    toast('❌', 'Not that word');
+    if (seat.wrong >= G.lv.lives) {
+      seat.out = true;
+      setTimeout(function () { Sound.play('out'); }, 300);
+      toast('💤', esc(seat.name) + ' is out');
+    }
+    render();
+    if (activeCount() === 0) {
+      setTimeout(function () { if (token === gen) endRound(-1); }, 1000);
+      return;
     }
     setTimeout(function () { if (token === gen) passTurn(p); }, 950);
   }
@@ -507,6 +573,8 @@
     var seat = G.seats[G.cur], html;
     if (G.phase === 'turn' && seat.type === 'cpu') {
       html = esc(seat.name) + ' is thinking<span class="dots"></span>';
+    } else if (G.phase === 'turn' && G.solving) {
+      html = esc(seat.name) + ', spell the whole word <span class="sub">' + G.typed.length + ' of ' + G.w.length + '</span>';
     } else if (G.phase === 'turn') {
       html = esc(seat.name) + ', your turn <span class="sub">tap a letter</span>';
     } else if (G.phase === 'busy') {
@@ -537,8 +605,11 @@
     var h = '';
     for (var i = 0; i < G.w.length; i++) {
       var ch = G.w[i], found = !!G.guessed[ch];
-      var cls = 'wl' + (found ? ' found' : '') + (found && ch === G.last ? ' pop' : '') + (reveal && !found ? ' missed' : '');
-      h += '<span class="' + cls + '">' + (found || reveal ? ch : '') + '</span>';
+      var typed = G.solving && i < G.typed.length ? G.typed[i] : '';
+      var cls = 'wl' + (found ? ' found' : '') + (found && ch === G.last ? ' pop' : '') +
+        (reveal && !found ? ' missed' : '') + (typed ? ' typed' : '');
+      var shown = reveal ? ch : (typed || (found ? ch : ''));
+      h += '<span class="' + cls + '">' + shown + '</span>';
     }
     $('#word').innerHTML = h;
   }
@@ -549,14 +620,26 @@
     function key(l) {
       var used = !!G.guessed[l], inWord = G.w.indexOf(l) >= 0;
       var cls = 'key' + (alpha ? ' big' : '') + (used ? (inWord ? ' hit' : ' miss') : '');
+      // While spelling the whole word, every letter can be typed, even one already guessed.
+      var off = G.solving ? !myTurn : (used || !myTurn);
       return '<button type="button" class="' + cls + '" data-l="' + l + '"' +
-        ((used || !myTurn) ? ' disabled' : '') + ' aria-label="Letter ' + l + '">' + l + '</button>';
+        (off ? ' disabled' : '') + ' aria-label="Letter ' + l + '">' + l + '</button>';
     }
-    $('#keys').innerHTML = alpha
+    var bar = '';
+    if (myTurn && !G.solving) {
+      bar = '<div class="solve-bar"><button type="button" class="btn ghost" data-act="start">Solve the word</button></div>';
+    } else if (myTurn && G.solving) {
+      bar = '<div class="solve-bar">' +
+        '<button type="button" class="btn ghost" data-act="erase">&#9003; Erase</button>' +
+        '<button type="button" class="btn ghost" data-act="cancel">Cancel</button>' +
+        '<button type="button" class="btn primary" data-act="submit"' + (G.typed.length === G.w.length ? '' : ' disabled') + '>Check my answer</button>' +
+        '</div>';
+    }
+    $('#keys').innerHTML = bar + (alpha
       ? '<div class="kb-alpha">' + ALPHA.map(function (l) { return key(l); }).join('') + '</div>'
       : QWERTY.map(function (row) {
           return '<div class="kb-row">' + row.split('').map(function (l) { return key(l); }).join('') + '</div>';
-        }).join('');
+        }).join(''));
   }
 
   /* ================= Computer players ================= */
@@ -616,14 +699,33 @@
   /* ================= Wiring ================= */
   function bindGame() {
     $('#keys').addEventListener('click', function (e) {
-      var b = e.target.closest('.key'); if (!b || b.disabled || !G) return;
-      guess(G.cur, b.dataset.l);
+      if (!G) return;
+      var a = e.target.closest('[data-act]');
+      if (a) {
+        if (a.disabled) return;
+        var act = a.dataset.act;
+        if (act === 'start') startSolve();
+        else if (act === 'erase') eraseLetter();
+        else if (act === 'cancel') cancelSolve();
+        else if (act === 'submit') submitSolve();
+        return;
+      }
+      var b = e.target.closest('.key'); if (!b || b.disabled) return;
+      if (G.solving) typeLetter(b.dataset.l);
+      else guess(G.cur, b.dataset.l);
     });
     document.addEventListener('keydown', function (e) {
       if (!G || G.phase !== 'turn' || modalOpen() || e.ctrlKey || e.metaKey || e.altKey) return;
       if (G.seats[G.cur].type !== 'human') return;
       var t = e.target;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      if (G.solving) {
+        if (e.key === 'Enter') { e.preventDefault(); submitSolve(); }
+        else if (e.key === 'Backspace') { e.preventDefault(); eraseLetter(); }
+        else if (e.key === 'Escape') { cancelSolve(); }
+        else if (/^[a-zA-Z]$/.test(e.key)) { e.preventDefault(); typeLetter(e.key.toUpperCase()); }
+        return;
+      }
       if (!/^[a-zA-Z]$/.test(e.key)) return;
       e.preventDefault();
       guess(G.cur, e.key.toUpperCase());
