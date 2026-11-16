@@ -533,7 +533,7 @@
     if (!e) { $('#hint').innerHTML = ''; return; }
     if (G.lv.hint === 'picture') h = '<div class="picture" aria-hidden="true">' + e.e + '</div>';
     else if (G.lv.hint === 'category') h = '<div class="chip">Category: <b>' + esc(e.c) + '</b></div>';
-    else h = '<div class="chip">No hint. Use your brain!</div>';
+    else h = '';   // Levels 2 to 5: no hint, so this area is left empty
     $('#hint').innerHTML = h;
   }
 
