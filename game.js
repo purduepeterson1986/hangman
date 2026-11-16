@@ -12,7 +12,7 @@
   var STAGES = 8;        // pieces of the hangman drawing
   var LEVELS = {
     1: { name: 'Easy', lives: 8, size: '3 to 5 letters', hint: 'category', sample: '🐱 CAT',
-         desc: 'Short words with a category to help. Big letter buttons, and each letter is read aloud.' },
+         desc: 'Short words with a category to help. Each letter is read aloud.' },
     2: { name: 'Medium', lives: 7, size: '4 to 6 letters', hint: 'none', sample: 'FROG',
          desc: 'A little longer, with no hint. Each letter is read aloud.' },
     3: { name: 'Tricky', lives: 6, size: '5 to 7 letters', hint: 'none', sample: 'TURTLE',
