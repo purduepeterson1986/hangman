@@ -1,0 +1,90 @@
+/* ================= Hangman word banks =================
+   Level 1-2: a picture is the hint (young players).
+   Level 3-4: a category is the hint.
+   Level 5:   no hint at all (adult challenge). */
+window.HANGMAN_WORDS = {
+  1: [
+    { w: 'CAT', e: '🐱' }, { w: 'DOG', e: '🐶' }, { w: 'PIG', e: '🐷' }, { w: 'COW', e: '🐮' },
+    { w: 'HEN', e: '🐔' }, { w: 'FOX', e: '🦊' }, { w: 'BEE', e: '🐝' }, { w: 'BUG', e: '🐛' },
+    { w: 'OWL', e: '🦉' }, { w: 'ANT', e: '🐜' }, { w: 'RAT', e: '🐀' }, { w: 'BAT', e: '🦇' },
+    { w: 'SUN', e: '☀️' }, { w: 'BUS', e: '🚌' }, { w: 'CAR', e: '🚗' }, { w: 'CUP', e: '☕' },
+    { w: 'HAT', e: '🎩' }, { w: 'BED', e: '🛏️' }, { w: 'EGG', e: '🥚' }, { w: 'PEN', e: '🖊️' },
+    { w: 'TOY', e: '🧸' }, { w: 'BOX', e: '📦' }, { w: 'KEY', e: '🔑' }, { w: 'LEG', e: '🦵' },
+    { w: 'PIE', e: '🥧' }, { w: 'ICE', e: '🧊' }, { w: 'JAM', e: '🍯' }
+  ],
+  2: [
+    { w: 'FISH', e: '🐟' }, { w: 'FROG', e: '🐸' }, { w: 'BIRD', e: '🐦' }, { w: 'STAR', e: '⭐' },
+    { w: 'MOON', e: '🌙' }, { w: 'CAKE', e: '🎂' }, { w: 'BOAT', e: '⛵' }, { w: 'BALL', e: '⚽' },
+    { w: 'DUCK', e: '🦆' }, { w: 'TREE', e: '🌳' }, { w: 'HOUSE', e: '🏠' }, { w: 'APPLE', e: '🍎' },
+    { w: 'BEAR', e: '🐻' }, { w: 'LION', e: '🦁' }, { w: 'SNAKE', e: '🐍' }, { w: 'ROBOT', e: '🤖' },
+    { w: 'TRAIN', e: '🚂' }, { w: 'PIZZA', e: '🍕' }, { w: 'SHEEP', e: '🐑' }, { w: 'HORSE', e: '🐴' },
+    { w: 'GRAPE', e: '🍇' }, { w: 'LEMON', e: '🍋' }, { w: 'CLOCK', e: '⏰' }, { w: 'BUNNY', e: '🐰' },
+    { w: 'MOUSE', e: '🐭' }, { w: 'TIGER', e: '🐯' }, { w: 'ZEBRA', e: '🦓' }, { w: 'WHALE', e: '🐋' },
+    { w: 'SNAIL', e: '🐌' }, { w: 'CROWN', e: '👑' }, { w: 'DRUM', e: '🥁' }, { w: 'HEART', e: '❤️' }
+  ],
+  3: [
+    { w: 'TURTLE', c: 'Animal' }, { w: 'RABBIT', c: 'Animal' }, { w: 'MONKEY', c: 'Animal' },
+    { w: 'PENGUIN', c: 'Animal' }, { w: 'GIRAFFE', c: 'Animal' }, { w: 'DOLPHIN', c: 'Animal' },
+    { w: 'DONKEY', c: 'Animal' }, { w: 'SPIDER', c: 'Animal' }, { w: 'PARROT', c: 'Animal' },
+    { w: 'BEAVER', c: 'Animal' },
+    { w: 'BANANA', c: 'Food' }, { w: 'PICKLE', c: 'Food' }, { w: 'BURGER', c: 'Food' },
+    { w: 'COOKIE', c: 'Food' }, { w: 'CHEESE', c: 'Food' }, { w: 'PANCAKE', c: 'Food' },
+    { w: 'YOGURT', c: 'Food' }, { w: 'POPCORN', c: 'Food' }, { w: 'BREAD', c: 'Food' },
+    { w: 'NOODLE', c: 'Food' },
+    { w: 'KITCHEN', c: 'Home' }, { w: 'GARDEN', c: 'Home' }, { w: 'WINDOW', c: 'Home' },
+    { w: 'BATHTUB', c: 'Home' }, { w: 'PILLOW', c: 'Home' }, { w: 'BLANKET', c: 'Home' },
+    { w: 'CARPET', c: 'Home' }, { w: 'CANDLE', c: 'Home' }, { w: 'FRIDGE', c: 'Home' },
+    { w: 'PENCIL', c: 'School' }, { w: 'ERASER', c: 'School' }, { w: 'RULER', c: 'School' },
+    { w: 'LIBRARY', c: 'School' }, { w: 'CRAYON', c: 'School' }, { w: 'SCHOOL', c: 'School' },
+    { w: 'LESSON', c: 'School' }, { w: 'TEACHER', c: 'School' }, { w: 'RECESS', c: 'School' },
+    { w: 'RAINBOW', c: 'Weather' }, { w: 'THUNDER', c: 'Weather' }, { w: 'SNOWY', c: 'Weather' },
+    { w: 'WINDY', c: 'Weather' }, { w: 'FOGGY', c: 'Weather' }, { w: 'CLOUDY', c: 'Weather' },
+    { w: 'BREEZE', c: 'Weather' }, { w: 'STORM', c: 'Weather' }, { w: 'SUNNY', c: 'Weather' },
+    { w: 'SOCCER', c: 'Sport' }, { w: 'TENNIS', c: 'Sport' }, { w: 'HOCKEY', c: 'Sport' },
+    { w: 'SKATING', c: 'Sport' }, { w: 'RUNNING', c: 'Sport' }, { w: 'CYCLING', c: 'Sport' },
+    { w: 'ARCHERY', c: 'Sport' }, { w: 'BOXING', c: 'Sport' }, { w: 'RUGBY', c: 'Sport' },
+    { w: 'TRUCK', c: 'Vehicle' }, { w: 'ROCKET', c: 'Vehicle' }, { w: 'SCOOTER', c: 'Vehicle' },
+    { w: 'TRACTOR', c: 'Vehicle' }, { w: 'FERRY', c: 'Vehicle' }, { w: 'CANOE', c: 'Vehicle' },
+    { w: 'SUBWAY', c: 'Vehicle' }
+  ],
+  4: [
+    { w: 'GRAVITY', c: 'Science' }, { w: 'MAGNETS', c: 'Science' }, { w: 'ECLIPSE', c: 'Science' },
+    { w: 'MOLECULE', c: 'Science' }, { w: 'ELECTRON', c: 'Science' }, { w: 'CRYSTAL', c: 'Science' },
+    { w: 'GEOLOGY', c: 'Science' }, { w: 'BIOLOGY', c: 'Science' }, { w: 'ORGANISM', c: 'Science' },
+    { w: 'PHYSICS', c: 'Science' },
+    { w: 'ASTEROID', c: 'Space' }, { w: 'SATELLITE', c: 'Space' }, { w: 'TELESCOPE', c: 'Space' },
+    { w: 'ASTRONAUT', c: 'Space' }, { w: 'PLANETS', c: 'Space' }, { w: 'ORBITING', c: 'Space' },
+    { w: 'METEORITE', c: 'Space' },
+    { w: 'SEAHORSE', c: 'Ocean life' }, { w: 'OCTOPUS', c: 'Ocean life' }, { w: 'JELLYFISH', c: 'Ocean life' },
+    { w: 'LOBSTER', c: 'Ocean life' }, { w: 'STINGRAY', c: 'Ocean life' }, { w: 'SEASHELL', c: 'Ocean life' },
+    { w: 'PLANKTON', c: 'Ocean life' }, { w: 'SEAWEED', c: 'Ocean life' },
+    { w: 'ORCHESTRA', c: 'Music' }, { w: 'TROMBONE', c: 'Music' }, { w: 'SAXOPHONE', c: 'Music' },
+    { w: 'HARMONICA', c: 'Music' }, { w: 'CLARINET', c: 'Music' }, { w: 'TRUMPET', c: 'Music' },
+    { w: 'KEYBOARD', c: 'Music' }, { w: 'MELODIES', c: 'Music' },
+    { w: 'SKELETON', c: 'The body' }, { w: 'STOMACH', c: 'The body' }, { w: 'KNUCKLE', c: 'The body' },
+    { w: 'SHOULDER', c: 'The body' }, { w: 'EYEBROW', c: 'The body' }, { w: 'HEARTBEAT', c: 'The body' },
+    { w: 'FINGERTIP', c: 'The body' },
+    { w: 'PLUMBER', c: 'Job' }, { w: 'DENTIST', c: 'Job' }, { w: 'SURGEON', c: 'Job' },
+    { w: 'PAINTER', c: 'Job' }, { w: 'ARCHITECT', c: 'Job' }, { w: 'MECHANIC', c: 'Job' },
+    { w: 'FIREMAN', c: 'Job' },
+    { w: 'TURQUOISE', c: 'Colour' }, { w: 'MAGENTA', c: 'Colour' }, { w: 'CRIMSON', c: 'Colour' },
+    { w: 'SCARLET', c: 'Colour' }, { w: 'EMERALD', c: 'Colour' }, { w: 'LAVENDER', c: 'Colour' },
+    { w: 'CHARCOAL', c: 'Colour' },
+    { w: 'MOUNTAIN', c: 'Land' }, { w: 'VOLCANO', c: 'Land' }, { w: 'CONTINENT', c: 'Land' },
+    { w: 'PENINSULA', c: 'Land' }, { w: 'GLACIER', c: 'Land' }, { w: 'PLATEAU', c: 'Land' },
+    { w: 'RIVERBANK', c: 'Land' }
+  ],
+  5: [
+    { w: 'SERENDIPITY' }, { w: 'ONOMATOPOEIA' }, { w: 'LABYRINTH' }, { w: 'QUIXOTIC' },
+    { w: 'CATACLYSM' }, { w: 'SOLILOQUY' }, { w: 'MNEMONIC' }, { w: 'PARAPHRASE' },
+    { w: 'JUGGERNAUT' }, { w: 'KALEIDOSCOPE' }, { w: 'SUPERCILIOUS' }, { w: 'IDIOSYNCRASY' },
+    { w: 'EPHEMERAL' }, { w: 'NONCHALANT' }, { w: 'OBSTREPEROUS' }, { w: 'RHYTHMIC' },
+    { w: 'PNEUMONIA' }, { w: 'CONSCIENCE' }, { w: 'BUREAUCRACY' }, { w: 'CHAMELEON' },
+    { w: 'HYPOCRISY' }, { w: 'MISCHIEVOUS' }, { w: 'ANONYMOUS' }, { w: 'QUESTIONNAIRE' },
+    { w: 'ACCOMMODATE' }, { w: 'SACRILEGIOUS' }, { w: 'PHILANTHROPY' }, { w: 'CATASTROPHE' },
+    { w: 'ENTREPRENEUR' }, { w: 'INOCULATE' }, { w: 'PSEUDONYM' }, { w: 'RESTAURANT' },
+    { w: 'BELLIGERENT' }, { w: 'CONUNDRUM' }, { w: 'GREGARIOUS' }, { w: 'VIVACIOUS' },
+    { w: 'PERSEVERANCE' }, { w: 'QUARANTINE' }, { w: 'SYNCHRONIZE' }, { w: 'ZEITGEIST' },
+    { w: 'ARCHIPELAGO' }, { w: 'OPPORTUNITY' }
+  ]
+};

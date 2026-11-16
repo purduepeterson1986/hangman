@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0c1024">
+  <title>Hangman</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Hangman">
+  <!-- When styles.css, words.js or game.js changes, change the ?v= tag on all three so browsers fetch the new copies. -->
+  <link rel="stylesheet" href="styles.css?v=2026-11-15a">
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <!-- ============ SETTINGS SCREEN ============ -->
+  <main id="setup" class="screen active">
+    <div class="setup-scroll">
+      <header class="hero">
+        <div class="logo" aria-hidden="true">
+          <span class="tile-mini t1">H</span>
+          <span class="tile-mini t2">A</span>
+          <span class="tile-mini t3">N</span>
+          <span class="tile-mini t4">G</span>
+        </div>
+        <h1>Hangman</h1>
+        <p>Guess the hidden word one letter at a time before you run out of chances.</p>
+      </header>
+
+      <section class="panel" aria-labelledby="h-players">
+        <div class="panel-head">
+          <h2 id="h-players">Players</h2>
+          <div class="segmented" id="player-count" role="radiogroup" aria-label="Number of players"></div>
+        </div>
+        <div class="seats" id="seats"></div>
+        <p class="hint">Names are optional. Set any seat to Computer to play against the game.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="h-level">
+        <div class="panel-head">
+          <h2 id="h-level">Level</h2>
+        </div>
+        <div class="levels" id="levels" role="radiogroup" aria-label="Level"></div>
+        <p class="hint">Each game has 5 words. Every word is new, and the player with the most points wins.</p>
+      </section>
+    </div>
+
+    <footer class="setup-footer">
+      <div class="summary" id="summary"></div>
+      <button class="btn primary big" id="start-btn" type="button">Start game</button>
+    </footer>
+  </main>
+
+  <!-- ============ PLAY SCREEN ============ -->
+  <main id="game" class="screen">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">A</span><span class="brand-name">Hangman</span></div>
+      <div class="round-info" id="round-info"></div>
+      <div class="controls">
+        <button class="icon-btn" id="sound-btn" type="button" aria-label="Sound on" title="Sound">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9v6h4l5 4V5L8 9H4z"/><path class="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="mute" d="M17 9l5 6M22 9l-5 6"/></svg>
+        </button>
+        <button class="icon-btn" id="fs-btn" type="button" aria-label="Full screen" title="Full screen">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>
+        </button>
+        <button class="btn ghost" id="restart-btn" type="button" title="Restart">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v5h5"/></svg><span>Restart</span>
+        </button>
+        <button class="btn ghost" id="menu-btn" type="button" title="Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg><span>Settings</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="players" id="players" aria-label="Players"></section>
+
+    <div class="status">
+      <div class="status-main" id="status-main" role="status" aria-live="polite"></div>
+    </div>
+
+    <section class="table">
+      <div class="gallows" id="gallows" aria-hidden="true">
+        <svg viewBox="0 0 300 280" class="gallows-svg">
+          <g class="frame">
+            <line x1="20" y1="268" x2="280" y2="268" class="wood"/>
+            <line x1="90" y1="268" x2="90" y2="30" class="wood"/>
+            <line x1="90" y1="30" x2="210" y2="30" class="wood"/>
+            <line x1="90" y1="72" x2="128" y2="30" class="wood thin"/>
+          </g>
+          <g class="figure">
+            <line class="part rope" data-k="1" x1="210" y1="30" x2="210" y2="70"/>
+            <g class="part" data-k="2">
+              <circle cx="210" cy="92" r="22" class="head"/>
+              <circle cx="202" cy="86" r="3.2" class="dot-eye"/>
+              <circle cx="218" cy="86" r="3.2" class="dot-eye"/>
+              <path d="M200 98 Q210 107 220 98" class="smile"/>
+            </g>
+            <line class="part limb" data-k="3" x1="210" y1="114" x2="210" y2="188"/>
+            <line class="part limb" data-k="4" x1="210" y1="132" x2="182" y2="162"/>
+            <line class="part limb" data-k="5" x1="210" y1="132" x2="238" y2="162"/>
+            <line class="part limb" data-k="6" x1="210" y1="188" x2="184" y2="240"/>
+            <line class="part limb" data-k="7" x1="210" y1="188" x2="236" y2="240"/>
+            <g class="part x-eyes" data-k="8">
+              <path d="M197 81 L207 91 M207 81 L197 91" class="x-mark"/>
+              <path d="M213 81 L223 91 M223 81 L213 91" class="x-mark"/>
+            </g>
+          </g>
+        </svg>
+        <div class="cap" id="cap"></div>
+      </div>
+
+      <div class="side">
+        <div class="hint-wrap" id="hint"></div>
+        <div class="word" id="word" aria-label="The hidden word"></div>
+        <div class="toast-slot"><div class="toast" id="toast" aria-live="polite"></div></div>
+      </div>
+    </section>
+
+    <section class="keyboard" id="keys" aria-label="Letters"></section>
+  </main>
+
+  <div class="modal-layer" id="modal-layer" hidden>
+    <div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+  </div>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <script src="words.js?v=2026-11-15a"></script>
+  <script src="game.js?v=2026-11-15a"></script>
+</body>
+</html>
