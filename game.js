@@ -24,7 +24,7 @@
   };
   var DIFFS = [['easy', 'Easy'], ['medium', 'Medium'], ['hard', 'Hard']];
   // How long a computer player "thinks" (ms) before it guesses.
-  var THINK = { easy: [1200, 1600], medium: [900, 1200], hard: [650, 900] };
+  var THINK = { easy: [2800, 3200], medium: [2800, 3200], hard: [2800, 3200] };
   var STORE_KEY = 'hangman.settings.v1';
   var TURN_SECS = 30;    // seconds per turn when the turn timer is on
   var RING = 276.46;     // circumference of the timer ring (2 x pi x 44)
