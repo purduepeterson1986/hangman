@@ -687,6 +687,19 @@
     return STAGES - lives + wrong;
   }
 
+  // Snowflakes that keep falling behind the snowman. Positions are fixed so the box looks the same each time.
+  function flakesHTML() {
+    var out = '';
+    for (var k = 0; k < 12; k++) {
+      var x = 15 + ((k * 73) % 270);            // spread across the box
+      var delay = ((k * 0.37) % 4).toFixed(2);  // start at different times
+      var dur = (4 + (k % 4) * 0.7).toFixed(1); // some fall faster than others
+      var r = (2.8 + (k % 3) * 1).toFixed(1);
+      out += '<circle class="flake" cx="0" cy="0" r="' + r + '" style="--x:' + x + 'px;animation-delay:-' + delay + 's;animation-duration:' + dur + 's"/>';
+    }
+    return out;
+  }
+
   // One snowman for each player, always on screen. The scarf and hat use that player's colour.
   // Pieces appear in this order: 1 head, 2 middle body, 3 bottom body, 4 arm, 5 other arm,
   // 6 scarf, 7 hat, 8 melting face (the end).
@@ -695,6 +708,17 @@
       '<svg viewBox="0 0 300 280" class="gallows-svg" aria-hidden="true">' +
       '<g class="frame">' +
         '<line x1="20" y1="268" x2="280" y2="268" class="ground"/>' +
+      '</g>' +
+      '<g class="flakes">' + flakesHTML() + '</g>' +
+      '<g class="outline">' +
+        '<circle cx="150" cy="84" r="30"/>' +
+        '<circle cx="150" cy="150" r="42"/>' +
+        '<circle cx="150" cy="212" r="56"/>' +
+        '<line x1="110" y1="160" x2="62" y2="128"/>' +
+        '<line x1="190" y1="160" x2="238" y2="128"/>' +
+        '<path d="M122 108 Q150 118 178 108 L180 120 Q150 130 120 120 Z"/>' +
+        '<rect x="126" y="22" width="48" height="32" rx="3"/>' +
+        '<rect x="104" y="50" width="92" height="9" rx="4"/>' +
       '</g>' +
       '<g class="figure">' +
         '<g class="part" data-k="1">' +
@@ -736,6 +760,7 @@
       var left = Math.max(0, lives - seat.wrong);
       var turn = (G.phase === 'turn' || G.phase === 'busy') && i === G.cur;
       panel.classList.toggle('dead', stage >= STAGES);
+      panel.classList.toggle('started', stage > 0);
       panel.classList.toggle('active', turn);
       panel.querySelectorAll('.part').forEach(function (el) {
         el.classList.toggle('on', +el.getAttribute('data-k') <= stage);

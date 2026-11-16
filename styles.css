@@ -365,6 +365,16 @@ h1, h2, h3, p { margin: 0; }
 .gallows.dead .dot-eye, .gallows.dead .smile { opacity: 0; }
 .gallows .sad { stroke: #2a1a3a; stroke-width: 3.5; stroke-linecap: round; fill: none; }
 .gallows .puddle { fill: #9fd8f0; opacity: .6; }
+/* Dashed outline of the whole snowman, shown until the first piece goes on */
+.gallows .outline { fill: none; stroke: #b9bfe0; stroke-width: 2.5; stroke-dasharray: 6 6; opacity: .5; transition: opacity .35s ease; }
+.gallows.started .outline { opacity: 0; }
+/* Snowflakes falling behind the snowman, from the top of the box to the ground */
+.gallows .flake { fill: #f4f9ff; opacity: .9; animation: flake-fall linear infinite; }
+@keyframes flake-fall {
+  from { transform: translate(var(--x), -12px); }
+  to { transform: translate(var(--x), 270px); }
+}
+@media (prefers-reduced-motion: reduce) { .gallows .flake { animation: none; opacity: .4; } }
 
 .side {
   display: flex; flex-direction: column; align-items: center; gap: 14px;
