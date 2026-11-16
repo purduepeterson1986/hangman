@@ -1,7 +1,7 @@
 {
   "name": "Snowman",
   "short_name": "Snowman",
-  "description": "A word-guessing game for 2 to 4 players, with five levels from picture words to an adult challenge.",
+  "description": "A word-guessing game for 1 or 2 players, with five levels from picture words to an adult challenge.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
