@@ -671,6 +671,7 @@
         '<button type="button" class="btn primary" data-act="submit"' + (G.typed.length === G.w.length ? '' : ' disabled') + '>Check my answer</button>' +
         '</div>';
     }
+    $('#keys').classList.toggle('qwerty', !alpha);   // Levels 3 to 5: larger letter boxes
     $('#keys').innerHTML = bar + (alpha
       ? '<div class="kb-alpha">' + ALPHA.map(function (l) { return key(l); }).join('') + '</div>'
       : QWERTY.map(function (row) {

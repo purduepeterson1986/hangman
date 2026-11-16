@@ -396,6 +396,8 @@ h1, h2, h3, p { margin: 0; }
   transition: transform .1s ease, background .15s ease;
 }
 .key.big { height: clamp(50px, 9vh, 72px); font-size: clamp(1.5rem, 4.4vw, 2.3rem); border-radius: 18px; }
+/* Levels 3 to 5: a little bigger letter boxes */
+.keyboard.qwerty .key { height: clamp(44px, 8vh, 62px); font-size: clamp(1.15rem, 3.1vw, 1.6rem); }
 .kb-row .key { max-width: 62px; }
 .key:not(:disabled):hover { background: rgba(255, 255, 255, .2); }
 .key:not(:disabled):active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0, 0, 0, .3); }
