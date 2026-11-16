@@ -407,6 +407,12 @@ h1, h2, h3, p { margin: 0; }
 /* Solve the whole word */
 .solve-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 8px; }
 .solve-bar .btn { min-height: 40px; padding: 0 16px; font-size: .95rem; }
+.solve-bar .btn.solve-go {
+  border: 0; color: #0b3a1e;
+  background: linear-gradient(180deg, #d6fbe2, #9ff0b9);
+  box-shadow: 0 6px 16px rgba(95, 227, 161, .35), inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+.solve-bar .btn.solve-go:hover { background: linear-gradient(180deg, #e6fdec, #b2f5c8); }
 .solve-bar .btn:disabled { opacity: .4; }
 .wl.typed { color: #fff; border-bottom-color: var(--gold); }
 

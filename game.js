@@ -655,7 +655,7 @@
     }
     var bar = '';
     if (myTurn && !G.solving) {
-      bar = '<div class="solve-bar"><button type="button" class="btn ghost" data-act="start">Solve the word</button></div>';
+      bar = '<div class="solve-bar"><button type="button" class="btn solve-go" data-act="start">Solve the word</button></div>';
     } else if (myTurn && G.solving) {
       bar = '<div class="solve-bar">' +
         '<button type="button" class="btn ghost" data-act="erase">&#9003; Erase</button>' +
