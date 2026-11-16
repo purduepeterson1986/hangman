@@ -1,31 +1,31 @@
 /* ================= Hangman word banks =================
-   Level 1:   a picture is the hint (young players).
-   Level 2:   a category is the hint.
+   Level 1:   a category is the hint.
+   Level 2:   no hint.
    Level 3:   no hint.
    Level 4:   a category is the hint.
    Level 5:   no hint at all (adult challenge). */
 window.HANGMAN_WORDS = {
   1: [
-    { w: 'CAT', e: '🐱' }, { w: 'DOG', e: '🐶' }, { w: 'PIG', e: '🐷' },
-    { w: 'COW', e: '🐮' }, { w: 'HEN', e: '🐔' }, { w: 'FOX', e: '🦊' },
-    { w: 'BEE', e: '🐝' }, { w: 'BUG', e: '🐛' }, { w: 'OWL', e: '🦉' },
-    { w: 'ANT', e: '🐜' }, { w: 'RAT', e: '🐀' }, { w: 'BAT', e: '🦇' },
-    { w: 'SUN', e: '☀️' }, { w: 'BUS', e: '🚌' }, { w: 'CAR', e: '🚗' },
-    { w: 'CUP', e: '☕' }, { w: 'HAT', e: '🎩' }, { w: 'BED', e: '🛏️' },
-    { w: 'EGG', e: '🥚' }, { w: 'PEN', e: '🖊️' }, { w: 'TOY', e: '🧸' },
-    { w: 'BOX', e: '📦' }, { w: 'KEY', e: '🔑' }, { w: 'LEG', e: '🦵' },
-    { w: 'PIE', e: '🥧' }, { w: 'ICE', e: '🧊' }, { w: 'JAM', e: '🍯' },
-    { w: 'FISH', e: '🐟' }, { w: 'FROG', e: '🐸' }, { w: 'BIRD', e: '🐦' },
-    { w: 'STAR', e: '⭐' }, { w: 'MOON', e: '🌙' }, { w: 'CAKE', e: '🎂' },
-    { w: 'BOAT', e: '⛵' }, { w: 'BALL', e: '⚽' }, { w: 'DUCK', e: '🦆' },
-    { w: 'TREE', e: '🌳' }, { w: 'HOUSE', e: '🏠' }, { w: 'APPLE', e: '🍎' },
-    { w: 'BEAR', e: '🐻' }, { w: 'LION', e: '🦁' }, { w: 'SNAKE', e: '🐍' },
-    { w: 'ROBOT', e: '🤖' }, { w: 'TRAIN', e: '🚂' }, { w: 'PIZZA', e: '🍕' },
-    { w: 'SHEEP', e: '🐑' }, { w: 'HORSE', e: '🐴' }, { w: 'GRAPE', e: '🍇' },
-    { w: 'LEMON', e: '🍋' }, { w: 'CLOCK', e: '⏰' }, { w: 'BUNNY', e: '🐰' },
-    { w: 'MOUSE', e: '🐭' }, { w: 'TIGER', e: '🐯' }, { w: 'ZEBRA', e: '🦓' },
-    { w: 'WHALE', e: '🐋' }, { w: 'SNAIL', e: '🐌' }, { w: 'CROWN', e: '👑' },
-    { w: 'DRUM', e: '🥁' }, { w: 'HEART', e: '❤️' }
+    { w: 'CAT', c: 'Animal' }, { w: 'DOG', c: 'Animal' }, { w: 'PIG', c: 'Animal' },
+    { w: 'COW', c: 'Animal' }, { w: 'HEN', c: 'Animal' }, { w: 'FOX', c: 'Animal' },
+    { w: 'BEE', c: 'Animal' }, { w: 'BUG', c: 'Animal' }, { w: 'OWL', c: 'Animal' },
+    { w: 'ANT', c: 'Animal' }, { w: 'RAT', c: 'Animal' }, { w: 'BAT', c: 'Animal' },
+    { w: 'SUN', c: 'Nature' }, { w: 'BUS', c: 'Vehicle' }, { w: 'CAR', c: 'Vehicle' },
+    { w: 'CUP', c: 'Thing' }, { w: 'HAT', c: 'Thing' }, { w: 'BED', c: 'Thing' },
+    { w: 'EGG', c: 'Food' }, { w: 'PEN', c: 'Thing' }, { w: 'TOY', c: 'Thing' },
+    { w: 'BOX', c: 'Thing' }, { w: 'KEY', c: 'Thing' }, { w: 'LEG', c: 'Thing' },
+    { w: 'PIE', c: 'Food' }, { w: 'ICE', c: 'Food' }, { w: 'JAM', c: 'Food' },
+    { w: 'FISH', c: 'Animal' }, { w: 'FROG', c: 'Animal' }, { w: 'BIRD', c: 'Animal' },
+    { w: 'STAR', c: 'Nature' }, { w: 'MOON', c: 'Nature' }, { w: 'CAKE', c: 'Food' },
+    { w: 'BOAT', c: 'Vehicle' }, { w: 'BALL', c: 'Thing' }, { w: 'DUCK', c: 'Animal' },
+    { w: 'TREE', c: 'Nature' }, { w: 'HOUSE', c: 'Thing' }, { w: 'APPLE', c: 'Food' },
+    { w: 'BEAR', c: 'Animal' }, { w: 'LION', c: 'Animal' }, { w: 'SNAKE', c: 'Animal' },
+    { w: 'ROBOT', c: 'Thing' }, { w: 'TRAIN', c: 'Vehicle' }, { w: 'PIZZA', c: 'Food' },
+    { w: 'SHEEP', c: 'Animal' }, { w: 'HORSE', c: 'Animal' }, { w: 'GRAPE', c: 'Food' },
+    { w: 'LEMON', c: 'Food' }, { w: 'CLOCK', c: 'Thing' }, { w: 'BUNNY', c: 'Animal' },
+    { w: 'MOUSE', c: 'Animal' }, { w: 'TIGER', c: 'Animal' }, { w: 'ZEBRA', c: 'Animal' },
+    { w: 'WHALE', c: 'Animal' }, { w: 'SNAIL', c: 'Animal' }, { w: 'CROWN', c: 'Thing' },
+    { w: 'DRUM', c: 'Thing' }, { w: 'HEART', c: 'Thing' }
   ],
   2: [
     { w: 'FISH', c: 'Animal' }, { w: 'FROG', c: 'Animal' }, { w: 'BIRD', c: 'Animal' },

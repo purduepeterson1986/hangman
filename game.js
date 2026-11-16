@@ -11,10 +11,10 @@
   var BONUS = 5;         // extra points for finishing a word
   var STAGES = 8;        // pieces of the hangman drawing
   var LEVELS = {
-    1: { name: 'Tiny Words', lives: 8, size: '3 to 5 letters', hint: 'picture', sample: '🐱 CAT',
-         desc: 'Short words with a picture to help. Big letter buttons, and each letter is read aloud.' },
-    2: { name: 'Category Words', lives: 7, size: '4 to 6 letters', hint: 'category', sample: 'FROG',
-         desc: 'A little longer. A category tells you what kind of word to look for. Each letter is read aloud.' },
+    1: { name: 'Tiny Words', lives: 8, size: '3 to 5 letters', hint: 'category', sample: '🐱 CAT',
+         desc: 'Short words with a category to help. Big letter buttons, and each letter is read aloud.' },
+    2: { name: 'Category Words', lives: 7, size: '4 to 6 letters', hint: 'none', sample: 'FROG',
+         desc: 'A little longer, with no hint. Each letter is read aloud.' },
     3: { name: 'Word Hunt', lives: 6, size: '5 to 7 letters', hint: 'none', sample: 'TURTLE',
          desc: 'No picture and no category. Just the letters.' },
     4: { name: 'Brain Teasers', lives: 5, size: '7 to 9 letters', hint: 'category', sample: 'GRAVITY',
