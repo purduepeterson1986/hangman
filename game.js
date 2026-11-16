@@ -26,6 +26,8 @@
   // How long a computer player "thinks" (ms) before it guesses.
   var THINK = { easy: [1200, 1600], medium: [900, 1200], hard: [650, 900] };
   var STORE_KEY = 'hangman.settings.v1';
+  var TURN_SECS = 30;    // seconds per turn when the turn timer is on
+  var RING = 276.46;     // circumference of the timer ring (2 x pi x 44)
 
   function $(s) { return document.querySelector(s); }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]; }); }
@@ -35,7 +37,7 @@
 
   /* ================= Settings ================= */
   var settings = {
-    count: 2,
+    count: 2,          // 1 or 2 players
     seats: [
       { name: '', type: 'human', level: 'medium' },
       { name: '', type: 'human', level: 'medium' },
@@ -43,7 +45,8 @@
       { name: '', type: 'human', level: 'medium' }
     ],
     level: 1,
-    sound: true
+    sound: true,
+    timer: true        // 30-second turn timer
   };
 
   function loadSettings() {
@@ -52,6 +55,8 @@
       if (!s) return;
       if (LEVELS[s.level]) settings.level = s.level;
       if (typeof s.sound === 'boolean') settings.sound = s.sound;
+      if (typeof s.timer === 'boolean') settings.timer = s.timer;
+      if (s.count === 1 || s.count === 2) settings.count = s.count;
       if (Array.isArray(s.seats)) {
         for (var i = 0; i < 4; i++) {
           var a = s.seats[i]; if (!a) continue;
@@ -105,13 +110,27 @@
         '<span class="tile-size">' + lv.lives + ' wrong guesses &middot; ' + lv.size + '</span></button>';
     }).join('');
   }
+  function renderCount() {
+    $('#count').innerHTML = [1, 2].map(function (k) {
+      var on = settings.count === k;
+      return '<button type="button" class="seg' + (on ? ' on' : '') + '" role="radio" aria-checked="' + on + '" data-count="' + k + '">' +
+        (k === 1 ? '1 player' : '2 players') + '</button>';
+    }).join('');
+  }
+  function renderTimer() {
+    $('#timer-opt').innerHTML = [[true, '30 seconds'], [false, 'Off']].map(function (o) {
+      var on = settings.timer === o[0];
+      return '<button type="button" class="seg' + (on ? ' on' : '') + '" role="radio" aria-checked="' + on + '" data-timer="' + o[0] + '">' + o[1] + '</button>';
+    }).join('');
+  }
   function renderSummary() {
     var cpu = 0, i;
     for (i = 0; i < settings.count; i++) if (settings.seats[i].type === 'cpu') cpu++;
-    var who = settings.count + ' players' + (cpu ? ' (' + (cpu === settings.count ? 'all computer' : cpu + ' computer') + ')' : '');
-    $('#summary').innerHTML = '<b>' + who + '</b> &middot; Level ' + settings.level + ' ' + LEVELS[settings.level].name + ' &middot; ' + ROUNDS + ' words';
+    var who = (settings.count === 1 ? '1 player' : '2 players') + (cpu ? ' (' + (cpu === settings.count ? 'all computer' : cpu + ' computer') + ')' : '');
+    $('#summary').innerHTML = '<b>' + who + '</b> &middot; Level ' + settings.level + ' ' + LEVELS[settings.level].name + ' &middot; ' + ROUNDS + ' words' +
+      ' &middot; ' + (settings.timer ? '30-second turns' : 'No turn timer');
   }
-  function renderSetup() { renderSeats(); renderLevels(); renderSummary(); }
+  function renderSetup() { renderCount(); renderTimer(); renderSeats(); renderLevels(); renderSummary(); }
 
   function bindSetup() {
     $('#seats').addEventListener('input', function (e) {
@@ -124,6 +143,14 @@
       if (b.dataset.type) s.type = b.dataset.type;
       if (b.dataset.diff) s.level = b.dataset.diff;
       saveSettings(); Sound.play('tick'); renderSeats(); renderSummary();
+    });
+    $('#count').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-count]'); if (!b) return;
+      settings.count = +b.dataset.count; saveSettings(); Sound.play('tick'); renderSetup();
+    });
+    $('#timer-opt').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-timer]'); if (!b) return;
+      settings.timer = b.dataset.timer === 'true'; saveSettings(); Sound.play('tick'); renderSetup();
     });
     $('#levels').addEventListener('click', function (e) {
       var b = e.target.closest('[data-level]'); if (!b) return;
@@ -259,6 +286,7 @@
 
   function startGame() {
     closeModal();
+    stopClock();
     var names = seatNames();
     gen++;
     G = {
@@ -271,6 +299,7 @@
     };
     $('#players').setAttribute('style', '--n: ' + G.n);
     $('#gallows').innerHTML = G.seats.map(function (s, i) { return gallowsHTML(i); }).join('');
+    $('#gallows').classList.toggle('solo', G.n === 1);
     showScreen('game');
     Sound.play('start');
     nextRound();
@@ -308,6 +337,7 @@
     if (!G || G.phase !== 'busy') return;
     G.phase = 'turn';
     render();
+    startClock();
     var seat = G.seats[G.cur];
     if (seat.type === 'cpu') {
       var token = ++gen, p = G.cur, t = THINK[seat.level];
@@ -331,8 +361,65 @@
     return G.seats.filter(function (s) { return !s.out; }).length;
   }
 
+  /* ---------- Turn timer ---------- */
+  var clockTimer = 0, clockEnd = 0;
+  function startClock() {
+    stopClock();
+    if (!G || !settings.timer) { renderClock(); return; }
+    clockEnd = Date.now() + TURN_SECS * 1000;
+    clockTimer = setInterval(tickClock, 200);
+    renderClock();
+  }
+  function stopClock() {
+    if (clockTimer) { clearInterval(clockTimer); clockTimer = 0; }
+  }
+  function tickClock() {
+    if (!G || G.phase !== 'turn') { stopClock(); renderClock(); return; }
+    if (Date.now() >= clockEnd) { stopClock(); renderClock(); timeUp(); return; }
+    renderClock();
+  }
+  // The ring shows the time left in this turn. Idle between turns it shows a full 30.
+  // After Solve is pressed the clock stops, shown as a dash.
+  function renderClock() {
+    var el = $('#clock'); if (!el) return;
+    el.hidden = !settings.timer;
+    if (!G || !settings.timer) return;
+    var running = !!clockTimer && G.phase === 'turn';
+    var left = running ? Math.max(0, Math.ceil((clockEnd - Date.now()) / 1000)) : TURN_SECS;
+    el.classList.toggle('warn', running && left <= 10 && left > 5);
+    el.classList.toggle('hot', running && left <= 5);
+    el.classList.toggle('idle', !running);
+    $('#ring').style.strokeDashoffset = (RING * (1 - left / TURN_SECS)).toFixed(1);
+    $('#clock-num').textContent = G.phase === 'turn' && !running ? '—' : left;
+  }
+  // Out of time before a letter or Solve: it counts as a miss and the turn passes.
+  function timeUp() {
+    if (!G || G.phase !== 'turn') return;
+    var p = G.cur, seat = G.seats[p];
+    G.solving = false;
+    G.typed = '';
+    G.phase = 'busy';
+    var token = ++gen;
+    seat.wrong++;
+    G.note = "Time's up";
+    Sound.play('miss');
+    toast('⏰', "Time's up");
+    if (seat.wrong >= G.lv.lives) {
+      seat.out = true;
+      setTimeout(function () { Sound.play('out'); }, 300);
+      toast('💤', esc(seat.name) + ' is out');
+    }
+    render();
+    if (activeCount() === 0) {
+      setTimeout(function () { if (token === gen) endRound(-1); }, 1000);
+      return;
+    }
+    setTimeout(function () { if (token === gen) passTurn(p); }, 950);
+  }
+
   function guess(p, letter) {
     if (!G || G.phase !== 'turn' || p !== G.cur || G.guessed[letter]) return;
+    stopClock();
     G.guessed[letter] = true;
     G.last = letter;
     G.phase = 'busy';
@@ -372,6 +459,7 @@
   /* ---------- Solve the whole word (one turn) ---------- */
   function startSolve() {
     if (!G || G.phase !== 'turn' || G.seats[G.cur].type !== 'human') return;
+    stopClock();   // pressing Solve counts as the player's move, so the clock stops
     G.solving = true;
     G.typed = '';
     render();
@@ -393,6 +481,7 @@
   }
   function submitSolve() {
     if (!G || !G.solving || G.phase !== 'turn' || G.typed.length !== G.w.length) return;
+    stopClock();
     var p = G.cur, seat = G.seats[p];
     var answer = G.typed;
     G.solving = false;
@@ -450,6 +539,7 @@
 
   function endRound(solver) {
     if (!G) return;
+    stopClock();
     G.phase = 'roundover';
     G.solvedBy = solver;
     var token = ++gen;
@@ -475,6 +565,7 @@
   }
 
   function gameOver() {
+    stopClock();
     G.phase = 'over';
     ++gen;
     render();
@@ -482,7 +573,7 @@
       .sort(function (a, b) { return b.s.score - a.s.score || a.i - b.i; });
     var top = ranked[0].s.score;
     var winners = ranked.filter(function (r) { return r.s.score === top; });
-    var title = winners.length === 1 ? esc(winners[0].s.name) + ' wins!' : 'It is a tie!';
+    var title = G.n === 1 ? 'Game over' : winners.length === 1 ? esc(winners[0].s.name) + ' wins!' : 'It is a tie!';
     var rows = ranked.map(function (r) {
       return '<div class="score-row' + (r.s.score === top ? ' lead' : '') + '">' + miniDisc(r.i, 'sm') +
         '<span class="nm">' + esc(r.s.name) + '</span><span class="sc">' + r.s.score + '</span></div>';
@@ -505,6 +596,7 @@
   }
   function doSettings() {
     gen++;
+    stopClock();
     G = null;
     closeModal();
     renderSetup();
@@ -519,6 +611,7 @@
     renderPlayers();
     renderStatus();
     renderGallows();
+    renderClock();
     renderWord();
     renderKeys();
   }
@@ -648,6 +741,8 @@
       h += '<span class="' + cls + '">' + shown + '</span>';
     }
     $('#word').innerHTML = h;
+    // Lets the CSS size every letter box so the whole word fits on one line.
+    $('#word').style.setProperty('--n', G.w.length);
   }
 
   function renderKeys() {

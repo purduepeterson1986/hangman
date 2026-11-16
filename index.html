@@ -11,7 +11,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Hangman">
   <!-- When styles.css, words.js or game.js changes, change the ?v= tag on all three so browsers fetch the new copies. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-16q">
+  <link rel="stylesheet" href="styles.css?v=2026-11-16r">
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -33,10 +33,18 @@
       <section class="panel" aria-labelledby="h-players">
         <div class="panel-head">
           <h2 id="h-players">Players</h2>
-          <span class="fixed-note">2 players</span>
+          <div class="segmented" id="count" role="radiogroup" aria-label="Number of players"></div>
         </div>
         <div class="seats" id="seats"></div>
         <p class="hint">Names are optional. Each player can be a Person or the Computer.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="h-timer">
+        <div class="panel-head">
+          <h2 id="h-timer">Turn timer</h2>
+          <div class="segmented" id="timer-opt" role="radiogroup" aria-label="Turn timer"></div>
+        </div>
+        <p class="hint">Each turn has 30 seconds. If time runs out before a letter is picked or Solve is pressed, that counts as a miss and the turn passes.</p>
       </section>
 
       <section class="panel" aria-labelledby="h-level">
@@ -82,14 +90,27 @@
     </div>
 
     <section class="table">
-      <!-- One hangman per player, filled in by game.js -->
-      <div class="gallows-row" id="gallows" aria-hidden="true"></div>
+      <div class="stage">
+        <!-- One hangman per player, filled in by game.js -->
+        <div class="gallows-row" id="gallows" aria-hidden="true"></div>
+        <div class="clock" id="clock" hidden>
+          <svg viewBox="0 0 100 100" class="clock-svg" aria-hidden="true">
+            <circle class="ring-bg" cx="50" cy="50" r="44"/>
+            <circle class="ring-fg" id="ring" cx="50" cy="50" r="44"/>
+          </svg>
+          <div class="clock-num"><b id="clock-num">30</b><span>sec</span></div>
+        </div>
+      </div>
 
       <div class="side">
         <div class="hint-wrap" id="hint"></div>
-        <div class="word" id="word" aria-label="The hidden word"></div>
         <div class="toast-slot"><div class="toast" id="toast" aria-live="polite"></div></div>
       </div>
+    </section>
+
+    <!-- The word gets the full width of the screen, between the hangmen and the keyboard -->
+    <section class="word-band">
+      <div class="word" id="word" aria-label="The hidden word"></div>
     </section>
 
     <section class="keyboard" id="keys" aria-label="Letters"></section>
@@ -100,7 +121,7 @@
   </div>
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <script src="words.js?v=2026-11-16q"></script>
-  <script src="game.js?v=2026-11-16q"></script>
+  <script src="words.js?v=2026-11-16r"></script>
+  <script src="game.js?v=2026-11-16r"></script>
 </body>
 </html>

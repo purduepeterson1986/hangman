@@ -306,8 +306,33 @@ h1, h2, h3, p { margin: 0; }
   padding: 4px clamp(10px, 2vw, 22px);
   width: 100%; max-width: 1100px; margin: 0 auto;
 }
-/* Two hangmen, one per player, always visible */
-.gallows-row { display: flex; justify-content: center; align-items: flex-start; gap: clamp(10px, 3vw, 40px); width: 100%; }
+/* Hangmen (one per player, always visible) with the turn clock to their right */
+.stage { display: flex; align-items: center; justify-content: center; gap: clamp(10px, 2vw, 22px); width: 100%; min-width: 0; }
+.gallows-row { flex: 0 1 min(100%, 540px); min-width: 0; display: flex; justify-content: center; align-items: flex-start; gap: clamp(10px, 3vw, 40px); }
+.gallows-row.solo { flex-basis: min(100%, 260px); }
+.clock {
+  position: relative; flex: 0 0 auto; aspect-ratio: 1;
+  width: clamp(72px, 9vw, 112px);
+  display: grid; place-items: center;
+}
+.clock.hot { animation: clock-pulse .5s ease-in-out infinite alternate; }
+@keyframes clock-pulse { to { transform: scale(1.06); } }
+.clock-svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.clock .ring-bg { fill: rgba(0, 0, 0, .3); stroke: var(--line); stroke-width: 7; }
+.clock .ring-fg {
+  fill: none; stroke: var(--good); stroke-width: 7; stroke-linecap: round;
+  stroke-dasharray: 276.46; stroke-dashoffset: 0;
+  transition: stroke-dashoffset .25s linear, stroke .3s ease;
+}
+.clock.warn .ring-fg { stroke: var(--gold); }
+.clock.hot .ring-fg { stroke: var(--bad); }
+.clock.idle .ring-fg { stroke: var(--ink-faint); opacity: .5; }
+.clock-num { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+.clock-num b { font-size: clamp(1.4rem, 3vw, 2.2rem); font-weight: 900; font-variant-numeric: tabular-nums; }
+.clock.warn .clock-num b { color: var(--gold); }
+.clock.hot .clock-num b { color: var(--bad); }
+.clock.idle .clock-num b { color: var(--ink-faint); }
+.clock-num span { margin-top: 2px; font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
 .gallows {
   flex: 0 1 240px; min-width: 0; max-width: 240px;
   display: flex; flex-direction: column; align-items: center;
@@ -353,12 +378,22 @@ h1, h2, h3, p { margin: 0; }
 }
 .chip b { color: var(--gold); }
 
-.word { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(4px, .8vw, 8px); max-width: 100%; }
+/* The word band spans the full width of the screen. Every letter box shrinks as needed,
+   so the whole word always stays on one line. */
+.word-band { flex: none; width: 100%; padding: 4px clamp(8px, 2vw, 22px) 6px; }
+.word {
+  --gap: clamp(3px, .6vw, 8px);
+  container-type: inline-size;
+  display: flex; flex-wrap: nowrap; justify-content: center; gap: var(--gap);
+  width: 100%; max-width: 1100px; margin: 0 auto;
+}
 .wl {
-  width: clamp(26px, 6.2vw, 58px); height: clamp(44px, 9vh, 66px);
+  --w: min(clamp(26px, 6.2vw, 58px), calc((100cqi - (var(--n, 1) - 1) * var(--gap)) / var(--n, 1)));
+  width: var(--w); flex: 0 0 auto;
+  height: clamp(44px, 9vh, 66px);
   display: grid; place-items: center;
   border-bottom: 5px solid rgba(255, 255, 255, .55);
-  font-weight: 900; font-size: clamp(1.6rem, 4.6vw, 3rem);
+  font-weight: 900; font-size: min(clamp(1.6rem, 4.6vw, 3rem), calc(var(--w) * .72));
   color: var(--gold);
   text-shadow: 0 3px 8px rgba(0, 0, 0, .4);
 }
@@ -455,8 +490,6 @@ h1, h2, h3, p { margin: 0; }
 
 /* ================= Responsive ================= */
 @media (min-width: 860px) {
-  .table { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 40px); align-items: center; }
-  .side { justify-content: center; }
   .gallows { flex-basis: 250px; max-width: 250px; }
 }
 @media (min-width: 1400px) and (min-height: 820px) {
@@ -494,6 +527,9 @@ h1, h2, h3, p { margin: 0; }
   .gallows { flex-basis: 0; max-width: none; flex: 1 1 0; padding: 4px 4px 6px; }
   .gallows .cap { font-size: .8rem; }
   .gallows-svg { width: auto; height: clamp(90px, 17vh, 150px); max-width: 100%; margin: 0 auto; }
+  .stage { gap: 6px; }
+  .gallows-row { flex: 1 1 auto; }
+  .gallows-row.solo { flex: 0 1 min(100%, 220px); }
   .hint-wrap { min-height: 0; }
   .picture { font-size: clamp(2.4rem, 7vh, 3.6rem); }
   .chip { padding: 6px 14px; }
@@ -506,7 +542,6 @@ h1, h2, h3, p { margin: 0; }
   .btn.big { width: 100%; }
   .kb-row .key { max-width: none; }
   .pcard .pips { display: none; }
-  .wl { width: clamp(22px, 7vw, 40px); }
 }
 @media (max-height: 560px) {
   .topbar { padding-top: 4px; padding-bottom: 2px; }

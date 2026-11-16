@@ -1,6 +1,6 @@
 # Hangman
 
-A word-guessing game for 2 players, played in any web browser with a mouse, a touch screen or a keyboard. Five levels take you from short picture words for young children to a challenge for adults.
+A word-guessing game for 1 or 2 players, played in any web browser with a mouse, a touch screen or a keyboard. Five levels take you from short picture words for young children to a challenge for adults.
 
 **Play it here:** https://purduepeterson1986.github.io/hangman/
 
@@ -12,7 +12,7 @@ A word-guessing game for 2 players, played in any web browser with a mouse, a to
    - **Right:** every copy of that letter appears, and you score a point for each one.
    - **Wrong:** you lose one of your chances, and the hangman gets another piece.
    - **Solve the word:** if you know the word, tap **Solve the word** and spell it out, then press **Check my answer**. A correct answer finishes the word and scores every hidden letter, plus the bonus. A wrong answer costs one chance, the same as a wrong letter.
-4. Then the turn passes to the other player, if they are still in.
+4. Then the turn passes to the other player, if they are still in. If the turn timer is on, you have 30 seconds to guess a letter or press **Solve the word**. If time runs out first, it counts as a miss and you lose your turn.
 5. Finish the word to score a bonus of 5 points. If you run out of chances, you are out for this word.
 6. A game has 5 words. The player with the most points at the end wins.
 
@@ -30,7 +30,8 @@ Levels 1 and 2 are made for young children. The letter buttons are big and in A 
 
 ## Players
 
-- **Players:** 2. Names are optional.
+- **Players:** 1 or 2. Names are optional. With 1 player, only one hangman is shown and the turn timer still runs.
+- **Turn timer:** on or off, set before the game. When on, the 30-second countdown shows to the right of the hangmen. Pressing **Solve the word** stops the clock for that turn.
 - Each seat can be a **Person** or the **Computer**.
 - The computer has three skill levels:
   - **Easy** guesses letters at random.
