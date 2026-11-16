@@ -552,7 +552,8 @@
       '<div class="answer">' + G.w + '</div>',
       [{ label: last ? 'See results' : 'Next word', cls: 'primary', fn: advance }]);
     Sound.play(solved ? 'solve' : 'lose');
-    speak(G.w.toLowerCase());
+    // Wait a moment so the reading of the last letter is not cut off by the whole word.
+    setTimeout(function () { if (token === gen) speak(G.w.toLowerCase()); }, 2000);
     if (G.seats.every(function (s) { return s.type === 'cpu'; })) {
       setTimeout(function () { if (token === gen && G && G.phase === 'roundover') advance(); }, 3200);
     }
