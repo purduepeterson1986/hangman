@@ -41,7 +41,7 @@ Levels 1 and 2 are made for young children. The letter buttons are big and in A 
 
 ## Features
 
-- Each player has their own hangman, drawn in their colour and always on screen. The hangman of the player whose turn it is is highlighted.
+- Each player has their own hangman, drawn in their color and always on screen. The hangman of the player whose turn it is is highlighted.
 - A letter can be guessed by tapping its button or by typing it on a keyboard.
 - Sound effects with a mute button, and a full-screen button.
 - Can be installed as an app from the browser.
