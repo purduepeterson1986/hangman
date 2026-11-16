@@ -408,10 +408,12 @@ h1, h2, h3, p { margin: 0; }
 @keyframes pop-in { from { transform: scale(.4) translateY(10px); opacity: 0; } }
 
 /* The toast sits in its own slot under the word, so it never covers the picture or the word. */
-.toast-slot { height: 52px; display: grid; place-items: center; width: 100%; pointer-events: none; }
+/* The toast is taken out of the page flow and centred in its slot, so showing it never moves anything else. */
+.toast-slot { position: relative; height: 52px; width: 100%; pointer-events: none; }
 .toast {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%;
   display: flex; align-items: center; gap: 12px;
-  max-width: 100%; white-space: nowrap;
+  max-width: calc(100% - 16px); white-space: nowrap;
   padding: 10px 20px; border-radius: 20px;
   background: rgba(14, 10, 34, .92); border: 2px solid var(--gold);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .5), 0 0 30px rgba(255, 207, 92, .2);
@@ -447,7 +449,8 @@ h1, h2, h3, p { margin: 0; }
 .key:disabled { box-shadow: none; }
 
 /* Solve the whole word */
-.solve-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 8px; }
+.solve-bar { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; margin-bottom: 8px; min-height: 40px; }
+.solve-bar.solve-empty { visibility: hidden; }
 .solve-bar .btn { min-height: 40px; padding: 0 16px; font-size: .95rem; }
 .solve-bar .btn.solve-go {
   border: 0; color: #0b3a1e;

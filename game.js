@@ -757,7 +757,8 @@
       return '<button type="button" class="' + cls + '" data-l="' + l + '"' +
         (off ? ' disabled' : '') + ' aria-label="Letter ' + l + '">' + l + '</button>';
     }
-    var bar = '';
+    // An empty bar keeps the same space when it is not your turn, so nothing above the keyboard jumps.
+    var bar = '<div class="solve-bar solve-empty" aria-hidden="true"></div>';
     if (myTurn && !G.solving) {
       bar = '<div class="solve-bar"><button type="button" class="btn solve-go" data-act="start">Solve the word</button></div>';
     } else if (myTurn && G.solving) {
