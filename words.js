@@ -13,14 +13,7 @@ window.HANGMAN_WORDS = {
     { w: 'PIE', e: '🥧' }, { w: 'ICE', e: '🧊' }, { w: 'JAM', e: '🍯' }
   ],
   2: [
-    { w: 'FISH', e: '🐟' }, { w: 'FROG', e: '🐸' }, { w: 'BIRD', e: '🐦' }, { w: 'STAR', e: '⭐' },
-    { w: 'MOON', e: '🌙' }, { w: 'CAKE', e: '🎂' }, { w: 'BOAT', e: '⛵' }, { w: 'BALL', e: '⚽' },
-    { w: 'DUCK', e: '🦆' }, { w: 'TREE', e: '🌳' }, { w: 'HOUSE', e: '🏠' }, { w: 'APPLE', e: '🍎' },
-    { w: 'BEAR', e: '🐻' }, { w: 'LION', e: '🦁' }, { w: 'SNAKE', e: '🐍' }, { w: 'ROBOT', e: '🤖' },
-    { w: 'TRAIN', e: '🚂' }, { w: 'PIZZA', e: '🍕' }, { w: 'SHEEP', e: '🐑' }, { w: 'HORSE', e: '🐴' },
-    { w: 'GRAPE', e: '🍇' }, { w: 'LEMON', e: '🍋' }, { w: 'CLOCK', e: '⏰' }, { w: 'BUNNY', e: '🐰' },
-    { w: 'MOUSE', e: '🐭' }, { w: 'TIGER', e: '🐯' }, { w: 'ZEBRA', e: '🦓' }, { w: 'WHALE', e: '🐋' },
-    { w: 'SNAIL', e: '🐌' }, { w: 'CROWN', e: '👑' }, { w: 'DRUM', e: '🥁' }, { w: 'HEART', e: '❤️' }
+    { w: 'FISH', c: 'Animal' }, { w: 'FROG', c: 'Animal' }, { w: 'BIRD', c: 'Animal' }, { w: 'STAR', c: 'Nature' }, { w: 'MOON', c: 'Nature' }, { w: 'CAKE', c: 'Food' }, { w: 'BOAT', c: 'Vehicle' }, { w: 'BALL', c: 'Thing' }, { w: 'DUCK', c: 'Animal' }, { w: 'TREE', c: 'Nature' }, { w: 'HOUSE', c: 'Thing' }, { w: 'APPLE', c: 'Food' }, { w: 'BEAR', c: 'Animal' }, { w: 'LION', c: 'Animal' }, { w: 'SNAKE', c: 'Animal' }, { w: 'ROBOT', c: 'Thing' }, { w: 'TRAIN', c: 'Vehicle' }, { w: 'PIZZA', c: 'Food' }, { w: 'SHEEP', c: 'Animal' }, { w: 'HORSE', c: 'Animal' }, { w: 'GRAPE', c: 'Food' }, { w: 'LEMON', c: 'Food' }, { w: 'CLOCK', c: 'Thing' }, { w: 'BUNNY', c: 'Animal' }, { w: 'MOUSE', c: 'Animal' }, { w: 'TIGER', c: 'Animal' }, { w: 'ZEBRA', c: 'Animal' }, { w: 'WHALE', c: 'Animal' }, { w: 'SNAIL', c: 'Animal' }, { w: 'CROWN', c: 'Thing' }, { w: 'DRUM', c: 'Thing' }, { w: 'HEART', c: 'Thing' }
   ],
   3: [
     { w: 'TURTLE', c: 'Animal' }, { w: 'RABBIT', c: 'Animal' }, { w: 'MONKEY', c: 'Animal' },

@@ -1,5 +1,5 @@
 /* ================= Hangman =================
-   A word-guessing game for 2 to 4 players, with five levels from picture
+   A word-guessing game for 2 players, with five levels from picture
    words for young children to a challenge for adults. Plain JavaScript. */
 (function () {
   'use strict';
@@ -13,10 +13,10 @@
   var LEVELS = {
     1: { name: 'Tiny Words', lives: 8, size: '3-letter words', hint: 'picture', sample: '🐱 CAT',
          desc: 'Short words with a picture to help. Big letter buttons, and each letter is read aloud.' },
-    2: { name: 'Picture Words', lives: 7, size: '4 to 5 letters', hint: 'picture', sample: '🐸 FROG',
-         desc: 'A little longer, still with a picture. Each letter is read aloud.' },
-    3: { name: 'Word Hunt', lives: 6, size: '5 to 7 letters', hint: 'category', sample: 'TURTLE',
-         desc: 'A category tells you what kind of word to look for.' },
+    2: { name: 'Category Words', lives: 7, size: '4 to 5 letters', hint: 'category', sample: 'FROG',
+         desc: 'A little longer. A category tells you what kind of word to look for. Each letter is read aloud.' },
+    3: { name: 'Word Hunt', lives: 6, size: '5 to 7 letters', hint: 'none', sample: 'TURTLE',
+         desc: 'No picture and no category. Just the letters.' },
     4: { name: 'Brain Teasers', lives: 5, size: '7 to 9 letters', hint: 'category', sample: 'GRAVITY',
          desc: 'Longer words, and fewer wrong guesses to spare.' },
     5: { name: 'Adult Challenge', lives: 4, size: '8 to 13 letters', hint: 'none', sample: 'SERENDIPITY',
@@ -342,7 +342,7 @@
     if (hits) {
       seat.score += hits;
       Sound.play('hit');
-      if (G.lv.hint === 'picture') speak(letter);
+      if (G.level <= 2) speak(letter);
       toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''));
       render();
       if (isSolved()) {
@@ -652,7 +652,7 @@
 
   function renderKeys() {
     var myTurn = G.phase === 'turn' && G.seats[G.cur].type === 'human';
-    var alpha = G.lv.hint === 'picture';
+    var alpha = G.level <= 2;   // Levels 1 and 2: A to Z order with big letter buttons
     function key(l) {
       var used = !!G.guessed[l], inWord = G.w.indexOf(l) >= 0;
       var cls = 'key' + (alpha ? ' big' : '') + (used ? (inWord ? ' hit' : ' miss') : '');
