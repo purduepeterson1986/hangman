@@ -47,6 +47,10 @@ Levels 1 and 2 are made for young children. The letter buttons are big and in A 
 - Can be installed as an app from the browser.
 - Settings are remembered between visits.
 
+## Word lists
+
+The words come from [WordNet 3.1](https://wordnet.princeton.edu/), a free English word database from Princeton University, used under the WordNet license. WordNet's word hierarchy gives the noun categories (for example, "dog" is an animal). Verbs and adjectives are labelled "Action" and "Describing word" instead. A few words were hand-checked and some were removed. The list of words is in `words.js`.
+
 ## Running it yourself
 
 No installation or build step is needed. Download the files and open `index.html` in a browser.
