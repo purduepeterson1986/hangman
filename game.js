@@ -11,15 +11,15 @@
   var BONUS = 5;         // extra points for finishing a word
   var STAGES = 8;        // pieces of the hangman drawing
   var LEVELS = {
-    1: { name: 'Tiny Words', lives: 8, size: '3 to 5 letters', hint: 'category', sample: '🐱 CAT',
+    1: { name: 'Easy', lives: 8, size: '3 to 5 letters', hint: 'category', sample: '🐱 CAT',
          desc: 'Short words with a category to help. Big letter buttons, and each letter is read aloud.' },
-    2: { name: 'Category Words', lives: 7, size: '4 to 6 letters', hint: 'none', sample: 'FROG',
+    2: { name: 'Medium', lives: 7, size: '4 to 6 letters', hint: 'none', sample: 'FROG',
          desc: 'A little longer, with no hint. Each letter is read aloud.' },
-    3: { name: 'Word Hunt', lives: 6, size: '5 to 7 letters', hint: 'none', sample: 'TURTLE',
+    3: { name: 'Tricky', lives: 6, size: '5 to 7 letters', hint: 'none', sample: 'TURTLE',
          desc: 'No picture and no category. Just the letters.' },
-    4: { name: 'Brain Teasers', lives: 5, size: '7 to 9 letters', hint: 'category', sample: 'GRAVITY',
+    4: { name: 'Hard', lives: 5, size: '7 to 9 letters', hint: 'category', sample: 'GRAVITY',
          desc: 'Longer words, and fewer wrong guesses to spare.' },
-    5: { name: 'Adult Challenge', lives: 4, size: '8 to 13 letters', hint: 'none', sample: 'SERENDIPITY',
+    5: { name: 'Expert', lives: 4, size: '8 to 13 letters', hint: 'none', sample: 'SERENDIPITY',
          desc: 'Long, tricky words with no hint, and only four wrong guesses.' }
   };
   var DIFFS = [['easy', 'Easy'], ['medium', 'Medium'], ['hard', 'Hard']];
