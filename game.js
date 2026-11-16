@@ -1,4 +1,4 @@
-/* ================= Hangman =================
+/* ================= Snowman =================
    A word-guessing game for 2 players, with five levels from picture
    words for young children to a challenge for adults. Plain JavaScript. */
 (function () {
@@ -9,7 +9,7 @@
   var COLORS = ['#4db5ff', '#ff5c8a', '#ffd23f', '#5fe3a1'];
   var ROUNDS = 5;        // words per game
   var BONUS = 5;         // extra points for finishing a word
-  var STAGES = 8;        // pieces of the hangman drawing
+  var STAGES = 8;        // pieces of the snowman drawing
   var LEVELS = {
     1: { name: 'Easy', lives: 8, size: '3 to 5 letters', hint: 'category', sample: '🐱 CAT',
          desc: 'Short words with a category to help. Each letter is read aloud.' },
@@ -169,6 +169,7 @@
     var ctx = null;
     function init() {
       if (ctx) return;
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* not supported */ } // iPhone/iPad: play sound even with the silent switch on
       try { var AC = window.AudioContext || window.webkitAudioContext; if (AC) ctx = new AC(); } catch (e) { ctx = null; }
     }
     ['pointerdown', 'touchend', 'keydown'].forEach(function (ev) {
@@ -686,32 +687,39 @@
     return STAGES - lives + wrong;
   }
 
-  // One hangman for each player, always on screen. Each is drawn in that player's colour.
+  // One snowman for each player, always on screen. The scarf and hat use that player's colour.
+  // Pieces appear in this order: 1 head, 2 middle body, 3 bottom body, 4 arm, 5 other arm,
+  // 6 scarf, 7 hat, 8 melting face (the end).
   function gallowsHTML(i) {
     return '<div class="gallows" data-seat="' + i + '" style="--pc:' + COLORS[i] + '">' +
       '<svg viewBox="0 0 300 280" class="gallows-svg" aria-hidden="true">' +
       '<g class="frame">' +
-        '<line x1="20" y1="268" x2="280" y2="268" class="wood"/>' +
-        '<line x1="90" y1="268" x2="90" y2="30" class="wood"/>' +
-        '<line x1="90" y1="30" x2="210" y2="30" class="wood"/>' +
-        '<line x1="90" y1="72" x2="128" y2="30" class="wood thin"/>' +
+        '<line x1="20" y1="268" x2="280" y2="268" class="ground"/>' +
       '</g>' +
       '<g class="figure">' +
-        '<line class="part rope" data-k="1" x1="210" y1="30" x2="210" y2="70"/>' +
-        '<g class="part" data-k="2">' +
-          '<circle cx="210" cy="92" r="22" class="head"/>' +
-          '<circle cx="202" cy="86" r="3.2" class="dot-eye"/>' +
-          '<circle cx="218" cy="86" r="3.2" class="dot-eye"/>' +
-          '<path d="M200 98 Q210 107 220 98" class="smile"/>' +
+        '<g class="part" data-k="1">' +
+          '<circle cx="150" cy="84" r="30" class="ball head"/>' +
+          '<circle cx="140" cy="78" r="3.2" class="dot-eye"/>' +
+          '<circle cx="160" cy="78" r="3.2" class="dot-eye"/>' +
+          '<path d="M138 92 Q150 102 162 92" class="smile"/>' +
         '</g>' +
-        '<line class="part limb" data-k="3" x1="210" y1="114" x2="210" y2="188"/>' +
-        '<line class="part limb" data-k="4" x1="210" y1="132" x2="182" y2="162"/>' +
-        '<line class="part limb" data-k="5" x1="210" y1="132" x2="238" y2="162"/>' +
-        '<line class="part limb" data-k="6" x1="210" y1="188" x2="184" y2="240"/>' +
-        '<line class="part limb" data-k="7" x1="210" y1="188" x2="236" y2="240"/>' +
-        '<g class="part x-eyes" data-k="8">' +
-          '<path d="M197 81 L207 91 M207 81 L197 91" class="x-mark"/>' +
-          '<path d="M213 81 L223 91 M223 81 L213 91" class="x-mark"/>' +
+        '<circle class="part ball" data-k="2" cx="150" cy="150" r="42"/>' +
+        '<circle class="part ball" data-k="3" cx="150" cy="212" r="56"/>' +
+        '<line class="part arm" data-k="4" x1="110" y1="160" x2="62" y2="128"/>' +
+        '<line class="part arm" data-k="5" x1="190" y1="160" x2="238" y2="128"/>' +
+        '<g class="part" data-k="6">' +
+          '<path d="M122 108 Q150 118 178 108 L180 120 Q150 130 120 120 Z" class="scarf"/>' +
+          '<path d="M160 116 L172 116 L176 144 L164 146 Z" class="scarf"/>' +
+        '</g>' +
+        '<g class="part" data-k="7">' +
+          '<rect x="126" y="22" width="48" height="32" rx="3" class="hat"/>' +
+          '<rect x="104" y="50" width="92" height="9" rx="4" class="hat"/>' +
+          '<rect x="126" y="44" width="48" height="7" class="hat-band"/>' +
+        '</g>' +
+        '<g class="part melt" data-k="8">' +
+          '<ellipse cx="150" cy="267" rx="110" ry="7" class="puddle"/>' +
+          '<path d="M133 72 L147 78 M153 78 L167 72" class="sad"/>' +
+          '<path d="M136 102 Q150 92 164 102" class="sad"/>' +
         '</g>' +
       '</g>' +
       '</svg>' +

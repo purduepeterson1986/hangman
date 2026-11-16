@@ -1,4 +1,4 @@
-/* ================= Hangman ================= */
+/* ================= Snowman ================= */
 :root {
   --bg-0: #080b1c;
   --bg-1: #121a3a;
@@ -349,25 +349,22 @@ h1, h2, h3, p { margin: 0; }
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--pc) 18%, transparent);
 }
 .gallows:not(.active) { opacity: .8; }
-/* The hangman is as tall as the room the table has (the table measures its own size), so it never overlaps the status line or the word */
+/* The snowman is as tall as the room the table has (the table measures its own size), so it never overlaps the status line or the word */
 .gallows-svg { width: 100%; height: clamp(70px, calc(100cqh - 230px), 220px); overflow: visible; }
 .gallows .cap { margin-top: 2px; color: var(--ink-dim); font-weight: 700; font-size: .95rem; text-align: center; }
-.gallows .wood { stroke: var(--wood); stroke-width: 11; stroke-linecap: round; fill: none; }
-.gallows .wood.thin { stroke-width: 7; }
+.gallows .ground { stroke: #e9f4fb; stroke-width: 10; stroke-linecap: round; fill: none; opacity: .9; }
 .gallows .part { opacity: 0; transition: opacity .35s ease; }
 .gallows .part.on { opacity: 1; }
-.gallows .limb, .gallows .rope { stroke: var(--pc); stroke-width: 8; stroke-linecap: round; fill: none; }
-.gallows .rope { stroke: #e8dcc0; stroke-width: 4; }
-.gallows .head { fill: #fff6e0; stroke: var(--pc); stroke-width: 6; }
-.gallows .dot-eye { fill: #2a1a3a; }
-.gallows .smile { stroke: #2a1a3a; stroke-width: 3.5; stroke-linecap: round; fill: none; }
-.gallows.dead .dot-eye { opacity: 0; }
-.gallows .x-mark { stroke: #2a1a3a; stroke-width: 3.5; stroke-linecap: round; fill: none; }
-.gallows .x-eyes { opacity: 0; }
-.gallows .x-eyes.on { opacity: 1; }
-.gallows .x-eyes.on { animation: wobble .6s ease-in-out infinite alternate; }
-@keyframes wobble { to { transform: rotate(-4deg); } }
-.gallows .part[data-k="8"].on { transform-origin: 210px 92px; }
+.gallows .ball { fill: #ffffff; stroke: #b9d6e8; stroke-width: 3; }
+.gallows .arm { stroke: #8a5a2e; stroke-width: 6; stroke-linecap: round; fill: none; }
+.gallows .scarf { fill: var(--pc); }
+.gallows .hat { fill: #4b3d6e; }
+.gallows .hat-band { fill: var(--pc); }
+.gallows .dot-eye { fill: #2a1a3a; transition: opacity .35s ease; }
+.gallows .smile { stroke: #2a1a3a; stroke-width: 3.5; stroke-linecap: round; fill: none; transition: opacity .35s ease; }
+.gallows.dead .dot-eye, .gallows.dead .smile { opacity: 0; }
+.gallows .sad { stroke: #2a1a3a; stroke-width: 3.5; stroke-linecap: round; fill: none; }
+.gallows .puddle { fill: #9fd8f0; opacity: .6; }
 
 .side {
   display: flex; flex-direction: column; align-items: center; gap: 14px;
@@ -569,5 +566,5 @@ h1, h2, h3, p { margin: 0; }
   .gallows-svg { height: clamp(60px, calc(100cqh - 190px), 200px); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .backdrop::after, .tile-mini.t4, .pcard.active .pdisc, .picture, .x-eyes.on { animation: none; }
+  .backdrop::after, .tile-mini.t4, .pcard.active .pdisc, .picture { animation: none; }
 }

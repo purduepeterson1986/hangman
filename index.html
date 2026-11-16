@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0c1024">
-  <title>Hangman</title>
+  <title>Snowman</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" href="icon-192.png">
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Hangman">
+  <meta name="apple-mobile-web-app-title" content="Snowman">
   <!-- When styles.css, words.js or game.js changes, change the ?v= tag on all three so browsers fetch the new copies. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-16ai">
+  <link rel="stylesheet" href="styles.css?v=2026-11-16aj">
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -21,12 +21,12 @@
     <div class="setup-scroll">
       <header class="hero">
         <div class="logo" aria-hidden="true">
-          <span class="tile-mini t1">H</span>
-          <span class="tile-mini t2">A</span>
-          <span class="tile-mini t3">N</span>
-          <span class="tile-mini t4">G</span>
+          <span class="tile-mini t1">S</span>
+          <span class="tile-mini t2">N</span>
+          <span class="tile-mini t3">O</span>
+          <span class="tile-mini t4">W</span>
         </div>
-        <h1>Hangman</h1>
+        <h1>Snowman</h1>
         <p>Guess the hidden word one letter at a time before you run out of chances.</p>
       </header>
 
@@ -65,7 +65,7 @@
   <!-- ============ PLAY SCREEN ============ -->
   <main id="game" class="screen">
     <header class="topbar">
-      <div class="brand"><span class="brand-mark" aria-hidden="true">A</span><span class="brand-name">Hangman</span></div>
+      <div class="brand"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-name">Snowman</span></div>
       <div class="round-info" id="round-info"></div>
       <div class="controls">
         <button class="icon-btn" id="sound-btn" type="button" aria-label="Sound on" title="Sound">
@@ -91,7 +91,7 @@
 
     <section class="table">
       <div class="stage">
-        <!-- One hangman per player, filled in by game.js -->
+        <!-- One snowman per player, filled in by game.js -->
         <div class="gallows-row" id="gallows" aria-hidden="true"></div>
         <div class="clock" id="clock" hidden>
           <svg viewBox="0 0 100 100" class="clock-svg" aria-hidden="true">
@@ -121,7 +121,7 @@
   </div>
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <script src="words.js?v=2026-11-16ai"></script>
-  <script src="game.js?v=2026-11-16ai"></script>
+  <script src="words.js?v=2026-11-16aj"></script>
+  <script src="game.js?v=2026-11-16aj"></script>
 </body>
 </html>
