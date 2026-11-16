@@ -50,7 +50,6 @@
     try {
       var s = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
       if (!s) return;
-      if (s.count >= 2 && s.count <= 4) settings.count = s.count;
       if (LEVELS[s.level]) settings.level = s.level;
       if (typeof s.sound === 'boolean') settings.sound = s.sound;
       if (Array.isArray(s.seats)) {
@@ -79,11 +78,6 @@
     return out;
   }
 
-  function renderCount() {
-    $('#player-count').innerHTML = [2, 3, 4].map(function (n) {
-      return '<button type="button" class="seg' + (settings.count === n ? ' on' : '') + '" data-n="' + n + '">' + n + '</button>';
-    }).join('');
-  }
   function renderSeats() {
     var h = '';
     for (var i = 0; i < settings.count; i++) {
@@ -117,13 +111,9 @@
     var who = settings.count + ' players' + (cpu ? ' (' + (cpu === settings.count ? 'all computer' : cpu + ' computer') + ')' : '');
     $('#summary').innerHTML = '<b>' + who + '</b> &middot; Level ' + settings.level + ' ' + LEVELS[settings.level].name + ' &middot; ' + ROUNDS + ' words';
   }
-  function renderSetup() { renderCount(); renderSeats(); renderLevels(); renderSummary(); }
+  function renderSetup() { renderSeats(); renderLevels(); renderSummary(); }
 
   function bindSetup() {
-    $('#player-count').addEventListener('click', function (e) {
-      var b = e.target.closest('[data-n]'); if (!b) return;
-      settings.count = +b.dataset.n; saveSettings(); Sound.play('tick'); renderSetup();
-    });
     $('#seats').addEventListener('input', function (e) {
       var row = e.target.closest('.seat'); if (!row || e.target.tagName !== 'INPUT') return;
       settings.seats[+row.dataset.i].name = e.target.value.slice(0, 12); saveSettings();
@@ -280,6 +270,7 @@
       solving: false, typed: ''
     };
     $('#players').setAttribute('style', '--n: ' + G.n);
+    $('#gallows').innerHTML = G.seats.map(function (s, i) { return gallowsHTML(i); }).join('');
     showScreen('game');
     Sound.play('start');
     nextRound();
@@ -587,17 +578,54 @@
     $('#status-main').innerHTML = miniDisc(G.cur, 'sm') + '<span class="txt">' + html + '</span>';
   }
 
+  // One hangman for each player, always on screen. Each is drawn in that player's colour.
+  function gallowsHTML(i) {
+    return '<div class="gallows" data-seat="' + i + '" style="--pc:' + COLORS[i] + '">' +
+      '<svg viewBox="0 0 300 280" class="gallows-svg" aria-hidden="true">' +
+      '<g class="frame">' +
+        '<line x1="20" y1="268" x2="280" y2="268" class="wood"/>' +
+        '<line x1="90" y1="268" x2="90" y2="30" class="wood"/>' +
+        '<line x1="90" y1="30" x2="210" y2="30" class="wood"/>' +
+        '<line x1="90" y1="72" x2="128" y2="30" class="wood thin"/>' +
+      '</g>' +
+      '<g class="figure">' +
+        '<line class="part rope" data-k="1" x1="210" y1="30" x2="210" y2="70"/>' +
+        '<g class="part" data-k="2">' +
+          '<circle cx="210" cy="92" r="22" class="head"/>' +
+          '<circle cx="202" cy="86" r="3.2" class="dot-eye"/>' +
+          '<circle cx="218" cy="86" r="3.2" class="dot-eye"/>' +
+          '<path d="M200 98 Q210 107 220 98" class="smile"/>' +
+        '</g>' +
+        '<line class="part limb" data-k="3" x1="210" y1="114" x2="210" y2="188"/>' +
+        '<line class="part limb" data-k="4" x1="210" y1="132" x2="182" y2="162"/>' +
+        '<line class="part limb" data-k="5" x1="210" y1="132" x2="238" y2="162"/>' +
+        '<line class="part limb" data-k="6" x1="210" y1="188" x2="184" y2="240"/>' +
+        '<line class="part limb" data-k="7" x1="210" y1="188" x2="236" y2="240"/>' +
+        '<g class="part x-eyes" data-k="8">' +
+          '<path d="M197 81 L207 91 M207 81 L197 91" class="x-mark"/>' +
+          '<path d="M213 81 L223 91 M223 81 L213 91" class="x-mark"/>' +
+        '</g>' +
+      '</g>' +
+      '</svg>' +
+      '<div class="cap"></div>' +
+      '</div>';
+  }
+
   function renderGallows() {
-    var seat = G.seats[G.cur], lives = G.lv.lives;
-    var stage = seat.out ? STAGES : Math.round(seat.wrong / lives * STAGES);
-    var fig = $('#gallows');
-    fig.style.setProperty('--pc', COLORS[G.cur]);
-    fig.classList.toggle('dead', stage >= STAGES);
-    fig.querySelectorAll('.part').forEach(function (el) {
-      el.classList.toggle('on', +el.getAttribute('data-k') <= stage);
+    G.seats.forEach(function (seat, i) {
+      var panel = document.querySelector('.gallows[data-seat="' + i + '"]');
+      if (!panel) return;
+      var lives = G.lv.lives;
+      var stage = seat.out ? STAGES : Math.round(seat.wrong / lives * STAGES);
+      var left = Math.max(0, lives - seat.wrong);
+      var turn = (G.phase === 'turn' || G.phase === 'busy') && i === G.cur;
+      panel.classList.toggle('dead', stage >= STAGES);
+      panel.classList.toggle('active', turn);
+      panel.querySelectorAll('.part').forEach(function (el) {
+        el.classList.toggle('on', +el.getAttribute('data-k') <= stage);
+      });
+      panel.querySelector('.cap').innerHTML = esc(seat.name) + ' &middot; ' + left + ' ' + (left === 1 ? 'chance' : 'chances') + ' left';
     });
-    var left = Math.max(0, lives - seat.wrong);
-    $('#cap').innerHTML = esc(seat.name) + '&rsquo;s hangman &middot; ' + left + ' ' + (left === 1 ? 'chance' : 'chances') + ' left';
   }
 
   function renderWord() {

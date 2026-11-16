@@ -1,18 +1,18 @@
 # Hangman
 
-A word-guessing game for 2 to 4 players, played in any web browser with a mouse, a touch screen or a keyboard. Five levels take you from short picture words for young children to a challenge for adults.
+A word-guessing game for 2 players, played in any web browser with a mouse, a touch screen or a keyboard. Five levels take you from short picture words for young children to a challenge for adults.
 
 **Play it here:** https://purduepeterson1986.github.io/hangman/
 
 ## How to play
 
-1. Choose the number of players, who plays each seat (a person or the computer, and how hard it plays), and a level. Then press **Start game**.
+1. Choose who plays each seat (a person or the computer, and how hard it plays), and a level. Then press **Start game**.
 2. A hidden word appears as blanks. Each blank is one letter.
 3. On your turn, guess one letter.
    - **Right:** every copy of that letter appears, and you score a point for each one.
    - **Wrong:** you lose one of your chances, and the hangman gets another piece.
    - **Solve the word:** if you know the word, tap **Solve the word** and spell it out, then press **Check my answer**. A correct answer finishes the word and scores every hidden letter, plus the bonus. A wrong answer costs one chance, the same as a wrong letter.
-4. Then the turn passes to the next player who is still in.
+4. Then the turn passes to the other player, if they are still in.
 5. Finish the word to score a bonus of 5 points. If you run out of chances, you are out for this word.
 6. A game has 5 words. The player with the most points at the end wins.
 
@@ -30,7 +30,7 @@ Levels 1 and 2 are made for young children. The letter buttons are big and in A 
 
 ## Players
 
-- **Players:** 2, 3 or 4. Names are optional.
+- **Players:** 2. Names are optional.
 - Each seat can be a **Person** or the **Computer**.
 - The computer has three skill levels:
   - **Easy** guesses letters at random.
@@ -41,7 +41,7 @@ Levels 1 and 2 are made for young children. The letter buttons are big and in A 
 
 ## Features
 
-- The picture of the hangman belongs to the player whose turn it is, and is drawn in that player's colour.
+- Each player has their own hangman, drawn in their colour and always on screen. The hangman of the player whose turn it is is highlighted.
 - A letter can be guessed by tapping its button or by typing it on a keyboard.
 - Sound effects with a mute button, and a full-screen button.
 - Can be installed as an app from the browser.

@@ -11,7 +11,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Hangman">
   <!-- When styles.css, words.js or game.js changes, change the ?v= tag on all three so browsers fetch the new copies. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-16a">
+  <link rel="stylesheet" href="styles.css?v=2026-11-16b">
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -33,10 +33,10 @@
       <section class="panel" aria-labelledby="h-players">
         <div class="panel-head">
           <h2 id="h-players">Players</h2>
-          <div class="segmented" id="player-count" role="radiogroup" aria-label="Number of players"></div>
+          <span class="fixed-note">2 players</span>
         </div>
         <div class="seats" id="seats"></div>
-        <p class="hint">Names are optional. Set any seat to Computer to play against the game.</p>
+        <p class="hint">Names are optional. Each player can be a Person or the Computer.</p>
       </section>
 
       <section class="panel" aria-labelledby="h-level">
@@ -82,35 +82,8 @@
     </div>
 
     <section class="table">
-      <div class="gallows" id="gallows" aria-hidden="true">
-        <svg viewBox="0 0 300 280" class="gallows-svg">
-          <g class="frame">
-            <line x1="20" y1="268" x2="280" y2="268" class="wood"/>
-            <line x1="90" y1="268" x2="90" y2="30" class="wood"/>
-            <line x1="90" y1="30" x2="210" y2="30" class="wood"/>
-            <line x1="90" y1="72" x2="128" y2="30" class="wood thin"/>
-          </g>
-          <g class="figure">
-            <line class="part rope" data-k="1" x1="210" y1="30" x2="210" y2="70"/>
-            <g class="part" data-k="2">
-              <circle cx="210" cy="92" r="22" class="head"/>
-              <circle cx="202" cy="86" r="3.2" class="dot-eye"/>
-              <circle cx="218" cy="86" r="3.2" class="dot-eye"/>
-              <path d="M200 98 Q210 107 220 98" class="smile"/>
-            </g>
-            <line class="part limb" data-k="3" x1="210" y1="114" x2="210" y2="188"/>
-            <line class="part limb" data-k="4" x1="210" y1="132" x2="182" y2="162"/>
-            <line class="part limb" data-k="5" x1="210" y1="132" x2="238" y2="162"/>
-            <line class="part limb" data-k="6" x1="210" y1="188" x2="184" y2="240"/>
-            <line class="part limb" data-k="7" x1="210" y1="188" x2="236" y2="240"/>
-            <g class="part x-eyes" data-k="8">
-              <path d="M197 81 L207 91 M207 81 L197 91" class="x-mark"/>
-              <path d="M213 81 L223 91 M223 81 L213 91" class="x-mark"/>
-            </g>
-          </g>
-        </svg>
-        <div class="cap" id="cap"></div>
-      </div>
+      <!-- One hangman per player, filled in by game.js -->
+      <div class="gallows-row" id="gallows" aria-hidden="true"></div>
 
       <div class="side">
         <div class="hint-wrap" id="hint"></div>
@@ -127,7 +100,7 @@
   </div>
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <script src="words.js?v=2026-11-16a"></script>
-  <script src="game.js?v=2026-11-16a"></script>
+  <script src="words.js?v=2026-11-16b"></script>
+  <script src="game.js?v=2026-11-16b"></script>
 </body>
 </html>

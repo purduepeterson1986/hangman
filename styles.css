@@ -306,8 +306,22 @@ h1, h2, h3, p { margin: 0; }
   padding: 4px clamp(10px, 2vw, 22px);
   width: 100%; max-width: 1100px; margin: 0 auto;
 }
-.gallows { display: flex; flex-direction: column; align-items: center; flex: none; max-width: 100%; }
-.gallows-svg { height: clamp(150px, 32vh, 300px); width: auto; aspect-ratio: 300 / 280; overflow: visible; }
+/* Two hangmen, one per player, always visible */
+.gallows-row { display: flex; justify-content: center; align-items: flex-start; gap: clamp(10px, 3vw, 40px); width: 100%; }
+.gallows {
+  flex: 0 1 240px; min-width: 0; max-width: 240px;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 6px 8px 8px; border-radius: 18px;
+  border: 2px solid transparent;
+  transition: border-color .3s ease, background .3s ease, opacity .3s ease;
+}
+.gallows.active {
+  border-color: var(--pc);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pc) 18%, transparent), color-mix(in srgb, var(--pc) 6%, transparent));
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--pc) 18%, transparent);
+}
+.gallows:not(.active) { opacity: .8; }
+.gallows-svg { width: 100%; height: auto; overflow: visible; }
 .gallows .cap { margin-top: 2px; color: var(--ink-dim); font-weight: 700; font-size: .95rem; text-align: center; }
 .gallows .wood { stroke: var(--wood); stroke-width: 11; stroke-linecap: round; fill: none; }
 .gallows .wood.thin { stroke-width: 7; }
@@ -435,7 +449,7 @@ h1, h2, h3, p { margin: 0; }
 @media (min-width: 860px) {
   .table { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 40px); align-items: center; }
   .side { justify-content: center; }
-  .gallows-svg { height: clamp(170px, 36vh, 320px); }
+  .gallows { flex-basis: 250px; max-width: 250px; }
 }
 @media (min-width: 1400px) and (min-height: 820px) {
   html { font-size: 19px; }
@@ -469,7 +483,9 @@ h1, h2, h3, p { margin: 0; }
   .tile-desc { display: none; }
   /* Phones: keep the picture, gallows and word all on screen above the keyboard */
   .table { gap: 4px; position: relative; }
-  .gallows-svg { height: clamp(100px, 20vh, 180px); }
+  .gallows { flex-basis: 0; max-width: none; flex: 1 1 0; padding: 4px 4px 6px; }
+  .gallows .cap { font-size: .8rem; }
+  .gallows-svg { width: auto; height: clamp(90px, 17vh, 150px); max-width: 100%; margin: 0 auto; }
   .hint-wrap { min-height: 0; }
   .picture { font-size: clamp(2.4rem, 7vh, 3.6rem); }
   .chip { padding: 6px 14px; }
@@ -492,7 +508,7 @@ h1, h2, h3, p { margin: 0; }
   .pcard .pdisc { --d: 26px; }
   .status { min-height: 34px; }
   .icon-btn, .controls .btn { width: 40px; height: 40px; min-height: 40px; }
-  .gallows-svg { height: 30vh; }
+  .gallows-svg { width: auto; height: 22vh; max-width: 100%; margin: 0 auto; }
 }
 @media (prefers-reduced-motion: reduce) {
   .backdrop::after, .tile-mini.t4, .pcard.active .pdisc, .picture, .x-eyes.on { animation: none; }
