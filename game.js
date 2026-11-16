@@ -578,6 +578,14 @@
     $('#status-main').innerHTML = miniDisc(G.cur, 'sm') + '<span class="txt">' + html + '</span>';
   }
 
+  // How many drawing pieces show after a number of wrong guesses. The first miss adds as
+  // many pieces as needed, each later miss adds one more, and the last miss adds only the X eyes.
+  function stageFor(wrong, lives) {
+    if (wrong <= 0) return 0;
+    if (wrong >= lives) return STAGES;
+    return STAGES - lives + wrong;
+  }
+
   // One hangman for each player, always on screen. Each is drawn in that player's colour.
   function gallowsHTML(i) {
     return '<div class="gallows" data-seat="' + i + '" style="--pc:' + COLORS[i] + '">' +
@@ -616,7 +624,7 @@
       var panel = document.querySelector('.gallows[data-seat="' + i + '"]');
       if (!panel) return;
       var lives = G.lv.lives;
-      var stage = seat.out ? STAGES : Math.round(seat.wrong / lives * STAGES);
+      var stage = seat.out ? STAGES : stageFor(seat.wrong, lives);
       var left = Math.max(0, lives - seat.wrong);
       var turn = (G.phase === 'turn' || G.phase === 'busy') && i === G.cur;
       panel.classList.toggle('dead', stage >= STAGES);
