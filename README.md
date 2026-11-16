@@ -20,8 +20,8 @@ A word-guessing game for 2 players, played in any web browser with a mouse, a to
 
 | Level | Name | Word length | Hint | Wrong guesses allowed |
 |---|---|---|---|---|
-| 1 | Tiny Words | 3 letters | A picture | 8 |
-| 2 | Category Words | 4 to 5 letters | A category, such as "Animal" | 7 |
+| 1 | Tiny Words | 3 to 5 letters | A picture | 8 |
+| 2 | Category Words | 4 to 6 letters | A category, such as "Animal" | 7 |
 | 3 | Word Hunt | 5 to 7 letters | None | 6 |
 | 4 | Brain Teasers | 7 to 9 letters | A category, such as "Science" | 5 |
 | 5 | Adult Challenge | 8 to 13 letters | None | 4 |

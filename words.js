@@ -1,19 +1,54 @@
 /* ================= Hangman word banks =================
-   Level 1-2: a picture is the hint (young players).
-   Level 3-4: a category is the hint.
+   Level 1:   a picture is the hint (young players).
+   Level 2:   a category is the hint.
+   Level 3:   no hint.
+   Level 4:   a category is the hint.
    Level 5:   no hint at all (adult challenge). */
 window.HANGMAN_WORDS = {
   1: [
-    { w: 'CAT', e: '🐱' }, { w: 'DOG', e: '🐶' }, { w: 'PIG', e: '🐷' }, { w: 'COW', e: '🐮' },
-    { w: 'HEN', e: '🐔' }, { w: 'FOX', e: '🦊' }, { w: 'BEE', e: '🐝' }, { w: 'BUG', e: '🐛' },
-    { w: 'OWL', e: '🦉' }, { w: 'ANT', e: '🐜' }, { w: 'RAT', e: '🐀' }, { w: 'BAT', e: '🦇' },
-    { w: 'SUN', e: '☀️' }, { w: 'BUS', e: '🚌' }, { w: 'CAR', e: '🚗' }, { w: 'CUP', e: '☕' },
-    { w: 'HAT', e: '🎩' }, { w: 'BED', e: '🛏️' }, { w: 'EGG', e: '🥚' }, { w: 'PEN', e: '🖊️' },
-    { w: 'TOY', e: '🧸' }, { w: 'BOX', e: '📦' }, { w: 'KEY', e: '🔑' }, { w: 'LEG', e: '🦵' },
-    { w: 'PIE', e: '🥧' }, { w: 'ICE', e: '🧊' }, { w: 'JAM', e: '🍯' }
+    { w: 'CAT', e: '🐱' }, { w: 'DOG', e: '🐶' }, { w: 'PIG', e: '🐷' },
+    { w: 'COW', e: '🐮' }, { w: 'HEN', e: '🐔' }, { w: 'FOX', e: '🦊' },
+    { w: 'BEE', e: '🐝' }, { w: 'BUG', e: '🐛' }, { w: 'OWL', e: '🦉' },
+    { w: 'ANT', e: '🐜' }, { w: 'RAT', e: '🐀' }, { w: 'BAT', e: '🦇' },
+    { w: 'SUN', e: '☀️' }, { w: 'BUS', e: '🚌' }, { w: 'CAR', e: '🚗' },
+    { w: 'CUP', e: '☕' }, { w: 'HAT', e: '🎩' }, { w: 'BED', e: '🛏️' },
+    { w: 'EGG', e: '🥚' }, { w: 'PEN', e: '🖊️' }, { w: 'TOY', e: '🧸' },
+    { w: 'BOX', e: '📦' }, { w: 'KEY', e: '🔑' }, { w: 'LEG', e: '🦵' },
+    { w: 'PIE', e: '🥧' }, { w: 'ICE', e: '🧊' }, { w: 'JAM', e: '🍯' },
+    { w: 'FISH', e: '🐟' }, { w: 'FROG', e: '🐸' }, { w: 'BIRD', e: '🐦' },
+    { w: 'STAR', e: '⭐' }, { w: 'MOON', e: '🌙' }, { w: 'CAKE', e: '🎂' },
+    { w: 'BOAT', e: '⛵' }, { w: 'BALL', e: '⚽' }, { w: 'DUCK', e: '🦆' },
+    { w: 'TREE', e: '🌳' }, { w: 'HOUSE', e: '🏠' }, { w: 'APPLE', e: '🍎' },
+    { w: 'BEAR', e: '🐻' }, { w: 'LION', e: '🦁' }, { w: 'SNAKE', e: '🐍' },
+    { w: 'ROBOT', e: '🤖' }, { w: 'TRAIN', e: '🚂' }, { w: 'PIZZA', e: '🍕' },
+    { w: 'SHEEP', e: '🐑' }, { w: 'HORSE', e: '🐴' }, { w: 'GRAPE', e: '🍇' },
+    { w: 'LEMON', e: '🍋' }, { w: 'CLOCK', e: '⏰' }, { w: 'BUNNY', e: '🐰' },
+    { w: 'MOUSE', e: '🐭' }, { w: 'TIGER', e: '🐯' }, { w: 'ZEBRA', e: '🦓' },
+    { w: 'WHALE', e: '🐋' }, { w: 'SNAIL', e: '🐌' }, { w: 'CROWN', e: '👑' },
+    { w: 'DRUM', e: '🥁' }, { w: 'HEART', e: '❤️' }
   ],
   2: [
-    { w: 'FISH', c: 'Animal' }, { w: 'FROG', c: 'Animal' }, { w: 'BIRD', c: 'Animal' }, { w: 'STAR', c: 'Nature' }, { w: 'MOON', c: 'Nature' }, { w: 'CAKE', c: 'Food' }, { w: 'BOAT', c: 'Vehicle' }, { w: 'BALL', c: 'Thing' }, { w: 'DUCK', c: 'Animal' }, { w: 'TREE', c: 'Nature' }, { w: 'HOUSE', c: 'Thing' }, { w: 'APPLE', c: 'Food' }, { w: 'BEAR', c: 'Animal' }, { w: 'LION', c: 'Animal' }, { w: 'SNAKE', c: 'Animal' }, { w: 'ROBOT', c: 'Thing' }, { w: 'TRAIN', c: 'Vehicle' }, { w: 'PIZZA', c: 'Food' }, { w: 'SHEEP', c: 'Animal' }, { w: 'HORSE', c: 'Animal' }, { w: 'GRAPE', c: 'Food' }, { w: 'LEMON', c: 'Food' }, { w: 'CLOCK', c: 'Thing' }, { w: 'BUNNY', c: 'Animal' }, { w: 'MOUSE', c: 'Animal' }, { w: 'TIGER', c: 'Animal' }, { w: 'ZEBRA', c: 'Animal' }, { w: 'WHALE', c: 'Animal' }, { w: 'SNAIL', c: 'Animal' }, { w: 'CROWN', c: 'Thing' }, { w: 'DRUM', c: 'Thing' }, { w: 'HEART', c: 'Thing' }
+    { w: 'FISH', c: 'Animal' }, { w: 'FROG', c: 'Animal' }, { w: 'BIRD', c: 'Animal' },
+    { w: 'STAR', c: 'Nature' }, { w: 'MOON', c: 'Nature' }, { w: 'CAKE', c: 'Food' },
+    { w: 'BOAT', c: 'Vehicle' }, { w: 'BALL', c: 'Thing' }, { w: 'DUCK', c: 'Animal' },
+    { w: 'TREE', c: 'Nature' }, { w: 'HOUSE', c: 'Thing' }, { w: 'APPLE', c: 'Food' },
+    { w: 'BEAR', c: 'Animal' }, { w: 'LION', c: 'Animal' }, { w: 'SNAKE', c: 'Animal' },
+    { w: 'ROBOT', c: 'Thing' }, { w: 'TRAIN', c: 'Vehicle' }, { w: 'PIZZA', c: 'Food' },
+    { w: 'SHEEP', c: 'Animal' }, { w: 'HORSE', c: 'Animal' }, { w: 'GRAPE', c: 'Food' },
+    { w: 'LEMON', c: 'Food' }, { w: 'CLOCK', c: 'Thing' }, { w: 'BUNNY', c: 'Animal' },
+    { w: 'MOUSE', c: 'Animal' }, { w: 'TIGER', c: 'Animal' }, { w: 'ZEBRA', c: 'Animal' },
+    { w: 'WHALE', c: 'Animal' }, { w: 'SNAIL', c: 'Animal' }, { w: 'CROWN', c: 'Thing' },
+    { w: 'DRUM', c: 'Thing' }, { w: 'HEART', c: 'Thing' }, { w: 'TURKEY', c: 'Animal' },
+    { w: 'RABBIT', c: 'Animal' }, { w: 'MONKEY', c: 'Animal' }, { w: 'DONKEY', c: 'Animal' },
+    { w: 'PARROT', c: 'Animal' }, { w: 'BADGER', c: 'Animal' }, { w: 'FALCON', c: 'Animal' },
+    { w: 'COYOTE', c: 'Animal' }, { w: 'BANANA', c: 'Food' }, { w: 'COOKIE', c: 'Food' },
+    { w: 'CHEESE', c: 'Food' }, { w: 'BURGER', c: 'Food' }, { w: 'PICKLE', c: 'Food' },
+    { w: 'YOGURT', c: 'Food' }, { w: 'ROCKET', c: 'Vehicle' }, { w: 'SUBWAY', c: 'Vehicle' },
+    { w: 'GARDEN', c: 'Nature' }, { w: 'SUNSET', c: 'Nature' }, { w: 'FOREST', c: 'Nature' },
+    { w: 'ISLAND', c: 'Nature' }, { w: 'CACTUS', c: 'Nature' }, { w: 'MEADOW', c: 'Nature' },
+    { w: 'PENCIL', c: 'Thing' }, { w: 'CANDLE', c: 'Thing' }, { w: 'BUTTON', c: 'Thing' },
+    { w: 'PILLOW', c: 'Thing' }, { w: 'BOTTLE', c: 'Thing' }, { w: 'CASTLE', c: 'Thing' },
+    { w: 'GUITAR', c: 'Thing' }, { w: 'LADDER', c: 'Thing' }
   ],
   3: [
     { w: 'TURTLE', c: 'Animal' }, { w: 'RABBIT', c: 'Animal' }, { w: 'MONKEY', c: 'Animal' },
