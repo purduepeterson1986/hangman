@@ -51,9 +51,9 @@
       '<path d="M-0.9,-48.6 Q0,-48.1 0.9,-48.6" stroke="#b07a6a" stroke-width=".4" fill="none"/>' +
       '<path d="M0,-45.6 C-1.6,-44.6 -1.6,-43 0,-42.4 C1.6,-43 1.6,-44.6 0,-45.6 Z" fill="#7fae5a" stroke="#c9a449" stroke-width=".4"/>' +
       '<g class="held">' +   // an arrow in his hand, ready; it hides while the real one is in the air
-        '<path d="M3.6,-28.9 H16" stroke="#8a6a3a" stroke-width=".8" stroke-linecap="round"/>' +
-        '<path d="M15.6,-30.3 L18.4,-28.9 L15.6,-27.5 Z" fill="#d9dde4"/>' +
-        '<path d="M3.6,-28.9 l-1.6,-1.3 M3.6,-28.9 l-1.6,1.3 M5,-28.9 l-1.6,-1.3 M5,-28.9 l-1.6,1.3" stroke="#f4f1e6" stroke-width=".5"/>' +
+        '<path d="M3.6,-42 H16" stroke="#8a6a3a" stroke-width=".8" stroke-linecap="round"/>' +
+        '<path d="M15.6,-43.4 L18.4,-42 L15.6,-40.6 Z" fill="#d9dde4"/>' +
+        '<path d="M3.6,-42 l-1.6,-1.3 M3.6,-42 l-1.6,1.3 M5,-42 l-1.6,-1.3 M5,-42 l-1.6,1.3" stroke="#f4f1e6" stroke-width=".5"/>' +
       '</g>';
   }
 
@@ -237,7 +237,7 @@
   ];
   var HEROES = [
     // box: the area the drawing covers (x, y, width, height), for the small picture in the "Hooray!" message.
-    { id: 'legolas', name: 'Legolas', box: [-14, -61, 28, 63], weapon: 'arrow', s: 2.8, h: 59, hand: { x: 18, y: -29 }, art: elfArt },
+    { id: 'legolas', name: 'Legolas', box: [-14, -61, 28, 63], weapon: 'arrow', s: 2.8, h: 59, hand: { x: 18, y: -42 }, art: elfArt },
     { id: 'gimli', name: 'Gimli', box: [-10, -40, 26, 42], weapon: 'axe', s: 3.2, h: 39, hand: { x: 12, y: -31 }, art: dwarfArt },
     { id: 'gandalf', name: 'Gandalf', box: [-14, -72, 30, 73], weapon: 'staff', s: 2.4, h: 70, hand: { x: 12.6, y: -64.6 }, art: gandalfArt },
     { id: 'hobbit', name: 'Frodo', box: [-10, -35, 26, 36], weapon: 'sword', s: 3.4, h: 34, hand: { x: 14, y: -26 }, art: hobbitArt }
