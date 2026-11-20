@@ -272,12 +272,13 @@
   }
 
   var toastTimer = 0;
-  function toast(ico, text) {
+  // ms: how long the message stays up (most stay up for just under a second)
+  function toast(ico, text, ms) {
     var el = $('#toast');
     el.innerHTML = '<span class="toast-ico">' + ico + '</span><span>' + text + '</span>';
     el.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 950);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, ms || 950);
   }
 
   /* ================= Game state ================= */
@@ -403,7 +404,7 @@
     if (lost) {
       setTimeout(function () { Sound.play('out'); }, 300);
       var fn = SCENE.foe().name;
-      toast(SCENE.foe().emoji, 'Oh no! ' + fn.charAt(0).toUpperCase() + fn.slice(1) + ' got ' + SCENE.hero().name + '!');
+      toast(SCENE.foe().emoji, 'Oh no! ' + fn.charAt(0).toUpperCase() + fn.slice(1) + ' got ' + SCENE.hero().name + '!', 4000);   // stays up while the creature catches the hero
     } else {
       toast(ico, text);
     }
