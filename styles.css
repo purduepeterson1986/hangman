@@ -318,7 +318,7 @@ h1, h2, h3, p { margin: 0; }
 .solve-slot { width: 100%; display: flex; justify-content: center; }
 .stage { position: relative; width: 100%; min-width: 0; flex: 0 1 auto; }
 .scene { width: 100%; display: flex; justify-content: center; }
-.stage .clock { position: absolute; top: 0; right: 0; width: clamp(56px, 7vw, 92px); }
+.table > .clock { position: absolute; top: 4px; right: clamp(10px, 2vw, 22px); width: clamp(56px, 7vw, 92px); z-index: 2; }
 .clock {
   position: relative; flex: 0 0 auto; aspect-ratio: 1;
   width: clamp(72px, 9vw, 112px);
@@ -633,6 +633,15 @@ h1, h2, h3, p { margin: 0; }
   .controls .btn span { display: none; }   /* icons only, so the buttons don't overlap */
   .toast-slot { height: 36px; }
 }
+/* Phones held upright: the clock sits to the right of the category and Solve button, below the word,
+   so it never covers the scene and the word keeps the full width */
+@media (max-width: 720px) and (orientation: portrait) {
+  .table { display: grid; grid-template-columns: 60px minmax(0, 1fr) 60px; grid-template-areas: "stage stage stage" "word word word" ". side clock"; align-content: center; row-gap: 4px; }
+  .stage { grid-area: stage; }
+  .word-band { grid-area: word; }
+  .side { grid-area: side; }
+  .table > .clock { position: relative; top: auto; right: auto; grid-area: clock; width: 56px; align-self: center; justify-self: end; }
+}
 /* Short landscape screens (phones turned sideways): the word, category and Solve button share one row under the scene */
 @media (max-height: 560px) and (orientation: landscape) {
   .table { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "stage stage" "word side"; align-content: center; column-gap: 12px; row-gap: 4px; }
@@ -644,7 +653,7 @@ h1, h2, h3, p { margin: 0; }
   .chip { padding: 4px 12px; font-size: .9rem; white-space: nowrap; }
   .wl { height: 40px; }
   .scene-svg { max-height: max(40px, calc(100cqh - 56px)); }
-  .stage .clock { width: 48px; }
+  .table > .clock { width: 48px; }
 }
 @media (max-height: 450px) {
   .key.big { height: 34px; font-size: 1.3rem; border-radius: 12px; }

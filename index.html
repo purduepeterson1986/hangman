@@ -11,7 +11,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Word Quest">
   <!-- When styles.css, words.js, scene.js or game.js changes, change the ?v= tag on all four (and the two in battles.html) so browsers fetch the new copies. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-20r">
+  <link rel="stylesheet" href="styles.css?v=2026-11-20s">
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -101,13 +101,14 @@
       <div class="stage">
         <!-- The path scene: the hero, 8 stepping stones and the creature, filled in by game.js -->
         <div class="scene" id="scene" role="img"></div>
-        <div class="clock" id="clock" hidden>
-          <svg viewBox="0 0 100 100" class="clock-svg" aria-hidden="true">
-            <circle class="ring-bg" cx="50" cy="50" r="44"/>
-            <circle class="ring-fg" id="ring" cx="50" cy="50" r="44"/>
-          </svg>
-          <div class="clock-num"><b id="clock-num">30</b><span>sec</span></div>
-        </div>
+      </div>
+      <!-- The turn clock: in the top-right corner, or beside the category and Solve button on a phone held upright -->
+      <div class="clock" id="clock" hidden>
+        <svg viewBox="0 0 100 100" class="clock-svg" aria-hidden="true">
+          <circle class="ring-bg" cx="50" cy="50" r="44"/>
+          <circle class="ring-fg" id="ring" cx="50" cy="50" r="44"/>
+        </svg>
+        <div class="clock-num"><b id="clock-num">30</b><span>sec</span></div>
       </div>
 
       <!-- Below the scene: the word, then the category, then the Solve button -->
@@ -129,8 +130,8 @@
   </div>
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <script src="words.js?v=2026-11-20r"></script>
-  <script src="scene.js?v=2026-11-20r"></script>
-  <script src="game.js?v=2026-11-20r"></script>
+  <script src="words.js?v=2026-11-20s"></script>
+  <script src="scene.js?v=2026-11-20s"></script>
+  <script src="game.js?v=2026-11-20s"></script>
 </body>
 </html>
