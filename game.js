@@ -26,6 +26,7 @@
   var THINK = { easy: [2800, 3200], medium: [2800, 3200], hard: [2800, 3200] };
   var STORE_KEY = 'hangman.settings.v1';
   var ROUND_PAUSE = 5000; // ms to pause after a word ends, before its result message appears
+  var WIN_PAUSE = 6000;   // the same, after a solved word: a little longer, so the hero's attack can finish
   var RING = 276.46;     // circumference of the timer ring (2 x pi x 44)
 
   function $(s) { return document.querySelector(s); }
@@ -547,7 +548,7 @@
     render();
     SCENE.end($('#scene'), solver >= 0);   // the hero wins, or the creature gets the hero
     // Pause so the players can see the finished word on the board before the message appears.
-    setTimeout(function () { if (token === gen && G && G.phase === 'roundover') showRoundEnd(solver, token); }, ROUND_PAUSE);
+    setTimeout(function () { if (token === gen && G && G.phase === 'roundover') showRoundEnd(solver, token); }, solver >= 0 ? WIN_PAUSE : ROUND_PAUSE);
   }
 
   function showRoundEnd(solver, token) {
