@@ -363,13 +363,13 @@ h1, h2, h3, p { margin: 0; }
 @keyframes sp-wiggle { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
 @keyframes foe-bob { to { transform: translateY(-4px); } }
 .scene .hero-act, .scene .foe-act { transform-box: fill-box; transform-origin: 50% 100%; }
-/* Caught: the creature leaps, bonks the hero on the head and hops down beside him; stars circle his head */
+/* Caught (slowed down so it is easy to follow): the creature leaps, bonks the hero on the head and hops down beside him; stars circle his head */
 .scene .stars { opacity: 0; }
 .scene .stars text { font-size: 22px; }
 .scene .stars-spin { transform-box: fill-box; transform-origin: center; animation: stars-spin 1.4s linear infinite; }
-.scene .lost .foe-act { animation: foe-pounce 1.4s ease-in-out forwards; }
-.scene .lost .hero-act { animation: hero-bonk .5s .75s ease-out forwards; }
-.scene .lost .stars { animation: show .3s 1s forwards; }
+.scene .lost .foe-act { animation: foe-pounce 2.2s ease-in-out forwards; }
+.scene .lost .hero-act { animation: hero-bonk .7s 1.2s ease-out forwards; }
+.scene .lost .stars { animation: show .4s 1.6s forwards; }
 @keyframes foe-pounce {
   0% { transform: none; }
   35% { transform: translate(-120px, -150px); }
@@ -380,20 +380,22 @@ h1, h2, h3, p { margin: 0; }
 @keyframes hero-bonk { 0% { transform: none; } 50% { transform: scale(1.15, .5); } 100% { transform: scale(1, .66); } }
 @keyframes stars-spin { to { transform: rotate(360deg); } }
 @keyframes show { to { opacity: 1; } }
-/* Solved: the hero shoots an arrow, the creature flips over and scurries away, and the hero hops for joy */
+/* Solved: the hero shoots an arrow; the creature is knocked back, slides back to where it started,
+   flips onto its back and wiggles its legs; the hero hops for joy */
 .scene .arrow { opacity: 0; }
 .scene .arrow-shaft { stroke: #8a6a3a; stroke-width: 3; }
 .scene .arrow-head { fill: #d9dde4; }
 .scene .arrow-fletch { stroke: #f4f1e6; stroke-width: 2; }
-.scene .won .arrow { animation: arrow-fly .5s ease-in forwards; }
-.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 1.8s .45s ease-in forwards; }
-.scene .won .hero-act { animation: hero-hop .3s 1.2s ease-in-out 4 alternate; }
+.scene .won .arrow { animation: arrow-fly .8s ease-in forwards; }
+.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 2.4s .75s ease-in-out forwards; }
+.scene .won .hero-act { animation: hero-hop .35s 2.2s ease-in-out 4 alternate; }
 @keyframes arrow-fly { 0% { opacity: 1; transform: none; } 95% { opacity: 1; } 100% { opacity: 0; transform: translateX(var(--fx)); } }
 @keyframes foe-flee {
   0% { transform: none; }
-  20% { transform: translateY(-40px) scaleY(-1); }
-  35% { transform: translateY(0) scaleY(-1); }
-  100% { transform: translateX(800px) scaleY(-1); }
+  12% { transform: translateY(-36px); }
+  22% { transform: translateY(0); }
+  70% { transform: translateX(var(--back)); }
+  85%, 100% { transform: translateX(var(--back)) scaleY(-1); }
 }
 @keyframes hero-hop { to { transform: translateY(-14px); } }
 @media (prefers-reduced-motion: reduce) {

@@ -13,7 +13,7 @@
   var HERO_X = 120;          // where the hero stands
   var HERO_S = 2.8;          // hero drawing scale
   var FOE_S = 1.8;           // creature drawing scale
-  var FOE_START = 940;       // where the creature waits before its first step
+  var FOE_START = 915;       // where the creature waits before its first step (its whole body stays on screen)
   function stoneX(k) { return 860 - (k - 1) * 82; }   // stone 1 is nearest the creature, stone 8 nearest the hero
   function foeX(pos) { return pos <= 0 ? FOE_START : stoneX(Math.min(pos, STEPS)); }
 
@@ -148,6 +148,7 @@
     }
     f.setAttribute('data-pos', pos);
     svg.style.setProperty('--fx', (x - HERO_X - 112) + 'px');   // how far the arrow flies: its tip stops at the creature's face
+    svg.style.setProperty('--back', (FOE_START - x) + 'px');      // how far the creature slides back to its start when it is beaten
     svg.querySelectorAll('.stone').forEach(function (el) {
       var k = +el.getAttribute('data-k');
       el.classList.toggle('passed', k <= pos);
