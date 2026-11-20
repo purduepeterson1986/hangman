@@ -39,7 +39,7 @@
       '<path d="M2.4,-44 C3.6,-34 4,-24 4,-14.4 L6.6,-14 C6.4,-24 6,-36 4.6,-44.6 Z" fill="#86a880"/>' +
       '<path d="M0,-25 V-14.2" stroke="#6f8a68" stroke-width=".5"/><path d="M-6,-27.4 H6" stroke="#8a6a3a" stroke-width="1.3"/>' +
       limb('arm-b', 'M-4,-43 Q-7.4,-36 -6.6,-29.6', '#9dbf96', 2, hand(-6.6, -28.8, skin)) +
-      limb('arm-a', 'M4,-43 Q7.4,-36 6.6,-29.6', '#9dbf96', 2, hand(6.6, -28.8, skin)) +
+      limb('arm-a', 'M4,-43 Q8.4,-39 9.6,-33.6', '#9dbf96', 2, '') +   // his right arm sticks out a little, holding the arrow
       '<path d="M-1.2,-48.4 H1.2 V-45 H-1.2 Z" fill="' + skin + '"/>' +
       '<path d="M-3.4,-51.4 L-8.4,-55 L-3.2,-49 Z M3.4,-51.4 L8.4,-55 L3.2,-49 Z" fill="' + skin + '" stroke="#c8a888" stroke-width=".3"/>' +
       '<path d="M-4.2,-53 C-6.6,-46 -6.2,-40 -4.8,-36.4 L-3,-41 L-3.2,-49 Z M4.2,-53 C6.6,-46 6.2,-40 4.8,-36.4 L3,-41 L3.2,-49 Z" fill="' + h + '"/>' +
@@ -50,11 +50,11 @@
       '<circle cx="-1.4" cy="-51.2" r=".5" fill="#1a3a30"/><circle cx="1.4" cy="-51.2" r=".5" fill="#1a3a30"/>' +
       '<path d="M-0.9,-48.6 Q0,-48.1 0.9,-48.6" stroke="#b07a6a" stroke-width=".4" fill="none"/>' +
       '<path d="M0,-45.6 C-1.6,-44.6 -1.6,-43 0,-42.4 C1.6,-43 1.6,-44.6 0,-45.6 Z" fill="#7fae5a" stroke="#c9a449" stroke-width=".4"/>' +
-      '<g class="held">' +   // an arrow in his hand, ready; it hides while the real one is in the air
-        '<path d="M3.6,-42 H16" stroke="#8a6a3a" stroke-width=".8" stroke-linecap="round"/>' +
-        '<path d="M15.6,-43.4 L18.4,-42 L15.6,-40.6 Z" fill="#d9dde4"/>' +
-        '<path d="M3.6,-42 l-1.6,-1.3 M3.6,-42 l-1.6,1.3 M5,-42 l-1.6,-1.3 M5,-42 l-1.6,1.3" stroke="#f4f1e6" stroke-width=".5"/>' +
-      '</g>';
+      '<g class="held">' +   // an arrow held upright in his hand; it hides while the real one is in the air
+        '<path d="M9.8,-22.6 V-45" stroke="#8a6a3a" stroke-width=".8" stroke-linecap="round"/>' +
+        '<path d="M8.4,-44.6 L9.8,-47.8 L11.2,-44.6 Z" fill="#d9dde4"/>' +
+        '<path d="M9.8,-22.6 l-1.3,1.6 M9.8,-22.6 l1.3,1.6 M9.8,-24 l-1.3,1.6 M9.8,-24 l1.3,1.6" stroke="#f4f1e6" stroke-width=".5"/>' +
+      '</g>' + hand(9.8, -32.8, skin);
   }
 
   // Gimli, a stocky dwarf: iron helm, braided beard, mail under a red tunic, an axe on his shoulder.
@@ -237,7 +237,7 @@
   ];
   var HEROES = [
     // box: the area the drawing covers (x, y, width, height), for the small picture in the "Hooray!" message.
-    { id: 'legolas', name: 'Legolas', box: [-14, -61, 28, 63], weapon: 'arrow', s: 2.8, h: 59, hand: { x: 18, y: -42 }, art: elfArt },
+    { id: 'legolas', name: 'Legolas', box: [-14, -61, 28, 63], weapon: 'arrow', s: 2.8, h: 59, hand: { x: 16, y: -33 }, art: elfArt },
     { id: 'gimli', name: 'Gimli', box: [-10, -40, 26, 42], weapon: 'axe', s: 3.2, h: 39, hand: { x: 12, y: -31 }, art: dwarfArt },
     { id: 'gandalf', name: 'Gandalf', box: [-14, -72, 30, 73], weapon: 'staff', s: 2.4, h: 70, hand: { x: 12.6, y: -64.6 }, art: gandalfArt },
     { id: 'hobbit', name: 'Frodo', box: [-10, -35, 26, 36], weapon: 'sword', s: 3.4, h: 34, hand: { x: 14, y: -26 }, art: hobbitArt }

@@ -442,7 +442,7 @@ h1, h2, h3, p { margin: 0; }
 @keyframes hero-ready { 0%, 100% { transform: none; } 25% { transform: translateX(-1px) scaleY(1.02); } 75% { transform: translateX(1px) scaleY(1.02); } }
 @keyframes hero-nervous { 0%, 100% { transform: translateX(-.6px); } 50% { transform: translateX(.6px) scaleY(.99); } }
 /* The hero's weapon: Legolas's arrow and Gimli's axe swing up, a hobbit's sword lifts and glows blue (brighter as the creature nears), Gandalf's staff glows */
-.scene .w-arrow .held { transform-origin: 0% 50%; }
+.scene .w-arrow .held { transform-origin: 50% 56%; }   /* the arrow turns around his hand */
 .scene .w-axe .held { transform-origin: 0% 100%; }
 .scene .sword { transform-origin: 0% 100%; }
 .scene-svg:not(.won):not(.lost) .held, .scene-svg:not(.won):not(.lost) .sword { animation: brandish 3.6s ease-in-out infinite; }
