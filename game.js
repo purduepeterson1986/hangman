@@ -289,7 +289,7 @@
   var toastTimer = 0;
   // The word is solved: stays up while the hero beats the creature.
   function winToast() {
-    toast('🏹', 'Hooray! ' + SCENE.hero().name + ' beat ' + SCENE.foe().name + '!', 4000);
+    toast(SCENE.heroIcon(), 'Hooray! ' + SCENE.hero().name + ' beat ' + SCENE.foe().name + '!', 4000);
   }
   // ms: how long the message stays up (most stay up for just under a second)
   function toast(ico, text, ms) {

@@ -6,7 +6,7 @@
   <title>Battle preview</title>
   <!-- Uses the game's own styles and scene, so what plays here is exactly what plays in the game.
        Keep the ?v= tags the same as in index.html. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-20o">
+  <link rel="stylesheet" href="styles.css?v=2026-11-20p">
   <style>
     html, body { height: auto; overflow: auto; }
     body { padding: 16px; color: var(--ink, #fff); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -35,7 +35,7 @@
   </header>
   <main class="cards" id="cards"></main>
 
-  <script src="scene.js?v=2026-11-20o"></script>
+  <script src="scene.js?v=2026-11-20p"></script>
   <script>
   (function () {
     'use strict';
@@ -71,7 +71,7 @@
       clearTimers(c);
       var root = c.querySelector('.scene');
       root.innerHTML = SCENE.html(b.hero, b.foe);
-      c.names = { hero: SCENE.hero().name, foe: SCENE.foe().name, icon: SCENE.foeIcon() };
+      c.names = { hero: SCENE.hero().name, foe: SCENE.foe().name, icon: SCENE.foeIcon(), heroIcon: SCENE.heroIcon() };
       SCENE.update(root, b.won ? 5 : 7, true);
       c.querySelector('.msg').textContent = '';
       c.querySelector('.msg').className = 'msg';
@@ -94,7 +94,7 @@
       if (b.won) {
         // The word is solved: the hero attacks at once.
         SCENE.end(root, true);
-        msg.textContent = '🏹 Hooray! ' + n.hero + ' beat ' + n.foe + '!';
+        msg.innerHTML = n.heroIcon + ' Hooray! ' + n.hero + ' beat ' + n.foe + '!';
         later(c, 4000, function () { msg.textContent = ''; });
         start();
       } else {

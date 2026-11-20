@@ -230,10 +230,11 @@
     { name: 'Merry', vest: '#2e9657' }, { name: 'Pippin', vest: '#c8433a' }
   ];
   var HEROES = [
-    { id: 'legolas', name: 'Legolas', weapon: 'arrow', s: 2.8, h: 59, hand: { x: 18, y: -29 }, art: elfArt },
-    { id: 'gimli', name: 'Gimli', weapon: 'axe', s: 3.2, h: 39, hand: { x: 12, y: -31 }, art: dwarfArt },
-    { id: 'gandalf', name: 'Gandalf', weapon: 'staff', s: 2.4, h: 70, hand: { x: 12.6, y: -64.6 }, art: gandalfArt },
-    { id: 'hobbit', name: 'Frodo', weapon: 'sword', s: 3.4, h: 34, hand: { x: 14, y: -26 }, art: hobbitArt }
+    // box: the area the drawing covers (x, y, width, height), for the small picture in the "Hooray!" message.
+    { id: 'legolas', name: 'Legolas', box: [-14, -61, 28, 63], weapon: 'arrow', s: 2.8, h: 59, hand: { x: 18, y: -29 }, art: elfArt },
+    { id: 'gimli', name: 'Gimli', box: [-10, -40, 26, 42], weapon: 'axe', s: 3.2, h: 39, hand: { x: 12, y: -31 }, art: dwarfArt },
+    { id: 'gandalf', name: 'Gandalf', box: [-14, -72, 30, 73], weapon: 'staff', s: 2.4, h: 70, hand: { x: 12.6, y: -64.6 }, art: gandalfArt },
+    { id: 'hobbit', name: 'Frodo', box: [-10, -35, 26, 36], weapon: 'sword', s: 3.4, h: 34, hand: { x: 14, y: -26 }, art: hobbitArt }
   ];
   // face: the middle of the creature's face (in drawing units, facing right), where the hero's weapon hits it.
   // box: the area its drawing covers (x, y, width, height), for the small picture in the "Oh no!" message.
@@ -273,6 +274,7 @@
     if (hero.id === 'hobbit') {   // one of the four hobbits, at random
       var hb = pick(HOBBITS);
       hero.name = hb.name;
+      hero.vest = hb.vest;
       art = hobbitArt(hb.vest);
     }
     var stones = '';
@@ -361,6 +363,11 @@
     update: update,
     end: end,
     hero: function () { return hero; },
+    // A small picture of the current hero, for the "Hooray!" message
+    heroIcon: function () {
+      return '<svg class="toast-pic" viewBox="' + hero.box.join(' ') + '" aria-hidden="true">' +
+        (hero.id === 'hobbit' ? hobbitArt(hero.vest) : hero.art()) + '</svg>';
+    },
     // A small picture of the current creature, for the "Oh no!" message
     foeIcon: function () { return '<svg class="toast-pic" viewBox="' + foe.box.join(' ') + '" aria-hidden="true">' + foe.art() + '</svg>'; },
     foe: function () { return foe; }
