@@ -1,4 +1,4 @@
-# Snowman
+# Word Quest
 
 A word-guessing game for 1 or 2 players, played in any web browser with a mouse, a touch screen or a keyboard. Five levels take you from short picture words for young children to a challenge for adults.
 

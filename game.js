@@ -1,4 +1,4 @@
-/* ================= Snowman =================
+/* ================= Word Quest =================
    A word-guessing game for 2 players, with five levels from picture
    words for young children to a challenge for adults. Plain JavaScript. */
 (function () {
