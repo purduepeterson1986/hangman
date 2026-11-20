@@ -7,6 +7,7 @@
   var ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   var QWERTY = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
   var COLORS = ['#4db5ff', '#ff5c8a', '#ffd23f', '#5fe3a1'];
+  var SNOW_PC = '#ff7a59';   // scarf colour of the one shared snowman
   var ROUNDS = 5;        // words per game
   var BONUS = 5;         // extra points for finishing a word
   var STAGES = 8;        // pieces of the snowman drawing
@@ -298,11 +299,10 @@
         return { name: nm, type: settings.seats[i].type, level: settings.seats[i].level, score: 0, wrong: 0, out: false };
       }),
       entry: null, w: '', guessed: {}, cur: 0, phase: 'busy', last: '', solvedBy: -1,
-      solving: false, typed: ''
+      solving: false, typed: '', wrong: 0
     };
     $('#players').setAttribute('style', '--n: ' + G.n);
-    $('#gallows').innerHTML = G.seats.map(function (s, i) { return gallowsHTML(i); }).join('');
-    $('#gallows').classList.toggle('solo', G.n === 1);
+    $('#gallows').innerHTML = gallowsHTML();
     showScreen('game');
     Sound.play('start');
     nextRound();
@@ -328,7 +328,7 @@
     G.solvedBy = -1;
     G.solving = false;
     G.typed = '';
-    G.seats.forEach(function (s) { s.wrong = 0; s.out = false; });
+    G.wrong = 0;   // one shared snowman for the word
     G.cur = (G.round - 1) % G.n;       // the starting player rotates each word
     G.phase = 'busy';
     G.note = 'Word ' + G.round + ' starts';
@@ -359,9 +359,6 @@
   function isSolved() {
     for (var i = 0; i < G.w.length; i++) if (!G.guessed[G.w[i]]) return false;
     return true;
-  }
-  function activeCount() {
-    return G.seats.filter(function (s) { return !s.out; }).length;
   }
 
   /* ---------- Turn timer ---------- */
@@ -395,29 +392,35 @@
     $('#ring').style.strokeDashoffset = (RING * (1 - left / settings.timer)).toFixed(1);
     $('#clock-num').textContent = G.phase === 'turn' && !running ? '—' : left;
   }
-  // Out of time before a letter or Solve: it counts as a miss and the turn passes.
-  function timeUp() {
-    if (!G || G.phase !== 'turn') return;
-    var p = G.cur, seat = G.seats[p];
-    G.solving = false;
-    G.typed = '';
+  // A miss (wrong letter, time out, or wrong answer) adds a piece to the one shared snowman.
+  // When it is complete the word is over and nobody gets the bonus; points already earned stay.
+  function missed(p, note, ico, text) {
+    G.wrong++;
+    G.note = note;
     G.phase = 'busy';
     var token = ++gen;
-    seat.wrong++;
-    G.note = "Time's up";
     Sound.play('miss');
-    toast('⏰', "Time's up");
-    if (seat.wrong >= G.lv.lives) {
-      seat.out = true;
+    var lost = G.wrong >= G.lv.lives;
+    if (lost) {
       setTimeout(function () { Sound.play('out'); }, 300);
-      toast('💤', esc(seat.name) + ' is out');
+      toast('💧', 'The snowman melted');
+    } else {
+      toast(ico, text);
     }
     render();
-    if (activeCount() === 0) {
+    if (lost) {
       setTimeout(function () { if (token === gen) endRound(-1); }, 1000);
       return;
     }
     setTimeout(function () { if (token === gen) passTurn(p); }, 950);
+  }
+
+  // Out of time before a letter or Solve: it counts as a miss and the turn passes.
+  function timeUp() {
+    if (!G || G.phase !== 'turn') return;
+    G.solving = false;
+    G.typed = '';
+    missed(G.cur, "Time's up", '⏰', "Time's up");
   }
 
   function guess(p, letter) {
@@ -428,40 +431,24 @@
     G.phase = 'busy';
     var token = ++gen;
     var seat = G.seats[p], hits = countIn(letter);
-    G.note = hits ? 'Good guess!' : 'Not in the word';
-    if (hits) {
-      seat.score += hits;
-      Sound.play('hit');
-      if (G.level <= 2) speak(letter.toLowerCase());   // lowercase, so the voice says just the letter
-      toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''));
-      render();
-      if (isSolved()) {
-        seat.score += BONUS;
-        G.solvedBy = p;
-        endRound(p);   // the 5-second pause in endRound is the only wait
-        return;
-      }
-      // A correct letter earns another turn for the same player (the clock starts over).
-      G.note = 'Good guess! Go again';
-      render();
-      setTimeout(function () { if (token === gen) beginTurn(); }, 950);
+    if (!hits) {
+      missed(p, 'Not in the word', '❌', 'No ' + letter);
       return;
-    } else {
-      seat.wrong++;
-      Sound.play('miss');
-      toast('❌', 'No ' + letter);
-      if (seat.wrong >= G.lv.lives) {
-        seat.out = true;
-        setTimeout(function () { Sound.play('out'); }, 300);
-        toast('💤', esc(seat.name) + ' is out');
-      }
-      render();
-      if (activeCount() === 0) {
-        setTimeout(function () { if (token === gen) endRound(-1); }, 1000);
-        return;
-      }
     }
-    setTimeout(function () { if (token === gen) passTurn(p); }, 950);
+    seat.score += hits;
+    G.note = 'Good guess! Go again';
+    Sound.play('hit');
+    if (G.level <= 2) speak(letter.toLowerCase());   // lowercase, so the voice says just the letter
+    toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''));
+    render();
+    if (isSolved()) {
+      seat.score += BONUS;
+      G.solvedBy = p;
+      endRound(p);   // the 5-second pause in endRound is the only wait
+      return;
+    }
+    // A correct letter earns another turn for the same player (the clock starts over).
+    setTimeout(function () { if (token === gen) beginTurn(); }, 950);
   }
 
   /* ---------- Solve the whole word (one turn) ---------- */
@@ -495,7 +482,6 @@
     G.solving = false;
     G.typed = '';
     G.phase = 'busy';
-    var token = ++gen;
     if (answer === G.w) {
       // Points for every letter that was still hidden, plus the finishing bonus.
       var newly = 0, i;
@@ -512,31 +498,12 @@
       return;
     }
     // A wrong answer costs one chance and the turn, the same as a wrong letter.
-    seat.wrong++;
-    G.note = 'Not that word';
-    Sound.play('miss');
-    toast('❌', 'Not that word');
-    if (seat.wrong >= G.lv.lives) {
-      seat.out = true;
-      setTimeout(function () { Sound.play('out'); }, 300);
-      toast('💤', esc(seat.name) + ' is out');
-    }
-    render();
-    if (activeCount() === 0) {
-      setTimeout(function () { if (token === gen) endRound(-1); }, 1000);
-      return;
-    }
-    setTimeout(function () { if (token === gen) passTurn(p); }, 950);
+    missed(p, 'Not that word', '❌', 'Not that word');
   }
 
   function passTurn(p) {
     if (!G) return;
-    var next = -1;
-    for (var k = 1; k <= G.n; k++) {
-      var idx = (p + k) % G.n;
-      if (!G.seats[idx].out) { next = idx; break; }
-    }
-    if (next < 0) { endRound(-1); return; }
+    var next = (p + 1) % G.n;   // no one is ever out now, so the turn just goes to the next seat
     G.cur = next;
     G.phase = 'busy';
     G.note = 'Next up: ' + esc(G.seats[next].name);
@@ -625,6 +592,7 @@
     renderPlayers();
     renderStatus();
     renderGallows();
+    renderLives();
     renderClock();
     renderWord();
     renderKeys();
@@ -646,7 +614,6 @@
 
   function seatTag(s, i) {
     var active = (G.phase === 'turn' || G.phase === 'busy') && i === G.cur;
-    if (s.out) return 'Out of guesses';
     if (active && G.phase === 'turn') return s.type === 'cpu' ? 'Thinking…' : 'Your turn';
     if (active) return 'Up next';
     return s.type === 'cpu' ? s.level.charAt(0).toUpperCase() + s.level.slice(1) + ' computer' : 'Person';
@@ -655,14 +622,10 @@
   function renderPlayers() {
     $('#players').innerHTML = G.seats.map(function (s, i) {
       var active = (G.phase === 'turn' || G.phase === 'busy') && i === G.cur;
-      var left = Math.max(0, G.lv.lives - s.wrong);
-      var pips = '';
-      for (var k = 0; k < G.lv.lives; k++) pips += '<i class="pip' + (k < left ? ' on' : '') + '">♥</i>';
-      return '<div class="pcard' + (active ? ' active' : '') + (s.out ? ' out' : '') + '" style="--pc:' + COLORS[i] + '">' +
+      return '<div class="pcard' + (active ? ' active' : '') + '" style="--pc:' + COLORS[i] + '">' +
         miniDisc(i) +
         '<div class="pcard-text"><div class="pcard-name">' + esc(s.name) + '</div>' +
-        '<div class="pcard-tag">' + seatTag(s, i) + '</div>' +
-        '<div class="pips" aria-label="' + left + ' chances left">' + pips + '</div></div>' +
+        '<div class="pcard-tag">' + seatTag(s, i) + '</div></div>' +
         '<div class="pcard-score"><b>' + s.score + '</b><span>pts</span></div></div>';
     }).join('');
   }
@@ -706,11 +669,11 @@
     return out;
   }
 
-  // One snowman for each player, always on screen. The scarf and hat use that player's colour.
+  // The one shared snowman, always on screen. Its scarf and hat use the shared colour.
   // Pieces appear in this order: 1 head, 2 middle body, 3 bottom body, 4 arm, 5 other arm,
   // 6 scarf, 7 hat, 8 melting face (the end).
-  function gallowsHTML(i) {
-    return '<div class="gallows" data-seat="' + i + '" style="--pc:' + COLORS[i] + '">' +
+  function gallowsHTML() {
+    return '<div class="gallows" style="--pc:' + SNOW_PC + '">' +
       '<svg viewBox="0 0 300 280" class="gallows-svg" aria-hidden="true">' +
       '<g class="frame">' +
         '<line x1="20" y1="268" x2="280" y2="268" class="ground"/>' +
@@ -757,22 +720,26 @@
       '</div>';
   }
 
+  // Hearts for the shared snowman's chances, under the word on the right.
+  function renderLives() {
+    var el = $('#lives'); if (!el || !G) return;
+    var left = Math.max(0, G.lv.lives - G.wrong), h = '';
+    for (var k = 0; k < G.lv.lives; k++) h += '<i class="pip' + (k < left ? ' on' : '') + '">♥</i>';
+    el.innerHTML = h;
+  }
+
   function renderGallows() {
-    G.seats.forEach(function (seat, i) {
-      var panel = document.querySelector('.gallows[data-seat="' + i + '"]');
-      if (!panel) return;
-      var lives = G.lv.lives;
-      var stage = seat.out ? STAGES : stageFor(seat.wrong, lives);
-      var left = Math.max(0, lives - seat.wrong);
-      var turn = (G.phase === 'turn' || G.phase === 'busy') && i === G.cur;
-      panel.classList.toggle('dead', stage >= STAGES);
-      panel.classList.toggle('started', stage > 0);
-      panel.classList.toggle('active', turn);
-      panel.querySelectorAll('.part').forEach(function (el) {
-        el.classList.toggle('on', +el.getAttribute('data-k') <= stage);
-      });
-      panel.querySelector('.cap').innerHTML = esc(seat.name) + ' &middot; ' + left + ' ' + (left === 1 ? 'chance' : 'chances') + ' left';
+    var panel = document.querySelector('#gallows .gallows');
+    if (!panel) return;
+    var lives = G.lv.lives;
+    var stage = stageFor(G.wrong, lives);
+    var left = Math.max(0, lives - G.wrong);
+    panel.classList.toggle('dead', stage >= STAGES);
+    panel.classList.toggle('started', stage > 0);
+    panel.querySelectorAll('.part').forEach(function (el) {
+      el.classList.toggle('on', +el.getAttribute('data-k') <= stage);
     });
+    panel.querySelector('.cap').innerHTML = left + ' ' + (left === 1 ? 'chance' : 'chances') + ' left';
   }
 
   function renderWord() {
@@ -814,7 +781,8 @@
         '</div>';
     }
     $('#keys').classList.toggle('qwerty', !alpha);   // Levels 3 to 5: larger letter boxes
-    $('#keys').innerHTML = bar + (alpha
+    $('#solve').innerHTML = bar;
+    $('#keys').innerHTML = (alpha
       ? '<div class="kb-alpha">' + ALPHA.map(function (l) { return key(l); }).join('') + '</div>'
       : QWERTY.map(function (row) {
           return '<div class="kb-row">' + row.split('').map(function (l) { return key(l); }).join('') + '</div>';
@@ -877,7 +845,7 @@
 
   /* ================= Wiring ================= */
   function bindGame() {
-    $('#keys').addEventListener('click', function (e) {
+    function onKeyClick(e) {
       if (!G) return;
       var a = e.target.closest('[data-act]');
       if (a) {
@@ -892,7 +860,9 @@
       var b = e.target.closest('.key'); if (!b || b.disabled) return;
       if (G.solving) typeLetter(b.dataset.l);
       else guess(G.cur, b.dataset.l);
-    });
+    }
+    $('#keys').addEventListener('click', onKeyClick);
+    $('#solve').addEventListener('click', onKeyClick);
     document.addEventListener('keydown', function (e) {
       if (!G || G.phase !== 'turn' || modalOpen() || e.ctrlKey || e.metaKey || e.altKey) return;
       if (G.seats[G.cur].type !== 'human') return;
