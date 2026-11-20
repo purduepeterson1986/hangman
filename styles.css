@@ -361,6 +361,11 @@ h1, h2, h3, p { margin: 0; }
 .scene .foe.walking .sp-legs, .scene .won .sp-legs, .scene .lost .sp-legs { animation-play-state: running; }
 .scene .foe.walking .foe-act { animation: foe-bob .3s ease-in-out infinite alternate; }
 @keyframes sp-wiggle { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+/* Creatures with two or four legs (orc, goblins, warg) swing them while they walk, and kick them when flipped over */
+.scene .foe .leg-a, .scene .foe .leg-b { transform-box: fill-box; transform-origin: 50% 0; animation: leg-swing .3s ease-in-out infinite alternate; animation-play-state: paused; }
+.scene .foe .leg-b { animation-direction: alternate-reverse; }
+.scene .foe.walking .leg-a, .scene .foe.walking .leg-b, .scene .won .foe .leg-a, .scene .won .foe .leg-b, .scene .lost .foe .leg-a, .scene .lost .foe .leg-b { animation-play-state: running; }
+@keyframes leg-swing { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
 @keyframes foe-bob { to { transform: translateY(-4px); } }
 .scene .hero-act, .scene .foe-act { transform-box: fill-box; transform-origin: 50% 100%; }
 /* Caught (slowed down so it is easy to follow): the creature leaps, bonks the hero on the head and hops down beside him; stars circle his head */
@@ -372,24 +377,49 @@ h1, h2, h3, p { margin: 0; }
 .scene .lost .stars { animation: show .4s 1.6s forwards; }
 @keyframes foe-pounce {
   0% { transform: none; }
-  35% { transform: translate(-120px, -150px); }
-  55% { transform: translate(-166px, -109px); }
+  35% { transform: translate(-120px, calc(var(--bonk) - 40px)); }
+  55% { transform: translate(-166px, var(--bonk)); }   /* --bonk: the top of the hero's squashed head */
   75% { transform: translate(-120px, -70px); }
   100% { transform: translate(-64px, 0); }
 }
 @keyframes hero-bonk { 0% { transform: none; } 50% { transform: scale(1.15, .5); } 100% { transform: scale(1, .66); } }
 @keyframes stars-spin { to { transform: rotate(360deg); } }
 @keyframes show { to { opacity: 1; } }
-/* Solved: the hero shoots an arrow; the creature is knocked back, slides back to where it started,
-   flips onto its back and wiggles its legs; the hero hops for joy */
-.scene .arrow { opacity: 0; }
+/* Solved: the hero attacks with his own weapon (Legolas an arrow, Gimli a thrown axe, Gandalf a bolt of
+   light from his staff, a hobbit runs in with his sword). The creature is knocked back as it is hit,
+   slides back to where it started, flips onto its back and wiggles its legs; the hero hops for joy. */
+.scene .shot { opacity: 0; }
 .scene .arrow-shaft { stroke: #8a6a3a; stroke-width: 3; }
 .scene .arrow-head { fill: #d9dde4; }
 .scene .arrow-fletch { stroke: #f4f1e6; stroke-width: 2; }
-.scene .won .arrow { animation: arrow-fly 1.6s linear forwards; }   /* a slow, steady flight so it is easy to follow */
-.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 2.4s 1.55s ease-in-out forwards; }   /* starts as the arrow hits */
+.scene .won .shot { animation: shot-fly 1.6s linear forwards; }   /* a slow, steady flight so it is easy to follow */
+@keyframes shot-fly { 0% { opacity: 1; transform: none; } 95% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--fx), var(--fy)); } }
+.scene .spin { transform-box: fill-box; transform-origin: center; }
+.scene .won .spin { animation: stars-spin .4s linear infinite; }          /* the thrown axe spins */
+.scene .won.w-axe .held { animation: held-away 1.7s forwards; }          /* Gimli's axe leaves his hand, then he has it back */
+@keyframes held-away { 0%, 94% { opacity: 0; } 100% { opacity: 1; } }
+.scene .staff-glow { transform-box: fill-box; transform-origin: center; }
+.scene .won.w-staff .staff-glow { animation: staff-flash .6s ease-out 2 alternate; }
+@keyframes staff-flash { to { transform: scale(3); } }
+/* The sword fighter runs to the creature, strikes, and walks back */
+.scene .won.w-sword .hero-act { animation: hero-charge 3s ease-in-out forwards, hero-hop .35s 3.2s ease-in-out 4 alternate; }
+.scene .won.w-sword .hero-act .leg-a, .scene .won.w-sword .hero-act .leg-b { transform-box: fill-box; transform-origin: 50% 0; animation: leg-swing .25s ease-in-out 12 alternate; }
+.scene .won.w-sword .hero-act .leg-b { animation-direction: alternate-reverse; }
+@keyframes hero-charge {
+  0% { transform: none; }
+  45% { transform: translateX(var(--reach)); }
+  50% { transform: translateX(var(--reach)) rotate(12deg); }
+  56% { transform: translateX(var(--reach)); }
+  100% { transform: none; }
+}
+/* A flash where the weapon hits */
+.scene .hit-in { opacity: 0; transform-box: fill-box; transform-origin: center; }
+.scene .hit-ring { fill: none; stroke: #fff6c8; stroke-width: 4; }
+.scene .hit-burst { stroke: #ffffff; stroke-width: 3; stroke-linecap: round; }
+.scene .won .hit-in { animation: hit-flash .6s 1.5s ease-out forwards; }
+@keyframes hit-flash { 0% { opacity: 0; transform: scale(.3); } 30% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0; transform: scale(1.5); } }
+.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 2.4s 1.55s ease-in-out forwards; }   /* starts as the weapon hits */
 .scene .won .hero-act { animation: hero-hop .35s 3s ease-in-out 4 alternate; }
-@keyframes arrow-fly { 0% { opacity: 1; transform: none; } 95% { opacity: 1; } 100% { opacity: 0; transform: translateX(var(--fx)); } }
 @keyframes foe-flee {
   0% { transform: none; }
   12% { transform: translateY(-36px); }
@@ -400,8 +430,9 @@ h1, h2, h3, p { margin: 0; }
 @keyframes hero-hop { to { transform: translateY(-14px); } }
 @media (prefers-reduced-motion: reduce) {
   .scene .foe { transition: none; }
-  .scene .sp-legs, .scene .stars-spin, .scene .foe.walking .foe-act { animation: none; }
-  .scene .won .arrow, .scene .won .foe-act, .scene .lost .foe-act, .scene .won .hero-act, .scene .lost .hero-act, .scene .lost .stars { animation-duration: .01s; animation-delay: 0s; }
+  .scene .sp-legs, .scene .foe .leg-a, .scene .foe .leg-b, .scene .stars-spin, .scene .spin, .scene .foe.walking .foe-act { animation: none; }
+  .scene .won .shot, .scene .won .hit-in, .scene .won .foe-act, .scene .lost .foe-act, .scene .won .hero-act, .scene .lost .hero-act,
+  .scene .lost .stars, .scene .won .held, .scene .won .staff-glow, .scene .won .hero-act .leg-a, .scene .won .hero-act .leg-b { animation-duration: .01s; animation-delay: 0s; animation-iteration-count: 1; }
 }
 
 .side {
