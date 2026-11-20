@@ -31,7 +31,7 @@ All levels use the same big letter buttons, in A to Z order. Levels 1 and 2 are 
 ## Players
 
 - **Players:** 1 or 2. Names are optional. With 1 player the turn timer still runs.
-- **Turn timer:** 30 seconds, 15 seconds, or off, set before the game. When on, the countdown shows to the right of the snowmen. Pressing **Solve the word** stops the clock for that turn.
+- **Turn timer:** 30 seconds, 15 seconds, or off, set before the game. When on, the countdown shows in the top-right corner of the scene. Pressing **Solve the word** stops the clock for that turn.
 - Each seat can be a **Person** or the **Computer**.
 - The computer has three skill levels:
   - **Easy** guesses letters at random.

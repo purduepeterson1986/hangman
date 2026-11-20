@@ -313,6 +313,7 @@ h1, h2, h3, p { margin: 0; }
   gap: clamp(4px, 1.2vh, 12px);
   padding: 4px clamp(10px, 2vw, 22px);
   width: 100%; max-width: 1200px; margin: 0 auto;
+  position: relative;
 }
 .solve-slot { width: 100%; display: flex; justify-content: center; }
 .stage { position: relative; width: 100%; min-width: 0; flex: 0 1 auto; }
@@ -341,7 +342,7 @@ h1, h2, h3, p { margin: 0; }
 .clock.hot .clock-num b { color: var(--bad); }
 .clock.idle .clock-num b { color: var(--ink-faint); }
 .clock-num span { margin-top: 2px; font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
-.scene-svg { display: block; width: 100%; height: auto; max-height: max(90px, calc(100cqh - 190px)); overflow: visible; }
+.scene-svg { display: block; width: 100%; height: auto; max-height: max(60px, calc(100cqh - 215px)); overflow: visible; }
 .scene .ground { fill: #1f3d2d; }
 .scene .tuft { stroke: #3f7a52; stroke-width: 2.4; stroke-linecap: round; fill: none; }
 /* The stepping stones: green, then yellow, then the last one red */
@@ -439,9 +440,8 @@ h1, h2, h3, p { margin: 0; }
 .wl.missed { color: var(--bad); opacity: .85; }
 @keyframes pop-in { from { transform: scale(.4) translateY(10px); opacity: 0; } }
 
-/* The toast sits in its own slot under the word, so it never covers the picture or the word. */
-/* The toast is taken out of the page flow and centred in its slot, so showing it never moves anything else. */
-.toast-slot { position: relative; height: 52px; width: 100%; pointer-events: none; }
+/* The toast floats over the top of the scene (the sky), out of the page flow, so showing it never moves anything else. */
+.toast-slot { position: absolute; top: 2px; left: 0; right: 0; height: 52px; z-index: 8; pointer-events: none; }
 .toast {
   position: absolute; left: 50%; top: 50%; translate: -50% -50%;
   display: flex; align-items: center; gap: 12px;
@@ -588,7 +588,26 @@ h1, h2, h3, p { margin: 0; }
   .pcard .pdisc { --d: 26px; }
   .status { min-height: 34px; }
   .icon-btn, .controls .btn { width: 40px; height: 40px; min-height: 40px; }
+  .controls .btn { padding: 0; }
+  .controls .btn span { display: none; }   /* icons only, so the buttons don't overlap */
   .toast-slot { height: 36px; }
+}
+/* Short landscape screens (phones turned sideways): the word, category and Solve button share one row under the scene */
+@media (max-height: 560px) and (orientation: landscape) {
+  .table { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "stage stage" "word side"; align-content: center; column-gap: 12px; row-gap: 4px; }
+  .stage { grid-area: stage; }
+  .word-band { grid-area: word; padding: 0; }
+  .side { grid-area: side; flex-direction: row; width: auto; gap: 8px; }
+  .solve-slot { width: auto; }
+  .solve-bar { margin-bottom: 0; flex-wrap: nowrap; }
+  .chip { padding: 4px 12px; font-size: .9rem; white-space: nowrap; }
+  .wl { height: 40px; }
+  .scene-svg { max-height: max(40px, calc(100cqh - 56px)); }
+  .stage .clock { width: 48px; }
+}
+@media (max-height: 450px) {
+  .key.big { height: 34px; font-size: 1.3rem; border-radius: 12px; }
+  .kb-alpha { gap: 5px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .backdrop::after, .tile-mini.t4, .pcard.active .pdisc, .pcard.active, .picture { animation: none; }
