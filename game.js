@@ -440,7 +440,8 @@
     G.note = 'Good guess! Go again';
     Sound.play('hit');
     if (G.level <= 2) speak(letter.toLowerCase());   // lowercase, so the voice says just the letter
-    toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''));
+    // If this letter finishes the word, the message stays up while the hero beats the creature.
+    toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''), isSolved() ? 4000 : 0);
     render();
     if (isSolved()) {
       seat.score += BONUS;
@@ -493,7 +494,7 @@
       G.last = '';
       G.note = 'Solved!';
       Sound.play('solve');
-      toast('🎉', 'Solved! +' + (newly + BONUS));
+      toast('🎉', 'Solved! +' + (newly + BONUS), 4000);   // stays up while the hero beats the creature
       render();
       endRound(p);   // the 5-second pause in endRound is the only wait
       return;
