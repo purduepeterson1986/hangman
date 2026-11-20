@@ -44,7 +44,7 @@ All levels use the same big letter buttons, in A to Z order. Levels 1 and 2 are 
 ## Features
 
 - A path scene across the screen: a hero on the left, 8 stepping stones (green, then yellow, then a red last stone) and a creature on the right. The stones still ahead of the creature always equal the chances left; on harder levels it starts part of the way along.
-- Each game pairs a hero with a creature at random. Heroes: **Legolas** (shoots an arrow), **Gimli** (throws his axe), **Gandalf** (casts a bolt of light from his staff) and a **hobbit** (Frodo, Sam, Merry or Pippin, who runs in with a sword). Creatures: the **spider**, an **orc**, two **goblins** and a **warg**. A beaten creature slides back to where it started, flips onto its back and kicks its legs. Below it are the word, the category and the **Solve the word** button. The border of the player whose turn it is pulses.
+- Every word pairs a hero with a creature at random. Heroes: **Legolas** (shoots an arrow), **Gimli** (throws his axe), **Gandalf** (casts a bolt of light from his staff) and a **hobbit** (Frodo, Sam, Merry or Pippin, who runs in with a sword). Creatures: the **spider**, an **orc**, two **goblins** and a **warg**. A beaten creature slides back to where it started, flips onto its back and kicks its legs. Below it are the word, the category and the **Solve the word** button. The border of the player whose turn it is pulses.
 - A letter can be guessed by tapping its button or by typing it on a keyboard.
 - Sound effects with a mute button, and a full-screen button.
 - Can be installed as an app from the browser.

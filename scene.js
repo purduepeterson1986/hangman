@@ -6,7 +6,7 @@
    Last miss: the creature catches the hero (in a fun way). Word solved: the hero wins with
    his own weapon: Legolas shoots an arrow, Gimli throws his axe, Gandalf casts a bolt of light
    from his staff, and a hobbit charges in with a sword.
-   A hero and a creature are paired at random each game.
+   A hero and a creature are paired at random for every word.
    All the drawings come from Hobbit Land. */
 (function () {
   'use strict';
@@ -223,7 +223,7 @@
     bolt: '<circle r="26" fill="#fff3b0" opacity=".25"/><circle r="15" fill="#fff8d0" opacity=".6"/><circle r="7" fill="#ffffff"/>'
   };
 
-  /* ---------- Who can appear. One hero and one creature are paired at random each game. ---------- */
+  /* ---------- Who can appear. One hero and one creature are paired at random for every word. ---------- */
   // s: drawing scale. h: drawing height. hand: where the weapon leaves from (in drawing units).
   var HOBBITS = [
     { name: 'Frodo', vest: '#2f6fc0' }, { name: 'Sam', vest: '#d49a22' },

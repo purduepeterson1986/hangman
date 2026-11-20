@@ -320,7 +320,6 @@
       together: settings.together && settings.count === 2   // both players get every point
     };
     $('#players').setAttribute('style', '--n: ' + G.n);
-    $('#scene').innerHTML = SCENE.html();   // a new hero and creature each game
     showScreen('game');
     Sound.play('start');
     nextRound();
@@ -347,7 +346,8 @@
     G.solving = false;
     G.typed = '';
     G.wrong = 0;   // misses for this word, shared by all players
-    G.snap = true; // the creature jumps back to its start without walking
+    G.snap = true; // the creature starts at its place without walking
+    $('#scene').innerHTML = SCENE.html();   // a new hero and creature, paired at random, for every word
     G.cur = (G.round - 1) % G.n;       // the starting player rotates each word
     G.phase = 'busy';
     G.note = 'Word ' + G.round + ' starts';
