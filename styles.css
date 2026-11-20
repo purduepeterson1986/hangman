@@ -392,18 +392,19 @@ h1, h2, h3, p { margin: 0; }
 .scene .arrow-shaft { stroke: #8a6a3a; stroke-width: 3; }
 .scene .arrow-head { fill: #d9dde4; }
 .scene .arrow-fletch { stroke: #f4f1e6; stroke-width: 2; }
-.scene .won .shot { animation: shot-fly 1.6s linear forwards; }   /* a slow, steady flight so it is easy to follow */
+/* Every hero waits 1 s before attacking, so the players can see the moment */
+.scene .won .shot { animation: shot-fly 1.6s 1s linear forwards; }   /* a slow, steady flight so it is easy to follow */
 @keyframes shot-fly { 0% { opacity: 1; transform: none; } 95% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--fx), var(--fy)); } }
 .scene .spin { transform-box: fill-box; transform-origin: center; }
 .scene .won .spin { animation: stars-spin .4s linear infinite; }          /* the thrown axe spins */
-.scene .won.w-axe .held { animation: held-away 1.7s forwards; }          /* Gimli's axe leaves his hand, then he has it back */
+.scene .won.w-axe .held { animation: held-away 1.7s 1s forwards; }          /* Gimli's axe leaves his hand, then he has it back */
 @keyframes held-away { 0%, 94% { opacity: 0; } 100% { opacity: 1; } }
 .scene .staff-glow { transform-box: fill-box; transform-origin: center; }
-.scene .won.w-staff .staff-glow { animation: staff-flash .6s ease-out 2 alternate; }
+.scene .won.w-staff .staff-glow { animation: staff-flash .6s 1s ease-out 2 alternate; }
 @keyframes staff-flash { to { transform: scale(3); } }
 /* The sword fighter runs to the creature at a steady jog (2.7 s), strikes, and stays there hopping for joy */
-.scene .won.w-sword .hero-act { animation: hero-charge 3.1s ease-in-out forwards, hero-hop-there .35s 3.6s ease-in-out 4 alternate; }
-.scene .won.w-sword .hero-act .leg-a, .scene .won.w-sword .hero-act .leg-b { transform-box: fill-box; transform-origin: 50% 0; animation: leg-swing .34s ease-in-out 8 alternate; }
+.scene .won.w-sword .hero-act { animation: hero-charge 3.1s 1s ease-in-out forwards, hero-hop-there .35s 4.6s ease-in-out 4 alternate; }
+.scene .won.w-sword .hero-act .leg-a, .scene .won.w-sword .hero-act .leg-b { transform-box: fill-box; transform-origin: 50% 0; animation: leg-swing .34s 1s ease-in-out 8 alternate; }
 .scene .won.w-sword .hero-act .leg-b { animation-direction: alternate-reverse; }
 @keyframes hero-charge {
   0% { transform: none; }
@@ -412,17 +413,17 @@ h1, h2, h3, p { margin: 0; }
   100% { transform: translateX(var(--reach)); }
 }
 @keyframes hero-hop-there { from { transform: translateX(var(--reach)); } to { transform: translateX(var(--reach)) translateY(-14px); } }
-/* With the slower run the strike lands at about 2.9 s, so the creature is knocked back then (and a bit quicker, to finish before the message) */
-.scene .won.w-sword .foe-act { animation-delay: 2.9s; animation-duration: 2s; }
-.scene .won.w-sword .hit-in { animation-delay: 2.85s; }
+/* With the slower run (and the 1 s wait) the strike lands at about 3.9 s, so the creature is knocked back then */
+.scene .won.w-sword .foe-act { animation-delay: 3.9s; animation-duration: 1.1s; }   /* quicker, so it ends before the result box at 5 s */
+.scene .won.w-sword .hit-in { animation-delay: 3.85s; }
 /* A flash where the weapon hits */
 .scene .hit-in { opacity: 0; transform-box: fill-box; transform-origin: center; }
 .scene .hit-ring { fill: none; stroke: #fff6c8; stroke-width: 4; }
 .scene .hit-burst { stroke: #ffffff; stroke-width: 3; stroke-linecap: round; }
-.scene .won .hit-in { animation: hit-flash .6s 1.5s ease-out forwards; }
+.scene .won .hit-in { animation: hit-flash .6s 2.5s ease-out forwards; }
 @keyframes hit-flash { 0% { opacity: 0; transform: scale(.3); } 30% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0; transform: scale(1.5); } }
-.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 2.4s 1.55s ease-in-out forwards; }   /* starts as the weapon hits */
-.scene .won .hero-act { animation: hero-hop .35s 3s ease-in-out 4 alternate; }
+.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 2.4s 2.55s ease-in-out forwards; }   /* starts as the weapon hits */
+.scene .won .hero-act { animation: hero-hop .35s 4s ease-in-out 4 alternate; }
 @keyframes foe-flee {
   0% { transform: none; }
   12% { transform: translateY(-36px); }
