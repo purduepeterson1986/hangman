@@ -386,9 +386,9 @@ h1, h2, h3, p { margin: 0; }
 .scene .arrow-shaft { stroke: #8a6a3a; stroke-width: 3; }
 .scene .arrow-head { fill: #d9dde4; }
 .scene .arrow-fletch { stroke: #f4f1e6; stroke-width: 2; }
-.scene .won .arrow { animation: arrow-fly .8s ease-in forwards; }
-.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 2.4s .75s ease-in-out forwards; }
-.scene .won .hero-act { animation: hero-hop .35s 2.2s ease-in-out 4 alternate; }
+.scene .won .arrow { animation: arrow-fly 1.6s linear forwards; }   /* a slow, steady flight so it is easy to follow */
+.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 2.4s 1.55s ease-in-out forwards; }   /* starts as the arrow hits */
+.scene .won .hero-act { animation: hero-hop .35s 3s ease-in-out 4 alternate; }
 @keyframes arrow-fly { 0% { opacity: 1; transform: none; } 95% { opacity: 1; } 100% { opacity: 0; transform: translateX(var(--fx)); } }
 @keyframes foe-flee {
   0% { transform: none; }
