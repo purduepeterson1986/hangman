@@ -45,7 +45,8 @@
     ],
     level: 1,
     sound: true,
-    timer: 30          // seconds per turn: 30, 15, or 0 for no turn timer
+    timer: 30,         // seconds per turn: 30, 15, or 0 for no turn timer
+    together: false    // 2 players: true = play together (both get every point), false = against each other
   };
 
   function loadSettings() {
@@ -58,6 +59,7 @@
       else if (s.timer === false) settings.timer = 0;
       else if (s.timer === 30 || s.timer === 15 || s.timer === 0) settings.timer = s.timer;
       if (s.count === 1 || s.count === 2) settings.count = s.count;
+      if (typeof s.together === 'boolean') settings.together = s.together;
       if (Array.isArray(s.seats)) {
         for (var i = 0; i < 4; i++) {
           var a = s.seats[i]; if (!a) continue;
@@ -124,14 +126,22 @@
       return '<button type="button" class="seg' + (on ? ' on' : '') + '" role="radio" aria-checked="' + on + '" data-timer="' + o[0] + '">' + o[1] + '</button>';
     }).join('');
   }
+  function renderMode() {
+    $('#mode-panel').hidden = settings.count !== 2;   // only means something with 2 players
+    $('#mode-opt').innerHTML = [[false, 'Against each other'], [true, 'Together']].map(function (o) {
+      var on = settings.together === o[0];
+      return '<button type="button" class="seg' + (on ? ' on' : '') + '" role="radio" aria-checked="' + on + '" data-mode="' + o[0] + '">' + o[1] + '</button>';
+    }).join('');
+  }
   function renderSummary() {
     var cpu = 0, i;
     for (i = 0; i < settings.count; i++) if (settings.seats[i].type === 'cpu') cpu++;
-    var who = (settings.count === 1 ? '1 player' : '2 players') + (cpu ? ' (' + (cpu === settings.count ? 'all computer' : cpu + ' computer') + ')' : '');
+    var who = (settings.count === 1 ? '1 player' : '2 players') + (cpu ? ' (' + (cpu === settings.count ? 'all computer' : cpu + ' computer') + ')' : '') +
+      (settings.count === 2 ? (settings.together ? ', together' : ', against each other') : '');
     $('#summary').innerHTML = '<b>' + who + '</b> &middot; Level ' + settings.level + ' ' + LEVELS[settings.level].name + ' &middot; ' + ROUNDS + ' words' +
       ' &middot; ' + (settings.timer ? settings.timer + '-second turns' : 'No turn timer');
   }
-  function renderSetup() { renderCount(); renderTimer(); renderSeats(); renderLevels(); renderSummary(); }
+  function renderSetup() { renderCount(); renderMode(); renderTimer(); renderSeats(); renderLevels(); renderSummary(); }
 
   function bindSetup() {
     $('#seats').addEventListener('input', function (e) {
@@ -148,6 +158,10 @@
     $('#count').addEventListener('click', function (e) {
       var b = e.target.closest('[data-count]'); if (!b) return;
       settings.count = +b.dataset.count; saveSettings(); Sound.play('tick'); renderSetup();
+    });
+    $('#mode-opt').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-mode]'); if (!b) return;
+      settings.together = b.dataset.mode === 'true'; saveSettings(); Sound.play('tick'); renderSetup();
     });
     $('#timer-opt').addEventListener('click', function (e) {
       var b = e.target.closest('[data-timer]'); if (!b) return;
@@ -302,7 +316,8 @@
         return { name: nm, type: settings.seats[i].type, level: settings.seats[i].level, score: 0, wrong: 0, out: false };
       }),
       entry: null, w: '', guessed: {}, cur: 0, phase: 'busy', last: '', solvedBy: -1,
-      solving: false, typed: '', wrong: 0
+      solving: false, typed: '', wrong: 0,
+      together: settings.together && settings.count === 2   // both players get every point
     };
     $('#players').setAttribute('style', '--n: ' + G.n);
     $('#scene').innerHTML = SCENE.html();   // a new hero and creature each game
@@ -353,6 +368,11 @@
         guess(p, AI.choose(p));
       }, t[0] + rnd(t[1] - t[0]));
     }
+  }
+
+  // Points go to the player who earned them, or to every player when playing together.
+  function addPoints(p, n) {
+    G.seats.forEach(function (s, i) { if (G.together || i === p) s.score += n; });
   }
 
   function countIn(letter) {
@@ -435,12 +455,12 @@
     G.last = letter;
     G.phase = 'busy';
     var token = ++gen;
-    var seat = G.seats[p], hits = countIn(letter);
+    var hits = countIn(letter);
     if (!hits) {
       missed(p, 'Not in the word', '❌', 'No ' + letter);
       return;
     }
-    seat.score += hits;
+    addPoints(p, hits);
     G.note = 'Good guess! Go again';
     Sound.play('hit');
     if (G.level <= 2) speak(letter.toLowerCase());   // lowercase, so the voice says just the letter
@@ -448,7 +468,7 @@
     else toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''));
     render();
     if (isSolved()) {
-      seat.score += BONUS;
+      addPoints(p, BONUS);
       G.solvedBy = p;
       endRound(p);   // the 5-second pause in endRound is the only wait
       return;
@@ -483,7 +503,7 @@
   function submitSolve() {
     if (!G || !G.solving || G.phase !== 'turn' || G.typed.length !== G.w.length) return;
     stopClock();
-    var p = G.cur, seat = G.seats[p];
+    var p = G.cur;
     var answer = G.typed;
     G.solving = false;
     G.typed = '';
@@ -493,7 +513,7 @@
       var newly = 0, i;
       for (i = 0; i < G.w.length; i++) if (!G.guessed[G.w[i]]) newly++;
       for (i = 0; i < G.w.length; i++) G.guessed[G.w[i]] = true;
-      seat.score += newly + BONUS;
+      addPoints(p, newly + BONUS);
       G.solvedBy = p;
       G.last = '';
       G.note = 'Solved!';
@@ -533,7 +553,7 @@
   function showRoundEnd(solver, token) {
     var solved = solver >= 0;
     var last = G.round >= ROUNDS;
-    var title = solved ? esc(G.seats[solver].name) + ' got it!' : 'Out of chances!';
+    var title = solved ? (G.together ? 'You got it together!' : esc(G.seats[solver].name) + ' got it!') : 'Out of chances!';
     var text = solved ? 'Bonus +' + BONUS + ' points for finishing the word.' : 'Nobody finished this word. Here it is:';
     openModal('<div class="modal-ico">' + (solved ? '🎉' : '🙁') + '</div><h3>' + title + '</h3><p>' + text + '</p>' +
       '<div class="answer">' + G.w + '</div>',
@@ -561,12 +581,12 @@
       .sort(function (a, b) { return b.s.score - a.s.score || a.i - b.i; });
     var top = ranked[0].s.score;
     var winners = ranked.filter(function (r) { return r.s.score === top; });
-    var title = G.n === 1 ? 'Game over' : winners.length === 1 ? esc(winners[0].s.name) + ' wins!' : 'It is a tie!';
+    var title = G.together ? 'Great teamwork!' : G.n === 1 ? 'Game over' : winners.length === 1 ? esc(winners[0].s.name) + ' wins!' : 'It is a tie!';
     var rows = ranked.map(function (r) {
       return '<div class="score-row' + (r.s.score === top ? ' lead' : '') + '">' + miniDisc(r.i, 'sm') +
         '<span class="nm">' + esc(r.s.name) + '</span><span class="sc">' + r.s.score + '</span></div>';
     }).join('');
-    openModal('<div class="modal-ico">🏆</div><h3>' + title + '</h3><p>After ' + ROUNDS + ' words</p><div class="scores">' + rows + '</div>', [
+    openModal('<div class="modal-ico">🏆</div><h3>' + title + '</h3><p>' + (G.together ? 'You scored ' + top + ' points together in ' + ROUNDS + ' words' : 'After ' + ROUNDS + ' words') + '</p><div class="scores">' + rows + '</div>', [
       { label: 'Play again', cls: 'primary', fn: startGame },
       { label: 'Change settings', cls: 'ghost', fn: toSettings }
     ]);

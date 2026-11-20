@@ -31,6 +31,7 @@ All levels use the same big letter buttons, in A to Z order. Levels 1 and 2 are 
 ## Players
 
 - **Players:** 1 or 2. Names are optional. With 1 player the turn timer still runs.
+- **Play mode** (2 players): **Against each other**, where the player who finds a letter or solves the word gets the points, or **Together**, where both players get every point at the same time and win as a team.
 - **Turn timer:** 30 seconds, 15 seconds, or off, set before the game. When on, the countdown shows in the top-right corner of the scene. Pressing **Solve the word** stops the clock for that turn.
 - Each seat can be a **Person** or the **Computer**.
 - The computer has three skill levels:

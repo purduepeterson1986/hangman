@@ -11,7 +11,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Snowman">
   <!-- When styles.css, words.js, scene.js or game.js changes, change the ?v= tag on all four so browsers fetch the new copies. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-20f">
+  <link rel="stylesheet" href="styles.css?v=2026-11-20g">
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -37,6 +37,14 @@
         </div>
         <div class="seats" id="seats"></div>
         <p class="hint">Names are optional. Each player can be a Person or the Computer.</p>
+      </section>
+
+      <section class="panel" id="mode-panel" aria-labelledby="h-mode">
+        <div class="panel-head">
+          <h2 id="h-mode">Play mode</h2>
+          <div class="segmented" id="mode-opt" role="radiogroup" aria-label="Play mode"></div>
+        </div>
+        <p class="hint">Against each other: the player who finds a letter or solves the word gets the points. Together: both players get every point at the same time, so you win as a team.</p>
       </section>
 
       <section class="panel" aria-labelledby="h-timer">
@@ -121,8 +129,8 @@
   </div>
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <script src="words.js?v=2026-11-20f"></script>
-  <script src="scene.js?v=2026-11-20f"></script>
-  <script src="game.js?v=2026-11-20f"></script>
+  <script src="words.js?v=2026-11-20g"></script>
+  <script src="scene.js?v=2026-11-20g"></script>
+  <script src="game.js?v=2026-11-20g"></script>
 </body>
 </html>
