@@ -272,6 +272,10 @@
   }
 
   var toastTimer = 0;
+  // The word is solved: stays up while the hero beats the creature.
+  function winToast() {
+    toast('🏹', 'Hooray! ' + SCENE.hero().name + ' beat ' + SCENE.foe().name + '!', 4000);
+  }
   // ms: how long the message stays up (most stay up for just under a second)
   function toast(ico, text, ms) {
     var el = $('#toast');
@@ -440,8 +444,8 @@
     G.note = 'Good guess! Go again';
     Sound.play('hit');
     if (G.level <= 2) speak(letter.toLowerCase());   // lowercase, so the voice says just the letter
-    // If this letter finishes the word, the message stays up while the hero beats the creature.
-    toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''), isSolved() ? 4000 : 0);
+    if (isSolved()) winToast();
+    else toast('✅', 'Yes! ' + letter + (hits > 1 ? ' &times;' + hits : ''));
     render();
     if (isSolved()) {
       seat.score += BONUS;
@@ -494,7 +498,7 @@
       G.last = '';
       G.note = 'Solved!';
       Sound.play('solve');
-      toast('🎉', 'Solved! +' + (newly + BONUS), 4000);   // stays up while the hero beats the creature
+      winToast();
       render();
       endRound(p);   // the 5-second pause in endRound is the only wait
       return;
