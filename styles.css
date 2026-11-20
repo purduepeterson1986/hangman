@@ -432,8 +432,56 @@ h1, h2, h3, p { margin: 0; }
   85%, 100% { transform: translateX(var(--back)) scaleY(-1); }
 }
 @keyframes hero-hop { to { transform: translateY(-14px); } }
+/* While a word is being played (not yet won or lost), everyone moves:
+   the hero shifts from foot to foot and shows off a weapon, the creature crouches, glares with glowing eyes and lunges.
+   When the creature reaches the yellow and red stones (.close) it all gets faster and fiercer, and the hero flinches at each step. */
+.scene .hero-idle, .scene .foe-idle, .scene .imp, .scene .held, .scene .sword, .scene .spear { transform-box: fill-box; transform-origin: 50% 100%; }
+.scene .eye-glow { opacity: .3; }
+.scene-svg:not(.won):not(.lost) .hero-idle { animation: hero-ready 2.4s ease-in-out infinite; }
+.scene-svg.close:not(.won):not(.lost) .hero-idle { animation: hero-nervous .5s ease-in-out infinite; }
+@keyframes hero-ready { 0%, 100% { transform: none; } 25% { transform: translateX(-1px) scaleY(1.02); } 75% { transform: translateX(1px) scaleY(1.02); } }
+@keyframes hero-nervous { 0%, 100% { transform: translateX(-.6px); } 50% { transform: translateX(.6px) scaleY(.99); } }
+/* The hero's weapon: Legolas's arrow and Gimli's axe swing up, a hobbit's sword lifts and glows blue (brighter as the creature nears), Gandalf's staff glows */
+.scene .w-arrow .held { transform-origin: 0% 50%; }
+.scene .w-axe .held { transform-origin: 0% 100%; }
+.scene .sword { transform-origin: 0% 100%; }
+.scene-svg:not(.won):not(.lost) .held, .scene-svg:not(.won):not(.lost) .sword { animation: brandish 3.6s ease-in-out infinite; }
+.scene-svg.close:not(.won):not(.lost) .held, .scene-svg.close:not(.won):not(.lost) .sword { animation-duration: 1.8s; }
+@keyframes brandish { 0%, 60%, 100% { transform: none; } 70% { transform: rotate(-24deg); } 80% { transform: rotate(8deg); } 90% { transform: rotate(-6deg); } }
+.scene-svg:not(.won):not(.lost) .sting { animation: sting-glow 2s ease-in-out infinite alternate; }
+.scene-svg.close:not(.won):not(.lost) .sting { animation-duration: .5s; }
+@keyframes sting-glow { from { opacity: .3; } to { opacity: .9; } }
+.scene-svg:not(.won):not(.lost) .staff-glow { animation: staff-pulse 1.6s ease-in-out infinite alternate; }
+.scene-svg.close:not(.won):not(.lost) .staff-glow { animation-duration: .6s; }
+@keyframes staff-pulse { to { transform: scale(1.6); } }
+.scene .won.w-arrow .held { animation: held-away 1.7s 1s forwards; }   /* the arrow in his hand is the one he shoots */
+/* The creature: crouch, lunge at the hero and back, every few seconds; its eyes glow */
+.scene-svg:not(.won):not(.lost) .foe:not(.walking) .foe-idle { animation: foe-menace 3s ease-in-out infinite; }
+.scene-svg.close:not(.won):not(.lost) .foe:not(.walking) .foe-idle { animation-duration: 1.6s; }
+@keyframes foe-menace {
+  0%, 30%, 100% { transform: none; }
+  45% { transform: scale(1.04, .9); }                       /* crouch */
+  55% { transform: translate(-10px, -6px) scale(.97, 1.06); } /* lunge toward the hero */
+  70% { transform: none; }
+}
+.scene-svg:not(.won):not(.lost) .eye-glow { animation: eye-glow 1.4s ease-in-out infinite alternate; }
+.scene-svg.close:not(.won):not(.lost) .eye-glow { animation-duration: .4s; }
+@keyframes eye-glow { from { opacity: .15; } to { opacity: 1; } }
+/* The orc shakes its spear; the spider taps its legs; the goblins dance, one after the other */
+.scene .spear { transform-origin: 0% 100%; }
+.scene-svg:not(.won):not(.lost) .spear { animation: spear-shake 1.2s ease-in-out infinite alternate; }
+@keyframes spear-shake { from { transform: rotate(-8deg); } to { transform: rotate(6deg); } }
+.scene-svg:not(.won):not(.lost) .foe:not(.walking) .sp-legs { animation-duration: 1.1s; animation-play-state: running; }
+.scene-svg[data-foe="goblins"]:not(.won):not(.lost) .imp { animation: goblin-dance .7s ease-in-out infinite alternate; }
+.scene-svg[data-foe="goblins"]:not(.won):not(.lost) .imp:not(:first-child) { animation-delay: -.35s; }
+@keyframes goblin-dance { from { transform: rotate(-7deg); } 50% { transform: translateY(-3px); } to { transform: rotate(7deg); } }
+/* The hero flinches back each time the creature steps closer */
+.scene .flinch:not(.won):not(.lost) .hero-act { animation: hero-flinch .6s ease-out; }
+@keyframes hero-flinch { 0%, 100% { transform: none; } 25% { transform: translateX(-8px) rotate(-6deg); } 60% { transform: translateX(-3px) rotate(-2deg); } }
 @media (prefers-reduced-motion: reduce) {
   .scene .foe { transition: none; }
+  .scene-svg:not(.won):not(.lost) :is(.hero-idle, .foe-idle, .held, .sword, .sting, .staff-glow, .eye-glow, .spear, .imp, .hero-act) { animation: none; }
+  .scene .eye-glow { opacity: .6; }
   .scene .sp-legs, .scene .foe .leg-a, .scene .foe .leg-b, .scene .stars-spin, .scene .spin, .scene .foe.walking .foe-act { animation: none; }
   .scene .won .shot, .scene .won .hit-in, .scene .won .foe-act, .scene .lost .foe-act, .scene .won .hero-act, .scene .lost .hero-act,
   .scene .lost .stars, .scene .won .held, .scene .won .staff-glow, .scene .won .hero-act .leg-a, .scene .won .hero-act .leg-b { animation-duration: .01s; animation-delay: 0s; animation-iteration-count: 1; }

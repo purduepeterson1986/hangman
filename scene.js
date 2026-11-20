@@ -49,7 +49,12 @@
       '<path d="M-2.2,-52.4 H-0.6 M0.6,-52.4 H2.2" stroke="#8a6a3a" stroke-width=".4"/>' +
       '<circle cx="-1.4" cy="-51.2" r=".5" fill="#1a3a30"/><circle cx="1.4" cy="-51.2" r=".5" fill="#1a3a30"/>' +
       '<path d="M-0.9,-48.6 Q0,-48.1 0.9,-48.6" stroke="#b07a6a" stroke-width=".4" fill="none"/>' +
-      '<path d="M0,-45.6 C-1.6,-44.6 -1.6,-43 0,-42.4 C1.6,-43 1.6,-44.6 0,-45.6 Z" fill="#7fae5a" stroke="#c9a449" stroke-width=".4"/>';
+      '<path d="M0,-45.6 C-1.6,-44.6 -1.6,-43 0,-42.4 C1.6,-43 1.6,-44.6 0,-45.6 Z" fill="#7fae5a" stroke="#c9a449" stroke-width=".4"/>' +
+      '<g class="held">' +   // an arrow in his hand, ready; it hides while the real one is in the air
+        '<path d="M3.6,-28.9 H16" stroke="#8a6a3a" stroke-width=".8" stroke-linecap="round"/>' +
+        '<path d="M15.6,-30.3 L18.4,-28.9 L15.6,-27.5 Z" fill="#d9dde4"/>' +
+        '<path d="M3.6,-28.9 l-1.6,-1.3 M3.6,-28.9 l-1.6,1.3 M5,-28.9 l-1.6,-1.3 M5,-28.9 l-1.6,1.3" stroke="#f4f1e6" stroke-width=".5"/>' +
+      '</g>';
   }
 
   // Gimli, a stocky dwarf: iron helm, braided beard, mail under a red tunic, an axe on his shoulder.
@@ -124,7 +129,7 @@
       '<circle cx="-1.2" cy="-15.6" r=".55" fill="#e8c860"/><circle cx="-1.1" cy="-13" r=".55" fill="#e8c860"/>' +
       // the sword, held up and forward in the right hand
       '<g class="sword">' +
-        '<path d="M8.2,-13.6 L14.6,-27.4" stroke="#bfe3ff" stroke-width="3" stroke-linecap="round" opacity=".35"/>' +
+        '<path class="sting" d="M8.2,-13.6 L14.6,-27.4" stroke="#8fd0ff" stroke-width="3.4" stroke-linecap="round" opacity=".35"/>' +
         '<path d="M8.2,-13.6 L14.6,-27.4" stroke="#e8f4ff" stroke-width="1.3" stroke-linecap="round"/>' +
         '<path d="M5.8,-14.2 L9.8,-12.4" stroke="#8a6a3a" stroke-width="1.2" stroke-linecap="round"/>' +
         '<path d="M7.2,-12.8 L6.4,-11" stroke="#6b4a2b" stroke-width="1.2" stroke-linecap="round"/>' +
@@ -149,7 +154,7 @@
         '<path d="' + d + '" stroke="#2e231d" stroke-width="' + w + '" fill="none" stroke-linecap="round"/>';
     }
     function eye(x, y, r) {
-      return '<circle cx="' + x + '" cy="' + y + '" r="' + (r * 2.4).toFixed(1) + '" fill="#c8ff7a" opacity=".25"/>' +
+      return '<circle cx="' + x + '" cy="' + y + '" r="' + (r * 2.4).toFixed(1) + '" fill="#c8ff7a" opacity=".25" class="eye-glow"/>' +
         '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#d8ff8a"/>' +
         '<circle cx="' + (x + r * 0.3).toFixed(1) + '" cy="' + y + '" r="' + (r * 0.45).toFixed(1) + '" fill="#1a2208"/>';
     }
@@ -171,7 +176,7 @@
   function orcArt(dx, s, helm, goblin) {
     var skin = goblin ? '#8fa05a' : '#6e7d4a';
     function foot(x) { return '<path d="M' + (x - 2.6) + ',-3 h4.4 l.6,3 h-5.4 Z" fill="#2a221a"/>'; }
-    return '<g transform="translate(' + dx + ',0) scale(' + s + ')">' +
+    return '<g transform="translate(' + dx + ',0) scale(' + s + ')"><g class="imp">' +
       limb('leg-a', 'M-3,-12 L-3.6,-2.6', '#3d2f22', 3.2, foot(-3.6)) + limb('leg-b', 'M3,-12 L3.6,-2.6', '#33271c', 3.2, foot(3.6)) +
       limb('leg-a', 'M-4,-28 Q-8.4,-22 -7.4,-15.4', skin, 3, hand(-7.4, -14.6, skin)) +
       '<path d="M-7.4,-12 C-9,-20 -6.6,-28 -1.6,-31 C3,-32.6 8,-29 8.4,-24 C8.8,-19 8,-15 7,-12 Z" fill="#5a4a32" stroke="#2c2418" stroke-width=".7"/>' +
@@ -180,17 +185,18 @@
       '<path d="M-1,-26 L4,-26.6 M-1.4,-22 L5,-22.4" stroke="#3e3222" stroke-width=".7"/>' +
       '<path d="M-4,-31.2 C-1,-34.2 4.2,-33.8 6.8,-30 L4.8,-26.8 C2,-29.4 -1,-29.2 -3.4,-27.4 Z" fill="#6d7278" stroke="#3a3e42" stroke-width=".6"/>' +
       limb('leg-b', 'M5,-27 Q10,-22 9,-14.6', skin, 3, hand(9, -14, skin)) +
-      (goblin ? '' : '<path d="M7.6,-6 L15,-46" stroke="#5a3d22" stroke-width="1.3"/>' +
-        '<path d="M15,-46.4 L12.2,-39.2 L14.2,-40 L15.2,-37.4 L17.4,-39.8 Z" fill="#9aa2a8" stroke="#4f585e" stroke-width=".5"/>') +
+      (goblin ? '' : '<g class="spear"><path d="M7.6,-6 L15,-46" stroke="#5a3d22" stroke-width="1.3"/>' +
+        '<path d="M15,-46.4 L12.2,-39.2 L14.2,-40 L15.2,-37.4 L17.4,-39.8 Z" fill="#9aa2a8" stroke="#4f585e" stroke-width=".5"/></g>') +
       '<ellipse cx="2.6" cy="-34.6" rx="5.8" ry="5.2" fill="' + skin + '" stroke="#2c3520" stroke-width=".7"/>' +
       (goblin ? '<path d="M-2.4,-36 L-13.6,-44 L-9,-37.4 L-11.4,-35 L-3,-32.6 Z" fill="' + skin + '" stroke="#2c3520" stroke-width=".5"/><path d="M-4,-35.4 L-10.6,-40" stroke="#c98a7a" stroke-width="1" opacity=".7"/>'
         : '<path d="M-2.4,-35.6 L-9.4,-40.6 L-3,-32.6 Z" fill="' + skin + '" stroke="#2c3520" stroke-width=".5"/>') +
       (helm ? '<path d="M-3.4,-36.4 C-3,-41.4 1,-42.4 3.4,-42.2 C6.6,-42 8.8,-39.6 8.4,-36.4 Q2.6,-38.4 -3.4,-36.4 Z" fill="#4a4e54" stroke="#2a2e32" stroke-width=".5"/>' : '') +
       '<path d="M-0.6,-38 L7.4,-37.2" stroke="#2c3520" stroke-width="1.4" stroke-linecap="round"/>' +
+      '<circle cx="1.4" cy="-36.2" r="2.4" fill="#ffb020" class="eye-glow"/><circle cx="5" cy="-36" r="2.4" fill="#ffb020" class="eye-glow"/>' +
       '<circle cx="1.4" cy="-36.2" r="1" fill="#ffd34d"/><circle cx="5" cy="-36" r="1" fill="#ffd34d"/>' +
       '<circle cx="1.6" cy="-36.2" r=".4" fill="#1a1208"/><circle cx="5.2" cy="-36" r=".4" fill="#1a1208"/>' +
       '<path d="M0,-31.6 Q3.6,-30.4 7.4,-32" stroke="#2c3520" stroke-width=".7" fill="none"/>' +
-      '<path d="M1,-31.6 L0.6,-29.2 L2,-31.2 Z M5.8,-31.8 L6.6,-29.4 L5,-31.2 Z" fill="#f3ecd2"/></g>';
+      '<path d="M1,-31.6 L0.6,-29.2 L2,-31.2 Z M5.8,-31.8 L6.6,-29.4 L5,-31.2 Z" fill="#f3ecd2"/></g></g>';
   }
   function oneOrc() { return shadow(12) + orcArt(0, 1, true, false); }
   function twoGoblins() { return shadow(18) + orcArt(-9, 0.8, false, true) + orcArt(8, 0.86, false, true); }
@@ -209,7 +215,7 @@
       '<path d="M-3,-12.8 C2,-13.6 6,-13 10,-11.8 C6,-14.6 2,-15 -3,-12.8 Z" fill="#8a8378"/>' +
       '<path d="M15,-24 C17,-28.4 21,-28.4 23,-25.4 L29,-22 C30.2,-21 29.8,-19.2 28.2,-19 L23.2,-18 C20,-17 16,-18 15,-21 Z" fill="' + fur + '" stroke="#3a3430" stroke-width=".6"/>' +
       '<path d="M16.6,-26.4 L16.6,-31.6 L19.8,-27.4 Z M19.4,-27 L20.6,-31.8 L22.2,-26.4 Z" fill="' + dark + '"/>' +
-      '<path d="M18.6,-24.6 L22.4,-23.6" stroke="#2a2620" stroke-width=".7"/><circle cx="21" cy="-23.2" r=".9" fill="#f0c040"/>' +
+      '<path d="M18.6,-24.6 L22.4,-23.6" stroke="#2a2620" stroke-width=".7"/><circle cx="21" cy="-23.2" r="2.4" fill="#ffb020" class="eye-glow"/><circle cx="21" cy="-23.2" r=".9" fill="#f0c040"/>' +
       '<circle cx="29" cy="-21.2" r=".9" fill="#1a1612"/>' +
       '<path d="M23,-19.4 L28.4,-19.6" stroke="#2a1612" stroke-width=".7"/><path d="M24.4,-19.4 l.4,1 l.4,-1 M26.4,-19.5 l.4,1 l.4,-1" stroke="#f3ecd2" stroke-width=".4" fill="none"/>';
   }
@@ -291,7 +297,7 @@
       '<g class="stones">' + stones + '</g>' +
       // The hero, with stars that circle his head when he is bonked
       '<g transform="translate(' + HERO_X + ',' + GROUND + ')">' +
-        '<g class="hero-act"><g transform="scale(' + hero.s + ')">' + shadow(12) + art + '</g></g>' +
+        '<g class="hero-act"><g transform="scale(' + hero.s + ')">' + shadow(12) + '<g class="hero-idle">' + art + '</g></g></g>' +
         '<g class="stars" transform="translate(0,' + (-(top * 0.66 + 24)).toFixed(0) + ')">' +
           '<g class="stars-spin">' +
             '<text x="-34" y="0">⭐</text><text x="16" y="-10">⭐</text><text x="-6" y="14">✨</text>' +
@@ -307,7 +313,7 @@
       // The creature: the outer group walks (CSS transform), the inner one does the jumps and flips.
       // It is flipped to face left, toward the hero.
       '<g class="foe" style="transform: translateX(' + FOE_START + 'px)">' +
-        '<g class="foe-act"><g transform="translate(0,' + GROUND + ') scale(' + (-foe.s) + ',' + foe.s + ')">' + foe.art() + '</g></g>' +
+        '<g class="foe-act"><g class="foe-idle"><g transform="translate(0,' + GROUND + ') scale(' + (-foe.s) + ',' + foe.s + ')">' + foe.art() + '</g></g></g>' +
       '</g>' +
       '</svg>';
   }
@@ -328,10 +334,16 @@
     } else if (+f.getAttribute('data-pos') !== pos) {
       f.style.transform = 'translateX(' + x + 'px)';
       f.classList.add('walking');
+      if (pos > +f.getAttribute('data-pos')) {   // the hero flinches as it comes closer
+        svg.classList.remove('flinch'); void svg.getBoundingClientRect(); svg.classList.add('flinch');
+        clearTimeout(svg.flinchTimer);
+        svg.flinchTimer = setTimeout(function () { svg.classList.remove('flinch'); }, 700);
+      }
       clearTimeout(f.walkTimer);
       f.walkTimer = setTimeout(function () { f.classList.remove('walking'); }, 950);
     }
     f.setAttribute('data-pos', pos);
+    svg.classList.toggle('close', pos >= 6);   // on the yellow or red stones: everyone gets more worked up
     // Aim the weapon: how far it flies, and the angle of the arrow.
     var a = shotStart(h), b = shotEnd(cr, x);
     svg.style.setProperty('--fx', (b.x - a.x).toFixed(0) + 'px');
