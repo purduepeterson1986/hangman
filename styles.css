@@ -493,6 +493,8 @@ h1, h2, h3, p { margin: 0; }
 }
 .toast.show { transform: scale(1); opacity: 1; }
 .toast-ico { font-size: 1.5em; line-height: 1; }
+.toast-pic { display: block; width: 1.9em; height: 1.65em; overflow: visible; }   /* a small picture of the creature */
+.msg .toast-pic { display: inline-block; vertical-align: middle; width: 2.6em; height: 1.9em; }
 
 /* On-screen keyboard */
 .keyboard { flex: none; width: 100%; max-width: 1000px; margin: 0 auto; padding: 6px clamp(8px, 2vw, 18px) calc(12px + env(safe-area-inset-bottom)); }

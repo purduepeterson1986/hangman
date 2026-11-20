@@ -236,11 +236,12 @@
     { id: 'hobbit', name: 'Frodo', weapon: 'sword', s: 3.4, h: 34, hand: { x: 14, y: -26 }, art: hobbitArt }
   ];
   // face: the middle of the creature's face (in drawing units, facing right), where the hero's weapon hits it.
+  // box: the area its drawing covers (x, y, width, height), for the small picture in the "Oh no!" message.
   var FOES = [
-    { id: 'spider', name: 'the spider', emoji: '🕷️', s: 1.8, face: { x: 18, y: -22 }, art: spiderArt },
-    { id: 'orc', name: 'the orc', emoji: '👹', s: 2.6, face: { x: 4, y: -35 }, art: oneOrc },
-    { id: 'goblins', name: 'the goblins', emoji: '👺', s: 2.9, face: { x: 10, y: -30 }, art: twoGoblins },
-    { id: 'warg', name: 'the warg', emoji: '🐺', s: 3.1, face: { x: 24, y: -22 }, art: wargArt }
+    { id: 'spider', name: 'the spider', box: [-40, -46, 90, 50], s: 1.8, face: { x: 18, y: -22 }, art: spiderArt },
+    { id: 'orc', name: 'the orc', box: [-12, -48, 32, 50], s: 2.6, face: { x: 4, y: -35 }, art: oneOrc },
+    { id: 'goblins', name: 'the goblins', box: [-22, -42, 42, 44], s: 2.9, face: { x: 10, y: -30 }, art: twoGoblins },
+    { id: 'warg', name: 'the warg', box: [-25, -34, 57, 36], s: 3.1, face: { x: 24, y: -22 }, art: wargArt }
   ];
 
   var hero = HEROES[0], foe = FOES[0];
@@ -360,6 +361,8 @@
     update: update,
     end: end,
     hero: function () { return hero; },
+    // A small picture of the current creature, for the "Oh no!" message
+    foeIcon: function () { return '<svg class="toast-pic" viewBox="' + foe.box.join(' ') + '" aria-hidden="true">' + foe.art() + '</svg>'; },
     foe: function () { return foe; }
   };
 })();

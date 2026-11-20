@@ -6,7 +6,7 @@
   <title>Battle preview</title>
   <!-- Uses the game's own styles and scene, so what plays here is exactly what plays in the game.
        Keep the ?v= tags the same as in index.html. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-20n">
+  <link rel="stylesheet" href="styles.css?v=2026-11-20o">
   <style>
     html, body { height: auto; overflow: auto; }
     body { padding: 16px; color: var(--ink, #fff); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -35,7 +35,7 @@
   </header>
   <main class="cards" id="cards"></main>
 
-  <script src="scene.js?v=2026-11-20n"></script>
+  <script src="scene.js?v=2026-11-20o"></script>
   <script>
   (function () {
     'use strict';
@@ -71,7 +71,7 @@
       clearTimers(c);
       var root = c.querySelector('.scene');
       root.innerHTML = SCENE.html(b.hero, b.foe);
-      c.names = { hero: SCENE.hero().name, foe: SCENE.foe().name, emoji: SCENE.foe().emoji };
+      c.names = { hero: SCENE.hero().name, foe: SCENE.foe().name, icon: SCENE.foeIcon() };
       SCENE.update(root, b.won ? 5 : 7, true);
       c.querySelector('.msg').textContent = '';
       c.querySelector('.msg').className = 'msg';
@@ -101,7 +101,7 @@
         // The last miss: the creature takes its last step, then (1 s later, as in the game) catches the hero.
         later(c, 400, function () {
           SCENE.update(root, 8, false);
-          msg.textContent = n.emoji + ' Oh no! ' + cap(n.foe) + ' got ' + n.hero + '!';
+          msg.innerHTML = n.icon + ' Oh no! ' + cap(n.foe) + ' got ' + n.hero + '!';
         });
         later(c, 1400, function () {
           SCENE.end(root, false);

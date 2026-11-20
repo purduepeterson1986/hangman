@@ -429,7 +429,7 @@
     if (lost) {
       setTimeout(function () { Sound.play('out'); }, 300);
       var fn = SCENE.foe().name;
-      toast(SCENE.foe().emoji, 'Oh no! ' + fn.charAt(0).toUpperCase() + fn.slice(1) + ' got ' + SCENE.hero().name + '!', 4000);   // stays up while the creature catches the hero
+      toast(SCENE.foeIcon(), 'Oh no! ' + fn.charAt(0).toUpperCase() + fn.slice(1) + ' got ' + SCENE.hero().name + '!', 4000);   // stays up while the creature catches the hero
     } else {
       toast(ico, text);
     }
