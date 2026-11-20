@@ -401,17 +401,20 @@ h1, h2, h3, p { margin: 0; }
 .scene .staff-glow { transform-box: fill-box; transform-origin: center; }
 .scene .won.w-staff .staff-glow { animation: staff-flash .6s ease-out 2 alternate; }
 @keyframes staff-flash { to { transform: scale(3); } }
-/* The sword fighter runs to the creature, strikes, and walks back */
-.scene .won.w-sword .hero-act { animation: hero-charge 3s ease-in-out forwards, hero-hop .35s 3.2s ease-in-out 4 alternate; }
-.scene .won.w-sword .hero-act .leg-a, .scene .won.w-sword .hero-act .leg-b { transform-box: fill-box; transform-origin: 50% 0; animation: leg-swing .25s ease-in-out 12 alternate; }
+/* The sword fighter runs to the creature at a steady jog (2.7 s), strikes, and stays there hopping for joy */
+.scene .won.w-sword .hero-act { animation: hero-charge 3.1s ease-in-out forwards, hero-hop-there .35s 3.6s ease-in-out 4 alternate; }
+.scene .won.w-sword .hero-act .leg-a, .scene .won.w-sword .hero-act .leg-b { transform-box: fill-box; transform-origin: 50% 0; animation: leg-swing .34s ease-in-out 8 alternate; }
 .scene .won.w-sword .hero-act .leg-b { animation-direction: alternate-reverse; }
 @keyframes hero-charge {
   0% { transform: none; }
-  45% { transform: translateX(var(--reach)); }
-  50% { transform: translateX(var(--reach)) rotate(12deg); }
-  56% { transform: translateX(var(--reach)); }
-  100% { transform: none; }
+  87% { transform: translateX(var(--reach)); }
+  93% { transform: translateX(var(--reach)) rotate(12deg); }
+  100% { transform: translateX(var(--reach)); }
 }
+@keyframes hero-hop-there { from { transform: translateX(var(--reach)); } to { transform: translateX(var(--reach)) translateY(-14px); } }
+/* With the slower run the strike lands at about 2.9 s, so the creature is knocked back then (and a bit quicker, to finish before the message) */
+.scene .won.w-sword .foe-act { animation-delay: 2.9s; animation-duration: 2s; }
+.scene .won.w-sword .hit-in { animation-delay: 2.85s; }
 /* A flash where the weapon hits */
 .scene .hit-in { opacity: 0; transform-box: fill-box; transform-origin: center; }
 .scene .hit-ring { fill: none; stroke: #fff6c8; stroke-width: 4; }
@@ -433,6 +436,7 @@ h1, h2, h3, p { margin: 0; }
   .scene .sp-legs, .scene .foe .leg-a, .scene .foe .leg-b, .scene .stars-spin, .scene .spin, .scene .foe.walking .foe-act { animation: none; }
   .scene .won .shot, .scene .won .hit-in, .scene .won .foe-act, .scene .lost .foe-act, .scene .won .hero-act, .scene .lost .hero-act,
   .scene .lost .stars, .scene .won .held, .scene .won .staff-glow, .scene .won .hero-act .leg-a, .scene .won .hero-act .leg-b { animation-duration: .01s; animation-delay: 0s; animation-iteration-count: 1; }
+  .scene .won.w-sword .foe-act, .scene .won.w-sword .hit-in, .scene .won.w-sword .hero-act { animation-duration: .01s; animation-delay: 0s; }
 }
 
 .side {
