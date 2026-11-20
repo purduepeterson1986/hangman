@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Battle preview</title>
+  <!-- Uses the game's own styles and scene, so what plays here is exactly what plays in the game.
+       Keep the ?v= tags the same as in index.html. -->
+  <link rel="stylesheet" href="styles.css?v=2026-11-20l">
+  <style>
+    html, body { height: auto; overflow: auto; }
+    body { padding: 16px; color: var(--ink, #fff); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    .top { max-width: 1100px; margin: 0 auto 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+    .top h1 { margin: 0; font-size: 1.5rem; }
+    .top p { margin: 0; color: var(--ink-dim, #b8bfe0); flex: 1 1 320px; }
+    .cards { max-width: 1400px; margin: 0 auto; display: grid; gap: 14px; }
+    @media (min-width: 900px) { .cards { grid-template-columns: 1fr 1fr; } .top { max-width: 1400px; } }
+    .card { background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px; padding: 12px 14px; }
+    .card-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .card-head h2 { margin: 0; font-size: 1.05rem; flex: 1 1 auto; }
+    .card-head .note { color: var(--ink-dim, #b8bfe0); font-size: .85rem; }
+    .clock-txt { font-variant-numeric: tabular-nums; color: var(--ink-dim, #b8bfe0); font-size: .9rem; min-width: 3.4em; text-align: right; }
+    .card .scene-svg { max-height: none; }
+    .msg { min-height: 1.6em; margin-top: 4px; text-align: center; font-weight: 800; transition: opacity .2s; }
+    .msg.box { color: var(--gold, #ffcf5c); }
+    button.play { cursor: pointer; border: 0; border-radius: 999px; padding: 8px 16px; font-weight: 800; font-size: .95rem; background: #2c3360; color: #fff; }
+    button.play.all { background: linear-gradient(180deg, #ffe07a, #ffbf3c); color: #2a1a00; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>Battle preview</h1>
+    <p>Every ending with its own timing, played exactly as in the game. The counter shows the time since the word ended.</p>
+    <button type="button" class="play all" id="play-all">▶ Play all</button>
+  </header>
+  <main class="cards" id="cards"></main>
+
+  <script src="scene.js?v=2026-11-20l"></script>
+  <script>
+  (function () {
+    'use strict';
+    // Each battle with a different timing. The creature wins the same way against every hero,
+    // so it is shown twice: against a tall hero and against a short one.
+    var BATTLES = [
+      { hero: 'legolas', foe: 'spider', won: true, title: 'Legolas shoots an arrow', note: '' },
+      { hero: 'gimli', foe: 'orc', won: true, title: 'Gimli throws his axe', note: '' },
+      { hero: 'gandalf', foe: 'warg', won: true, title: 'Gandalf casts a bolt of light from his staff', note: '' },
+      { hero: 'hobbit', foe: 'goblins', won: true, title: 'A hobbit runs in with his sword', note: '' },
+      { hero: 'gandalf', foe: 'spider', won: false, title: 'The creature catches the hero', note: 'the same for every pair (tall hero)' },
+      { hero: 'hobbit', foe: 'warg', won: false, title: 'The creature catches the hero', note: 'the same for every pair (short hero)' }
+    ];
+    var ROUND_PAUSE = 5000;   // as in the game: the result box appears 5 s after the word ends
+
+    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    var cards = document.getElementById('cards');
+    BATTLES.forEach(function (b, i) {
+      var c = document.createElement('section');
+      c.className = 'card';
+      c.innerHTML = '<div class="card-head"><h2>' + b.title + '</h2><span class="note">' + b.note + '</span>' +
+        '<span class="clock-txt">0.0 s</span><button type="button" class="play">↻ Replay</button></div>' +
+        '<div class="scene"></div><div class="msg"></div>';
+      cards.appendChild(c);
+      c.querySelector('.play').addEventListener('click', function () { play(c, b); });
+      reset(c, b);
+    });
+
+    // Build a fresh scene for this battle, with the creature a few stones along the path.
+    function reset(c, b) {
+      clearTimers(c);
+      var root = c.querySelector('.scene');
+      root.innerHTML = SCENE.html(b.hero, b.foe);
+      c.names = { hero: SCENE.hero().name, foe: SCENE.foe().name, emoji: SCENE.foe().emoji };
+      SCENE.update(root, b.won ? 5 : 7, true);
+      c.querySelector('.msg').textContent = '';
+      c.querySelector('.msg').className = 'msg';
+      c.querySelector('.clock-txt').textContent = '0.0 s';
+    }
+    function clearTimers(c) { (c.timers || []).forEach(clearTimeout); clearInterval(c.tick); c.timers = []; }
+    function later(c, ms, fn) { c.timers.push(setTimeout(fn, ms)); }
+
+    function play(c, b) {
+      reset(c, b);
+      var root = c.querySelector('.scene'), msg = c.querySelector('.msg'), n = c.names;
+      var t0;
+      function start() {
+        t0 = Date.now();
+        c.tick = setInterval(function () { c.querySelector('.clock-txt').textContent = ((Date.now() - t0) / 1000).toFixed(1) + ' s'; }, 100);
+        later(c, ROUND_PAUSE, function () { msg.className = 'msg box'; msg.textContent = '(The result box appears here in the game.)'; });
+        later(c, ROUND_PAUSE + 1500, function () { clearInterval(c.tick); });
+      }
+      if (b.won) {
+        // The word is solved: the hero attacks at once.
+        SCENE.end(root, true);
+        msg.textContent = '🏹 Hooray! ' + n.hero + ' beat ' + n.foe + '!';
+        later(c, 4000, function () { msg.textContent = ''; });
+        start();
+      } else {
+        // The last miss: the creature takes its last step, then (1 s later, as in the game) catches the hero.
+        later(c, 400, function () {
+          SCENE.update(root, 8, false);
+          msg.textContent = n.emoji + ' Oh no! ' + cap(n.foe) + ' got ' + n.hero + '!';
+        });
+        later(c, 1400, function () {
+          SCENE.end(root, false);
+          start();
+          later(c, 3000, function () { msg.textContent = ''; });
+        });
+      }
+    }
+
+    document.getElementById('play-all').addEventListener('click', function () {
+      [].forEach.call(document.querySelectorAll('.card'), function (c, i) { play(c, BATTLES[i]); });
+    });
+  })();
+  </script>
+</body>
+</html>

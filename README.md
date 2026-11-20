@@ -66,7 +66,8 @@ No installation or build step is needed. Download the files and open `index.html
 | `styles.css` | Appearance and animations |
 | `words.js` | The word lists for each level |
 | `scene.js` | The path scene: the heroes, the creatures and the stepping stones (drawings from Hobbit Land) |
+| `battles.html` | A preview page that plays every ending with its own timing: https://purduepeterson1986.github.io/hangman/battles.html |
 | `game.js` | Game rules, turns, solving, scoring, computer players and settings |
 | `manifest.json`, `icon-192.png`, `icon-512.png` | Lets the game be installed as an app |
 
-When `styles.css`, `words.js`, `scene.js` or `game.js` changes, change the `?v=` tag on all four lines in `index.html` so browsers fetch the new copies.
+When `styles.css`, `words.js`, `scene.js` or `game.js` changes, change the `?v=` tag on all four lines in `index.html` (and the two in `battles.html`) so browsers fetch the new copies.

@@ -259,14 +259,15 @@
   }
 
   // Where the weapon leaves the hero, and where it hits the creature standing at x.
-  function shotStart() { return { x: HERO_X + hero.hand.x * hero.s, y: GROUND + hero.hand.y * hero.s }; }
-  function shotEnd(x) { return { x: x - foe.face.x * foe.s, y: GROUND + foe.face.y * foe.s }; }
+  function shotStart(h) { return { x: HERO_X + h.hand.x * h.s, y: GROUND + h.hand.y * h.s }; }
+  function shotEnd(f, x) { return { x: x - f.face.x * f.s, y: GROUND + f.face.y * f.s }; }
+  function byId(list, id) { return list.filter(function (o) { return o.id === id; })[0]; }
 
   // Builds the whole scene with a hero and a creature picked at random.
   // (heroId / foeId pick a particular one instead; used for testing.)
   function html(heroId, foeId) {
-    hero = HEROES.filter(function (h) { return h.id === heroId; })[0] || pick(HEROES);
-    foe = FOES.filter(function (f) { return f.id === foeId; })[0] || pick(FOES);
+    hero = byId(HEROES, heroId) || pick(HEROES);
+    foe = byId(FOES, foeId) || pick(FOES);
     var art = hero.art();
     if (hero.id === 'hobbit') {   // one of the four hobbits, at random
       var hb = pick(HOBBITS);
@@ -278,8 +279,9 @@
       stones += '<ellipse class="stone ' + stoneClass(k) + '" data-k="' + k + '" cx="' + stoneX(k) + '" cy="' + (GROUND + 4) + '" rx="30" ry="8"/>';
     }
     var top = hero.h * hero.s;            // height of the hero in the scene
-    var s0 = shotStart();
+    var s0 = shotStart(hero);
     return '<svg viewBox="0 30 1000 215" class="scene-svg w-' + hero.weapon + '" preserveAspectRatio="xMidYMax meet" aria-hidden="true"' +
+      ' data-hero="' + hero.id + '" data-foe="' + foe.id + '"' +   // each scene knows its own pair, so several can be on one page
       ' style="--bonk: ' + (-top * 0.66).toFixed(0) + 'px; --hop: ' + (-Math.max(36, top * 0.3)).toFixed(0) + 'px">' +
       '<rect x="0" y="' + GROUND + '" width="1000" height="40" rx="14" class="ground"/>' +
       '<g class="tufts">' + tufts() + '</g>' +
@@ -307,11 +309,11 @@
       '</svg>';
   }
 
-  var walkTimer = 0;
   // pos = how many stones the creature has walked (0 to 8). snap = jump there with no walking (a new word).
   function update(root, pos, snap) {
     var svg = root && root.querySelector('.scene-svg'); if (!svg) return;
     var f = svg.querySelector('.foe');
+    var h = byId(HEROES, svg.getAttribute('data-hero')), cr = byId(FOES, svg.getAttribute('data-foe'));
     var x = foeX(pos);
     if (snap) {
       svg.classList.remove('won', 'lost');
@@ -323,18 +325,18 @@
     } else if (+f.getAttribute('data-pos') !== pos) {
       f.style.transform = 'translateX(' + x + 'px)';
       f.classList.add('walking');
-      clearTimeout(walkTimer);
-      walkTimer = setTimeout(function () { f.classList.remove('walking'); }, 950);
+      clearTimeout(f.walkTimer);
+      f.walkTimer = setTimeout(function () { f.classList.remove('walking'); }, 950);
     }
     f.setAttribute('data-pos', pos);
     // Aim the weapon: how far it flies, and the angle of the arrow.
-    var a = shotStart(), b = shotEnd(x);
+    var a = shotStart(h), b = shotEnd(cr, x);
     svg.style.setProperty('--fx', (b.x - a.x).toFixed(0) + 'px');
     svg.style.setProperty('--fy', (b.y - a.y).toFixed(0) + 'px');
     svg.style.setProperty('--back', (FOE_START - x) + 'px');                     // how far the creature slides back when beaten
     svg.style.setProperty('--reach', (b.x - HERO_X - 72).toFixed(0) + 'px');   // how far the sword fighter runs: the sword tip just reaches the face
     var aim = svg.querySelector('.shot-aim');
-    if (aim && hero.weapon === 'arrow') {
+    if (aim && h.weapon === 'arrow') {
       aim.setAttribute('transform', 'rotate(' + (Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI).toFixed(1) + ')');
     }
     var hit = svg.querySelector('.hit');
