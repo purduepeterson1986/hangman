@@ -2,7 +2,7 @@
 
 A word-guessing game for 1 or 2 players, played in any web browser with a mouse, a touch screen or a keyboard. Five levels take you from short picture words for young children to a challenge for adults.
 
-**Play it here:** https://purduepeterson1986.github.io/hangman/
+**Play it here:** https://purduepeterson1986.github.io/word-quest/
 
 ## How to play
 
@@ -66,7 +66,7 @@ No installation or build step is needed. Download the files and open `index.html
 | `styles.css` | Appearance and animations |
 | `words.js` | The word lists for each level |
 | `scene.js` | The path scene: the heroes, the creatures and the stepping stones (drawings from Hobbit Land) |
-| `battles.html` | A preview page that plays every ending with its own timing: https://purduepeterson1986.github.io/hangman/battles.html |
+| `battles.html` | A preview page that plays every ending with its own timing: https://purduepeterson1986.github.io/word-quest/battles.html |
 | `game.js` | Game rules, turns, solving, scoring, computer players and settings |
 | `manifest.json`, `icon-192.png`, `icon-512.png` | Lets the game be installed as an app |
 
