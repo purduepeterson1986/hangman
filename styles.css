@@ -305,23 +305,19 @@ h1, h2, h3, p { margin: 0; }
 .dots::after { content: ""; animation: dots 1.2s steps(4, end) infinite; }
 @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
 
-/* Table: the one shared snowman on the left; the word, category and Solve button on the right */
+/* Table: the path scene across the full width, then the word, the category and the Solve button */
 .table {
   container-type: size;
   flex: 1; min-height: 0; min-width: 0;
-  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  align-items: center; column-gap: clamp(10px, 3vw, 40px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: clamp(4px, 1.2vh, 12px);
   padding: 4px clamp(10px, 2vw, 22px);
   width: 100%; max-width: 1200px; margin: 0 auto;
 }
-.play { min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(8px, 1.6vh, 16px); }
 .solve-slot { width: 100%; display: flex; justify-content: center; }
-.lives { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 6px; }
-.lives .pip { font-size: clamp(1.1rem, 2.4vw, 1.6rem); }
-.lives .pip:not(.on) { color: rgba(255, 255, 255, .14); }
-/* Hangmen (one per player, always visible) with the turn clock to their right */
-.stage { display: flex; align-items: center; justify-content: center; gap: clamp(8px, 1.5vw, 18px); width: 100%; min-width: 0; }
-.gallows-row { flex: 1 1 auto; min-width: 0; display: flex; justify-content: center; align-items: center; }
+.stage { position: relative; width: 100%; min-width: 0; flex: 0 1 auto; }
+.scene { width: 100%; display: flex; justify-content: center; }
+.stage .clock { position: absolute; top: 0; right: 0; width: clamp(56px, 7vw, 92px); }
 .clock {
   position: relative; flex: 0 0 auto; aspect-ratio: 1;
   width: clamp(72px, 9vw, 112px);
@@ -345,45 +341,65 @@ h1, h2, h3, p { margin: 0; }
 .clock.hot .clock-num b { color: var(--bad); }
 .clock.idle .clock-num b { color: var(--ink-faint); }
 .clock-num span { margin-top: 2px; font-size: .66rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
-.gallows {
-  flex: 1 1 auto; min-width: 0; max-width: none; width: 100%;
-  display: flex; flex-direction: column; align-items: center;
-  padding: 6px 8px 8px; border-radius: 18px;
-  border: 2px solid transparent;
-  transition: border-color .3s ease, background .3s ease, opacity .3s ease;
+.scene-svg { display: block; width: 100%; height: auto; max-height: max(90px, calc(100cqh - 190px)); overflow: visible; }
+.scene .ground { fill: #1f3d2d; }
+.scene .tuft { stroke: #3f7a52; stroke-width: 2.4; stroke-linecap: round; fill: none; }
+/* The stepping stones: green, then yellow, then the last one red */
+.scene .stone { stroke: rgba(0, 0, 0, .35); stroke-width: 2; transition: opacity .5s ease; }
+.scene .st-g { fill: #5fd38a; }
+.scene .st-y { fill: #ffd23f; }
+.scene .st-r { fill: #ff5c6c; }
+.scene .stone.passed { opacity: .16; }
+.scene .stone.next { stroke: #ffffff; stroke-width: 3; }
+/* The creature walks one stone per miss; its legs only wiggle while it moves */
+.scene .foe { transition: transform .9s ease-in-out; }
+.scene-svg.snap .foe { transition: none; }
+.scene .sp-legs { animation: sp-wiggle .3s ease-in-out infinite alternate; animation-play-state: paused; transform-box: fill-box; }
+.scene .sp-legs.l { transform-origin: 100% 40%; }
+.scene .sp-legs.r { transform-origin: 0% 40%; animation-direction: alternate-reverse; }
+.scene .foe.walking .sp-legs, .scene .won .sp-legs, .scene .lost .sp-legs { animation-play-state: running; }
+.scene .foe.walking .foe-act { animation: foe-bob .3s ease-in-out infinite alternate; }
+@keyframes sp-wiggle { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+@keyframes foe-bob { to { transform: translateY(-4px); } }
+.scene .hero-act, .scene .foe-act { transform-box: fill-box; transform-origin: 50% 100%; }
+/* Caught: the creature leaps, bonks the hero on the head and hops down beside him; stars circle his head */
+.scene .stars { opacity: 0; }
+.scene .stars text { font-size: 22px; }
+.scene .stars-spin { transform-box: fill-box; transform-origin: center; animation: stars-spin 1.4s linear infinite; }
+.scene .lost .foe-act { animation: foe-pounce 1.4s ease-in-out forwards; }
+.scene .lost .hero-act { animation: hero-bonk .5s .75s ease-out forwards; }
+.scene .lost .stars { animation: show .3s 1s forwards; }
+@keyframes foe-pounce {
+  0% { transform: none; }
+  35% { transform: translate(-120px, -150px); }
+  55% { transform: translate(-166px, -109px); }
+  75% { transform: translate(-120px, -70px); }
+  100% { transform: translate(-64px, 0); }
 }
-.gallows.active {
-  border-color: var(--pc);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--pc) 18%, transparent), color-mix(in srgb, var(--pc) 6%, transparent));
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--pc) 18%, transparent);
+@keyframes hero-bonk { 0% { transform: none; } 50% { transform: scale(1.15, .5); } 100% { transform: scale(1, .66); } }
+@keyframes stars-spin { to { transform: rotate(360deg); } }
+@keyframes show { to { opacity: 1; } }
+/* Solved: the hero shoots an arrow, the creature flips over and scurries away, and the hero hops for joy */
+.scene .arrow { opacity: 0; }
+.scene .arrow-shaft { stroke: #8a6a3a; stroke-width: 3; }
+.scene .arrow-head { fill: #d9dde4; }
+.scene .arrow-fletch { stroke: #f4f1e6; stroke-width: 2; }
+.scene .won .arrow { animation: arrow-fly .5s ease-in forwards; }
+.scene .won .foe-act { transform-origin: 50% 50%; animation: foe-flee 1.8s .45s ease-in forwards; }
+.scene .won .hero-act { animation: hero-hop .3s 1.2s ease-in-out 4 alternate; }
+@keyframes arrow-fly { 0% { opacity: 1; transform: none; } 95% { opacity: 1; } 100% { opacity: 0; transform: translateX(var(--fx)); } }
+@keyframes foe-flee {
+  0% { transform: none; }
+  20% { transform: translateY(-40px) scaleY(-1); }
+  35% { transform: translateY(0) scaleY(-1); }
+  100% { transform: translateX(800px) scaleY(-1); }
 }
-.gallows:not(.active) { opacity: .8; }
-/* The snowman is as tall as the room the table has (the table measures its own size), so it never overlaps the status line or the word */
-.gallows-svg { width: 100%; height: auto; max-height: calc(100cqh - 48px); overflow: visible; }
-.gallows .cap { margin-top: 2px; color: var(--ink-dim); font-weight: 700; font-size: .95rem; text-align: center; }
-.gallows .ground { stroke: #e9f4fb; stroke-width: 10; stroke-linecap: round; fill: none; opacity: .9; }
-.gallows .part { opacity: 0; transition: opacity .35s ease; }
-.gallows .part.on { opacity: 1; }
-.gallows .ball { fill: #ffffff; stroke: #b9d6e8; stroke-width: 3; }
-.gallows .arm { stroke: #8a5a2e; stroke-width: 6; stroke-linecap: round; fill: none; }
-.gallows .scarf { fill: var(--pc); }
-.gallows .hat { fill: #4b3d6e; }
-.gallows .hat-band { fill: var(--pc); }
-.gallows .dot-eye { fill: #2a1a3a; transition: opacity .35s ease; }
-.gallows .smile { stroke: #2a1a3a; stroke-width: 3.5; stroke-linecap: round; fill: none; transition: opacity .35s ease; }
-.gallows.dead .dot-eye, .gallows.dead .smile { opacity: 0; }
-.gallows .sad { stroke: #2a1a3a; stroke-width: 3.5; stroke-linecap: round; fill: none; }
-.gallows .puddle { fill: #9fd8f0; opacity: .6; }
-/* Dashed outline of the whole snowman, shown until the first piece goes on */
-.gallows .outline { fill: none; stroke: #b9bfe0; stroke-width: 2.5; stroke-dasharray: 6 6; opacity: .5; transition: opacity .35s ease; }
-.gallows.started .outline { opacity: 0; }
-/* Snowflakes falling behind the snowman, from the top of the box to the ground */
-.gallows .flake { fill: #f4f9ff; opacity: .9; animation: flake-fall linear infinite; }
-@keyframes flake-fall {
-  from { transform: translate(var(--x), -12px); }
-  to { transform: translate(var(--x), 270px); }
+@keyframes hero-hop { to { transform: translateY(-14px); } }
+@media (prefers-reduced-motion: reduce) {
+  .scene .foe { transition: none; }
+  .scene .sp-legs, .scene .stars-spin, .scene .foe.walking .foe-act { animation: none; }
+  .scene .won .arrow, .scene .won .foe-act, .scene .lost .foe-act, .scene .won .hero-act, .scene .lost .hero-act, .scene .lost .stars { animation-duration: .01s; animation-delay: 0s; }
 }
-@media (prefers-reduced-motion: reduce) { .gallows .flake { animation: none; opacity: .4; } }
 
 .side {
   display: flex; flex-direction: column; align-items: center; gap: 14px;
@@ -543,13 +559,8 @@ h1, h2, h3, p { margin: 0; }
   .levels .tile:last-child:nth-child(odd) { grid-column: span 2; }
   .levels .tile { min-height: 0; }
   .tile-desc { display: none; }
-  /* Phones: keep the picture, gallows and word all on screen above the keyboard */
-  .table { gap: 4px; position: relative; grid-template-columns: minmax(0, 1fr); }
-  .gallows { flex-basis: 0; max-width: none; flex: 1 1 0; padding: 4px 4px 6px; }
-  .gallows .cap { font-size: .8rem; }
-  .gallows-svg { width: auto; height: clamp(90px, 17vh, 150px); max-width: 100%; margin: 0 auto; }
-  .stage { gap: 6px; }
-  .gallows-row { flex: 1 1 auto; }
+  /* Phones: keep the scene, word and Solve button all on screen above the keyboard */
+  .table { gap: 4px; position: relative; }
   .hint-wrap { min-height: 0; }
   .picture { font-size: clamp(2.4rem, 7vh, 3.6rem); }
   .chip { padding: 6px 14px; }

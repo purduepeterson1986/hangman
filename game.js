@@ -7,10 +7,8 @@
   var ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
   var QWERTY = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
   var COLORS = ['#4db5ff', '#ff5c8a', '#ffd23f', '#5fe3a1'];
-  var SNOW_PC = '#ff7a59';   // scarf colour of the one shared snowman
   var ROUNDS = 5;        // words per game
   var BONUS = 5;         // extra points for finishing a word
-  var STAGES = 8;        // pieces of the snowman drawing
   var LEVELS = {
     1: { name: 'Easy', lives: 8, size: '3 to 5 letters', hint: 'category', sample: '🐱 CAT',
          desc: 'Short words with a category to help. Each letter is read aloud.' },
@@ -302,7 +300,7 @@
       solving: false, typed: '', wrong: 0
     };
     $('#players').setAttribute('style', '--n: ' + G.n);
-    $('#gallows').innerHTML = gallowsHTML();
+    $('#scene').innerHTML = SCENE.html();   // a new hero and creature each game
     showScreen('game');
     Sound.play('start');
     nextRound();
@@ -328,7 +326,8 @@
     G.solvedBy = -1;
     G.solving = false;
     G.typed = '';
-    G.wrong = 0;   // one shared snowman for the word
+    G.wrong = 0;   // misses for this word, shared by all players
+    G.snap = true; // the creature jumps back to its start without walking
     G.cur = (G.round - 1) % G.n;       // the starting player rotates each word
     G.phase = 'busy';
     G.note = 'Word ' + G.round + ' starts';
@@ -392,8 +391,8 @@
     $('#ring').style.strokeDashoffset = (RING * (1 - left / settings.timer)).toFixed(1);
     $('#clock-num').textContent = G.phase === 'turn' && !running ? '—' : left;
   }
-  // A miss (wrong letter, time out, or wrong answer) adds a piece to the one shared snowman.
-  // When it is complete the word is over and nobody gets the bonus; points already earned stay.
+  // A miss (wrong letter, time out, or wrong answer) moves the creature one stone closer to the hero.
+  // When it reaches the hero the word is over and nobody gets the bonus; points already earned stay.
   function missed(p, note, ico, text) {
     G.wrong++;
     G.note = note;
@@ -403,7 +402,8 @@
     var lost = G.wrong >= G.lv.lives;
     if (lost) {
       setTimeout(function () { Sound.play('out'); }, 300);
-      toast('💧', 'The snowman melted');
+      var fn = SCENE.foe().name;
+      toast(SCENE.foe().emoji, 'Oh no! ' + fn.charAt(0).toUpperCase() + fn.slice(1) + ' got ' + SCENE.hero().name + '!');
     } else {
       toast(ico, text);
     }
@@ -519,6 +519,7 @@
     G.solvedBy = solver;
     var token = ++gen;
     render();
+    SCENE.end($('#scene'), solver >= 0);   // the hero wins, or the creature gets the hero
     // Pause so the players can see the finished word on the board before the message appears.
     setTimeout(function () { if (token === gen && G && G.phase === 'roundover') showRoundEnd(solver, token); }, ROUND_PAUSE);
   }
@@ -591,8 +592,7 @@
     renderHint();
     renderPlayers();
     renderStatus();
-    renderGallows();
-    renderLives();
+    renderScene();
     renderClock();
     renderWord();
     renderKeys();
@@ -648,98 +648,16 @@
     $('#status-main').innerHTML = miniDisc(G.cur, 'sm') + '<span class="txt">' + html + '</span>';
   }
 
-  // How many drawing pieces show after a number of wrong guesses. The first miss adds as
-  // many pieces as needed, each later miss adds one more, and the last miss adds only the X eyes.
-  function stageFor(wrong, lives) {
-    if (wrong <= 0) return 0;
-    if (wrong >= lives) return STAGES;
-    return STAGES - lives + wrong;
-  }
-
-  // Snowflakes that keep falling behind the snowman. Positions are fixed so the box looks the same each time.
-  function flakesHTML() {
-    var out = '';
-    for (var k = 0; k < 12; k++) {
-      var x = 15 + ((k * 73) % 270);            // spread across the box
-      var delay = ((k * 0.37) % 4).toFixed(2);  // start at different times
-      var dur = (4 + (k % 4) * 0.7).toFixed(1); // some fall faster than others
-      var r = (2.8 + (k % 3) * 1).toFixed(1);
-      out += '<circle class="flake" cx="0" cy="0" r="' + r + '" style="--x:' + x + 'px;animation-delay:-' + delay + 's;animation-duration:' + dur + 's"/>';
-    }
-    return out;
-  }
-
-  // The one shared snowman, always on screen. Its scarf and hat use the shared colour.
-  // Pieces appear in this order: 1 head, 2 middle body, 3 bottom body, 4 arm, 5 other arm,
-  // 6 scarf, 7 hat, 8 melting face (the end).
-  function gallowsHTML() {
-    return '<div class="gallows" style="--pc:' + SNOW_PC + '">' +
-      '<svg viewBox="0 0 300 280" class="gallows-svg" aria-hidden="true">' +
-      '<g class="frame">' +
-        '<line x1="20" y1="268" x2="280" y2="268" class="ground"/>' +
-      '</g>' +
-      '<g class="flakes">' + flakesHTML() + '</g>' +
-      '<g class="outline">' +
-        '<circle cx="150" cy="84" r="30"/>' +
-        '<circle cx="150" cy="150" r="42"/>' +
-        '<circle cx="150" cy="212" r="56"/>' +
-        '<line x1="110" y1="160" x2="62" y2="128"/>' +
-        '<line x1="190" y1="160" x2="238" y2="128"/>' +
-        '<path d="M122 108 Q150 118 178 108 L180 120 Q150 130 120 120 Z"/>' +
-        '<rect x="126" y="22" width="48" height="32" rx="3"/>' +
-        '<rect x="104" y="50" width="92" height="9" rx="4"/>' +
-      '</g>' +
-      '<g class="figure">' +
-        '<g class="part" data-k="1">' +
-          '<circle cx="150" cy="84" r="30" class="ball head"/>' +
-          '<circle cx="140" cy="78" r="3.2" class="dot-eye"/>' +
-          '<circle cx="160" cy="78" r="3.2" class="dot-eye"/>' +
-          '<path d="M138 92 Q150 102 162 92" class="smile"/>' +
-        '</g>' +
-        '<circle class="part ball" data-k="2" cx="150" cy="150" r="42"/>' +
-        '<circle class="part ball" data-k="3" cx="150" cy="212" r="56"/>' +
-        '<line class="part arm" data-k="4" x1="110" y1="160" x2="62" y2="128"/>' +
-        '<line class="part arm" data-k="5" x1="190" y1="160" x2="238" y2="128"/>' +
-        '<g class="part" data-k="6">' +
-          '<path d="M122 108 Q150 118 178 108 L180 120 Q150 130 120 120 Z" class="scarf"/>' +
-          '<path d="M160 116 L172 116 L176 144 L164 146 Z" class="scarf"/>' +
-        '</g>' +
-        '<g class="part" data-k="7">' +
-          '<rect x="126" y="22" width="48" height="32" rx="3" class="hat"/>' +
-          '<rect x="104" y="50" width="92" height="9" rx="4" class="hat"/>' +
-          '<rect x="126" y="44" width="48" height="7" class="hat-band"/>' +
-        '</g>' +
-        '<g class="part melt" data-k="8">' +
-          '<ellipse cx="150" cy="267" rx="110" ry="7" class="puddle"/>' +
-          '<path d="M133 72 L147 78 M153 78 L167 72" class="sad"/>' +
-          '<path d="M136 102 Q150 92 164 102" class="sad"/>' +
-        '</g>' +
-      '</g>' +
-      '</svg>' +
-      '<div class="cap"></div>' +
-      '</div>';
-  }
-
-  // Hearts for the shared snowman's chances, under the word on the right.
-  function renderLives() {
-    var el = $('#lives'); if (!el || !G) return;
-    var left = Math.max(0, G.lv.lives - G.wrong), h = '';
-    for (var k = 0; k < G.lv.lives; k++) h += '<i class="pip' + (k < left ? ' on' : '') + '">♥</i>';
-    el.innerHTML = h;
-  }
-
-  function renderGallows() {
-    var panel = document.querySelector('#gallows .gallows');
-    if (!panel) return;
-    var lives = G.lv.lives;
-    var stage = stageFor(G.wrong, lives);
-    var left = Math.max(0, lives - G.wrong);
-    panel.classList.toggle('dead', stage >= STAGES);
-    panel.classList.toggle('started', stage > 0);
-    panel.querySelectorAll('.part').forEach(function (el) {
-      el.classList.toggle('on', +el.getAttribute('data-k') <= stage);
-    });
-    panel.querySelector('.cap').innerHTML = left + ' ' + (left === 1 ? 'chance' : 'chances') + ' left';
+  // How many stones the creature has walked: 8 minus the chances for this level, plus the misses so far.
+  // So the stones still ahead of it always equal the chances left.
+  function scenePos() { return Math.max(0, Math.min(SCENE.STEPS, SCENE.STEPS - G.lv.lives + G.wrong)); }
+  function renderScene() {
+    var root = $('#scene'); if (!root) return;
+    SCENE.update(root, scenePos(), !!G.snap);
+    G.snap = false;
+    var left = Math.max(0, G.lv.lives - G.wrong);
+    root.setAttribute('aria-label', left + ' ' + (left === 1 ? 'step' : 'steps') + ' left before ' +
+      SCENE.foe().name + ' reaches ' + SCENE.hero().name);
   }
 
   function renderWord() {

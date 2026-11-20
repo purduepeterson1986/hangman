@@ -10,10 +10,10 @@ A word-guessing game for 1 or 2 players, played in any web browser with a mouse,
 2. A hidden word appears as blanks. Each blank is one letter.
 3. On your turn, guess one letter.
    - **Right:** every copy of that letter appears, and you score a point for each one. You then get another turn, with the clock reset, to guess again or solve the word.
-   - **Wrong:** the shared snowman gets another piece.
+   - **Wrong:** the spider walks one stepping stone closer to Legolas.
    - **Solve the word:** if you know the word, tap **Solve the word** and spell it out, then press **Check my answer**. A correct answer finishes the word and scores every hidden letter, plus the bonus. A wrong answer costs one chance, the same as a wrong letter.
 4. Then the turn passes to the other player. If the turn timer is on, you have 30 or 15 seconds (your choice) to guess a letter or press **Solve the word**. If time runs out first, it counts as a miss and you lose your turn.
-5. Finish the word to score a bonus of 5 points. There is one snowman for both players. If it melts before the word is finished, the word is over, nobody gets the bonus, and points already earned stay.
+5. Finish the word to score a bonus of 5 points, and Legolas shoots an arrow that sends the spider running. The path is shared by both players. If the spider reaches Legolas before the word is finished, it bonks him on the head, the word is over, nobody gets the bonus, and points already earned stay.
 6. A game has 5 words. The player with the most points at the end wins.
 
 ## Levels
@@ -30,19 +30,19 @@ All levels use the same big letter buttons, in A to Z order. Levels 1 and 2 are 
 
 ## Players
 
-- **Players:** 1 or 2. Names are optional. With 1 player, only one snowman is shown and the turn timer still runs.
+- **Players:** 1 or 2. Names are optional. With 1 player the turn timer still runs.
 - **Turn timer:** 30 seconds, 15 seconds, or off, set before the game. When on, the countdown shows to the right of the snowmen. Pressing **Solve the word** stops the clock for that turn.
 - Each seat can be a **Person** or the **Computer**.
 - The computer has three skill levels:
   - **Easy** guesses letters at random.
   - **Medium** looks at the letters that still fit the blanks, and picks one of its best choices.
   - **Hard** always picks the letter that fits the most possible words.
-- There is one snowman, shared by both players. Any wrong guess, time-out or wrong answer adds a piece for everyone.
+- The path is shared by both players. Any wrong guess, time-out or wrong answer moves the spider one stone closer for everyone.
 - The starting player changes with each word.
 
 ## Features
 
-- One shared snowman on the left, with the word, category and **Solve the word** button on the right. The border of the player whose turn it is pulses.
+- A path scene across the screen: Legolas on the left, 8 stepping stones (green, then yellow, then a red last stone) and the spider on the right. The stones still ahead of the spider always equal the chances left; on harder levels it starts part of the way along. Below it are the word, the category and the **Solve the word** button. The border of the player whose turn it is pulses.
 - A letter can be guessed by tapping its button or by typing it on a keyboard.
 - Sound effects with a mute button, and a full-screen button.
 - Can be installed as an app from the browser.
@@ -63,7 +63,8 @@ No installation or build step is needed. Download the files and open `index.html
 | `index.html` | The page |
 | `styles.css` | Appearance and animations |
 | `words.js` | The word lists for each level |
+| `scene.js` | The path scene: Legolas, the spider and the stepping stones (drawings from Hobbit Land) |
 | `game.js` | Game rules, turns, solving, scoring, computer players and settings |
 | `manifest.json`, `icon-192.png`, `icon-512.png` | Lets the game be installed as an app |
 
-When `styles.css`, `words.js` or `game.js` changes, change the `?v=` tag on all three lines in `index.html` so browsers fetch the new copies.
+When `styles.css`, `words.js`, `scene.js` or `game.js` changes, change the `?v=` tag on all four lines in `index.html` so browsers fetch the new copies.

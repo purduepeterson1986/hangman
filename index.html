@@ -10,8 +10,8 @@
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Snowman">
-  <!-- When styles.css, words.js or game.js changes, change the ?v= tag on all three so browsers fetch the new copies. -->
-  <link rel="stylesheet" href="styles.css?v=2026-11-19d">
+  <!-- When styles.css, words.js, scene.js or game.js changes, change the ?v= tag on all four so browsers fetch the new copies. -->
+  <link rel="stylesheet" href="styles.css?v=2026-11-20a">
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"></div>
@@ -91,8 +91,8 @@
 
     <section class="table">
       <div class="stage">
-        <!-- The one shared snowman, filled in by game.js -->
-        <div class="gallows-row" id="gallows" aria-hidden="true"></div>
+        <!-- The path scene: the hero, 8 stepping stones and the creature, filled in by game.js -->
+        <div class="scene" id="scene" role="img"></div>
         <div class="clock" id="clock" hidden>
           <svg viewBox="0 0 100 100" class="clock-svg" aria-hidden="true">
             <circle class="ring-bg" cx="50" cy="50" r="44"/>
@@ -102,17 +102,14 @@
         </div>
       </div>
 
-      <!-- On the right of the snowman: the word, then the category, then the Solve button -->
-      <div class="play">
-        <section class="word-band">
-          <div class="word" id="word" aria-label="The hidden word"></div>
-        </section>
-        <div class="lives" id="lives" aria-label="Chances left for the shared snowman"></div>
-        <div class="side">
-          <div class="hint-wrap" id="hint"></div>
-          <div class="solve-slot" id="solve"></div>
-          <div class="toast-slot"><div class="toast" id="toast" aria-live="polite"></div></div>
-        </div>
+      <!-- Below the scene: the word, then the category, then the Solve button -->
+      <section class="word-band">
+        <div class="word" id="word" aria-label="The hidden word"></div>
+      </section>
+      <div class="side">
+        <div class="hint-wrap" id="hint"></div>
+        <div class="solve-slot" id="solve"></div>
+        <div class="toast-slot"><div class="toast" id="toast" aria-live="polite"></div></div>
       </div>
     </section>
 
@@ -124,7 +121,8 @@
   </div>
   <canvas id="confetti" aria-hidden="true"></canvas>
 
-  <script src="words.js?v=2026-11-19d"></script>
-  <script src="game.js?v=2026-11-19d"></script>
+  <script src="words.js?v=2026-11-20a"></script>
+  <script src="scene.js?v=2026-11-20a"></script>
+  <script src="game.js?v=2026-11-20a"></script>
 </body>
 </html>
