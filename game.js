@@ -26,7 +26,6 @@
   // How long a computer player "thinks" (ms) before it guesses.
   var THINK = { easy: [2800, 3200], medium: [2800, 3200], hard: [2800, 3200] };
   var STORE_KEY = 'hangman.settings.v1';
-  var TURN_SECS = 30;    // seconds per turn when the turn timer is on
   var ROUND_PAUSE = 5000; // ms to pause after a word ends, before its result message appears
   var RING = 276.46;     // circumference of the timer ring (2 x pi x 44)
 
@@ -47,7 +46,7 @@
     ],
     level: 1,
     sound: true,
-    timer: true        // 30-second turn timer
+    timer: 30          // seconds per turn: 30, 15, or 0 for no turn timer
   };
 
   function loadSettings() {
@@ -56,7 +55,9 @@
       if (!s) return;
       if (LEVELS[s.level]) settings.level = s.level;
       if (typeof s.sound === 'boolean') settings.sound = s.sound;
-      if (typeof s.timer === 'boolean') settings.timer = s.timer;
+      if (s.timer === true) settings.timer = 30;          // older saved setting
+      else if (s.timer === false) settings.timer = 0;
+      else if (s.timer === 30 || s.timer === 15 || s.timer === 0) settings.timer = s.timer;
       if (s.count === 1 || s.count === 2) settings.count = s.count;
       if (Array.isArray(s.seats)) {
         for (var i = 0; i < 4; i++) {
@@ -119,7 +120,7 @@
     }).join('');
   }
   function renderTimer() {
-    $('#timer-opt').innerHTML = [[true, '30 seconds'], [false, 'Off']].map(function (o) {
+    $('#timer-opt').innerHTML = [[30, '30 seconds'], [15, '15 seconds'], [0, 'Off']].map(function (o) {
       var on = settings.timer === o[0];
       return '<button type="button" class="seg' + (on ? ' on' : '') + '" role="radio" aria-checked="' + on + '" data-timer="' + o[0] + '">' + o[1] + '</button>';
     }).join('');
@@ -129,7 +130,7 @@
     for (i = 0; i < settings.count; i++) if (settings.seats[i].type === 'cpu') cpu++;
     var who = (settings.count === 1 ? '1 player' : '2 players') + (cpu ? ' (' + (cpu === settings.count ? 'all computer' : cpu + ' computer') + ')' : '');
     $('#summary').innerHTML = '<b>' + who + '</b> &middot; Level ' + settings.level + ' ' + LEVELS[settings.level].name + ' &middot; ' + ROUNDS + ' words' +
-      ' &middot; ' + (settings.timer ? '30-second turns' : 'No turn timer');
+      ' &middot; ' + (settings.timer ? settings.timer + '-second turns' : 'No turn timer');
   }
   function renderSetup() { renderCount(); renderTimer(); renderSeats(); renderLevels(); renderSummary(); }
 
@@ -151,7 +152,7 @@
     });
     $('#timer-opt').addEventListener('click', function (e) {
       var b = e.target.closest('[data-timer]'); if (!b) return;
-      settings.timer = b.dataset.timer === 'true'; saveSettings(); Sound.play('tick'); renderSetup();
+      settings.timer = +b.dataset.timer; saveSettings(); Sound.play('tick'); renderSetup();
     });
     $('#levels').addEventListener('click', function (e) {
       var b = e.target.closest('[data-level]'); if (!b) return;
@@ -368,7 +369,7 @@
   function startClock() {
     stopClock();
     if (!G || !settings.timer) { renderClock(); return; }
-    clockEnd = Date.now() + TURN_SECS * 1000;
+    clockEnd = Date.now() + settings.timer * 1000;
     clockTimer = setInterval(tickClock, 200);
     renderClock();
   }
@@ -387,11 +388,11 @@
     el.hidden = !settings.timer;
     if (!G || !settings.timer) return;
     var running = !!clockTimer && G.phase === 'turn';
-    var left = running ? Math.max(0, Math.ceil((clockEnd - Date.now()) / 1000)) : TURN_SECS;
+    var left = running ? Math.max(0, Math.ceil((clockEnd - Date.now()) / 1000)) : settings.timer;
     el.classList.toggle('warn', running && left <= 10 && left > 5);
     el.classList.toggle('hot', running && left <= 5);
     el.classList.toggle('idle', !running);
-    $('#ring').style.strokeDashoffset = (RING * (1 - left / TURN_SECS)).toFixed(1);
+    $('#ring').style.strokeDashoffset = (RING * (1 - left / settings.timer)).toFixed(1);
     $('#clock-num').textContent = G.phase === 'turn' && !running ? '—' : left;
   }
   // Out of time before a letter or Solve: it counts as a miss and the turn passes.
@@ -440,6 +441,11 @@
         endRound(p);   // the 5-second pause in endRound is the only wait
         return;
       }
+      // A correct letter earns another turn for the same player (the clock starts over).
+      G.note = 'Good guess! Go again';
+      render();
+      setTimeout(function () { if (token === gen) beginTurn(); }, 950);
+      return;
     } else {
       seat.wrong++;
       Sound.play('miss');

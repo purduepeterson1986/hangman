@@ -9,10 +9,10 @@ A word-guessing game for 1 or 2 players, played in any web browser with a mouse,
 1. Choose who plays each seat (a person or the computer, and how hard it plays), and a level. Then press **Start game**.
 2. A hidden word appears as blanks. Each blank is one letter.
 3. On your turn, guess one letter.
-   - **Right:** every copy of that letter appears, and you score a point for each one.
+   - **Right:** every copy of that letter appears, and you score a point for each one. You then get another turn, with the clock reset, to guess again or solve the word.
    - **Wrong:** you lose one of your chances, and the snowman gets another piece.
    - **Solve the word:** if you know the word, tap **Solve the word** and spell it out, then press **Check my answer**. A correct answer finishes the word and scores every hidden letter, plus the bonus. A wrong answer costs one chance, the same as a wrong letter.
-4. Then the turn passes to the other player, if they are still in. If the turn timer is on, you have 30 seconds to guess a letter or press **Solve the word**. If time runs out first, it counts as a miss and you lose your turn.
+4. Then the turn passes to the other player, if they are still in. If the turn timer is on, you have 30 or 15 seconds (your choice) to guess a letter or press **Solve the word**. If time runs out first, it counts as a miss and you lose your turn.
 5. Finish the word to score a bonus of 5 points. If you run out of chances, your snowman melts and you are out for this word.
 6. A game has 5 words. The player with the most points at the end wins.
 
@@ -31,7 +31,7 @@ All levels use the same big letter buttons, in A to Z order. Levels 1 and 2 are 
 ## Players
 
 - **Players:** 1 or 2. Names are optional. With 1 player, only one snowman is shown and the turn timer still runs.
-- **Turn timer:** on or off, set before the game. When on, the 30-second countdown shows to the right of the hangmen. Pressing **Solve the word** stops the clock for that turn.
+- **Turn timer:** 30 seconds, 15 seconds, or off, set before the game. When on, the countdown shows to the right of the snowmen. Pressing **Solve the word** stops the clock for that turn.
 - Each seat can be a **Person** or the **Computer**.
 - The computer has three skill levels:
   - **Easy** guesses letters at random.
