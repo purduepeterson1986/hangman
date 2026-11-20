@@ -554,9 +554,14 @@
   function showRoundEnd(solver, token) {
     var solved = solver >= 0;
     var last = G.round >= ROUNDS;
-    var title = solved ? (G.together ? 'You got it together!' : esc(G.seats[solver].name) + ' got it!') : 'Out of chances!';
-    var text = solved ? 'Bonus +' + BONUS + ' points for finishing the word.' : 'Nobody finished this word. Here it is:';
-    openModal('<div class="modal-ico">' + (solved ? '🎉' : '🙁') + '</div><h3>' + title + '</h3><p>' + text + '</p>' +
+    // The box tells what happened in the battle, with a picture of the winner: the hero or the creature.
+    var hero = SCENE.hero().name, foe = SCENE.foe().name;
+    var pic = (solved ? SCENE.heroIcon() : SCENE.foeIcon()).replace('class="toast-pic"', 'class="modal-pic"');
+    var title = solved ? esc(hero) + ' beat ' + esc(foe) + '!' : esc(foe.charAt(0).toUpperCase() + foe.slice(1)) + ' got ' + esc(hero) + '!';
+    var text = solved
+      ? (G.together ? 'You solved it together.' : '<b>' + esc(G.seats[solver].name) + '</b> solved it.') + ' Bonus +' + BONUS + ' points for finishing the word.'
+      : 'Nobody finished this word. Here it is:';
+    openModal('<div class="modal-ico">' + pic + '</div><h3>' + title + '</h3><p>' + text + '</p>' +
       '<div class="answer">' + G.w + '</div>',
       [{ label: last ? 'See results' : 'Next word', cls: 'primary', fn: advance }]);
     Sound.play(solved ? 'solve' : 'lose');

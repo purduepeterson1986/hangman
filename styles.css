@@ -551,6 +551,7 @@ h1, h2, h3, p { margin: 0; }
 }
 @keyframes modal-in { from { transform: scale(.85) translateY(20px); opacity: 0; } }
 .modal-ico { font-size: 3.4rem; line-height: 1; margin-bottom: 8px; }
+.modal-pic { display: block; width: 120px; height: 96px; margin: 0 auto; overflow: visible; }   /* the hero or creature who won the word */
 .modal h3 { font-size: clamp(1.5rem, 4.5vw, 2.1rem); font-weight: 900; line-height: 1.15; }
 .modal p { color: var(--ink-dim); margin-top: 8px; line-height: 1.45; }
 .answer {
